@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
 
-class Examples extends Component {
+class Pace extends Component {
     render() {
         return(
             <main>
-                <h1>Pace Examples</h1>
+                <h1>Find Your Pace</h1>
             </main>
         )
     }
 }
 
-export default Examples;
+export default Pace;

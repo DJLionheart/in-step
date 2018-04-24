@@ -5,7 +5,7 @@ class Auth extends Component {
     render() {
         return(
             <main>
-                <Link to="/about"><button>Login</button></Link>
+                <Link to="/questionnaire"><button>Login</button></Link>
                 
             </main>
         )
