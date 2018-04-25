@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getUserPreferences } from '../../ducks/reducer';
+import { getUserPreferences } from '../../ducks/user';
 
 class Questionnaire extends Component {
     constructor() {

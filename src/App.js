@@ -7,10 +7,11 @@ import './App.css';
 
 class App extends Component {
   render() {
+    const { pathname } = this.props.location;
     return (
       <div className="App">
         {
-          this.props.location.pathname === '/' || this.props.location.pathname === '/questionnaire'
+          pathname === '/' || pathname === '/loading' || pathname === '/questionnaire'
             ? null
             : <NavBar/>
         }

@@ -5,7 +5,9 @@ class Auth extends Component {
     render() {
         return(
             <main>
-                <Link to="/questionnaire"><button>Login</button></Link>
+                <Link to="/loading"><button>Login</button></Link>
+                <a href={ process.env.REACT_APP_LOGIN_A }><button>Auth0 - Test Login</button></a>
+                <a href={ process.env.REACT_APP_LOGIN_S }><button>Spotify - Test Login</button></a>
                 
             </main>
         )

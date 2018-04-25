@@ -1,8 +1,8 @@
+import axios from 'axios';
 
 const initialState = {
-    user_name: '',
-    user_profile: '', 
-    selector: 'BPM',
+    user: {}, 
+    // selector: 'BPM',
     user_preferences: {
         user_genre: [],
         user_pace: ''
@@ -11,10 +11,19 @@ const initialState = {
 
 }
 
-const GET_USER_DETAILS = 'GET_USER_DETAILS'
+const GET_USER = 'GET_USER'
     , CHANGE_SELECTOR = 'CHANGE_SELECTOR'
     , GET_PREFERENCES = 'GET_PREFERENCES';
 
+export function getUser() {
+    let userData = axios.get('/api/auth/me').then( res => {
+        return res.data
+    })
+    return {
+        type: GET_USER,
+        payload: userData
+    }
+}
 
 export function getUserPreferences(genreList, userPace) {
     return {
@@ -27,12 +36,11 @@ export function getUserPreferences(genreList, userPace) {
 }
 
 
-export default function reducer(state = initialState, action) {
+export default function user(state = initialState, action) {
     switch( action.type ) {
 
-        case GET_USER_DETAILS:
-            const { user_name, user_profile } = action.payload;
-            return Object.assign({}, state, {user_name: user_name, user_profile: user_profile});
+        case GET_USER + 'FULFILLED':
+            return Object.assign({}, state, {user: action.payload});
 
         case CHANGE_SELECTOR:
             return Object.assign({}, state, {selector: action.payload});
