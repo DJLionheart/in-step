@@ -1,9 +1,7 @@
 
-
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
-    google_id TEXT NULL,
-    spotify_id TEXT NULL,
+    auth_id TEXT NOT NULL,
     profile_pic TEXT,
     user_name VARCHAR(60)
 );
