@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { getUser } from '../../ducks/users';
 
 
 class Loader extends Component {
+    constructor() {
+        super();
+        this.state = {
+            user: {}
+        }
+    }
+
+    componentDidMount() {
+        console.log('loader', this.props);
+       
+        this.props.getUser()
+
+    }
     render() {
         return(
             <main>
@@ -14,4 +30,7 @@ class Loader extends Component {
     }
 }
 
-export default Loader;
+function mapStateToProps(state) {
+    return state
+}
+export default connect(mapStateToProps, { getUser })(Loader);

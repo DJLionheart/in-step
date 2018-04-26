@@ -4,7 +4,7 @@ const express = require('express')
     , massive = require('massive')
     , session = require('express-session')
     , passport = require('passport')
-    , Auth0Strategy = require('passport-auth0')
+    // , Auth0Strategy = require('passport-auth0')
     , SpotifyStrategy = require('passport-spotify').Strategy;
 
 
@@ -14,13 +14,14 @@ const {
     YE_OLDE_PORTE,
     SESSION_SECRET, 
     DOMAIN,
-    A0_CLIENT_ID,
-    A0_CLIENT_SECRET,
-    A0_CALLBACK_URL,
+    // A0_CLIENT_ID,
+    // A0_CLIENT_SECRET,
+    // A0_CALLBACK_URL,
     S_CLIENT_ID,
     S_CLIENT_SECRET,
     S_CALLBACK_URL,
-    CONNECTION_STRING
+    CONNECTION_STRING,
+    LOGOUT_URL
 } = process.env;
 
 app.use(express.json());
@@ -38,60 +39,55 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new Auth0Strategy({
-    domain: DOMAIN,
-    clientID: A0_CLIENT_ID,
-    clientSecret: A0_CLIENT_SECRET,
-    callbackURL: A0_CALLBACK_URL,
-    scope: 'openid profile'
-}, function(accessToken, refreshToken, extraParams, profile, done){
+// passport.use(new Auth0Strategy({
+//     domain: DOMAIN,
+//     clientID: A0_CLIENT_ID,
+//     clientSecret: A0_CLIENT_SECRET,
+//     callbackURL: A0_CALLBACK_URL,
+//     scope: 'openid profile email'
+// }, function(accessToken, refreshToken, extraParams, profile, done){
     
-        const db = app.get('db');
-        const { id, displayName, picture } = profile;
+    
+//         const db = app.get('db');
+//         const { id, displayName, picture } = profile
+//             , { email } = profile._json;
 
-        db.find_user([id]).then( users => {
-            if(users[0]) {
-                return done(null, users[0].id)
-            } else {
-                db.create_user([displayName, picture, id]).then( createdUser => {
-                    return done(null, createdUser[0])
-            })
-        }
-    })
-}))
+//         db.find_user([id]).then( users => {
+//             if(users[0]) {
+//                 return done(null, users[0].userid)
+//             } else {
+//                 db.create_user([displayName, picture, id, null, email, 'Google']).then( createdUser => {
+//                     return done(null, createdUser[0])
+//             })
+//         }
+//     })
+// }))
 
 
 passport.use(new SpotifyStrategy({
     clientID: S_CLIENT_ID,
     clientSecret: S_CLIENT_SECRET,
     callbackURL: S_CALLBACK_URL
+    // scope: ['playlist-modify-private', 'user-read-email'], showDialog: true
   }, function(accessToken, refreshToken, expires_in, profile, done) {
+    //   console.log(profile);
       
         const db = app.get('db');
-        const { id, displayName, photos } = profile;
+        const { id, displayName, photos, profileUrl } = profile
+            , { email } = profile._json;
 
         db.find_user([id]).then( users => {
             if(users[0]) {
-                return done(null, users[0].id)
+                return done(null, users[0].userid)
             } else {
-                db.create_user([displayName, photos[0], id]).then( createdUser => {
+                db.create_user([displayName, photos[0], id, profileUrl, email, 'Spotify']).then( createdUser => {
                 return done(null, createdUser[0])
             })
         }
     })
 }));
 
-passport.serializeUser( (id, done) => {
-    return done(null, id)
-})
-
-passport.deserializeUser( (id, done) => {
-    app.get('db').find_session_user([id]).then( user => {
-        return done(null, user[0])
-    })
-})
-
-app.get('/api/auth/spotify', passport.authenticate('spotify'))
+app.get('/api/auth/spotify', passport.authenticate('spotify', {scope: ['playlist-modify-private', 'user-read-email'], show_dialog: true}))
 
 app.get('/api/auth/spotify/callback', passport.authenticate('spotify', {
     successRedirect: 'http://localhost:3000/#/loading',
@@ -104,13 +100,24 @@ function mid(res, req, next) {
     next();
     
 }
-app.get('/api/auth/callback', mid, passport.authenticate('auth0', {
-    successRedirect: 'http://localhost:3000/#/loading',
-    failureRedirect: 'http://localhost:3000/#/'
-}))
+
+// app.get('/api/auth/callback', mid, passport.authenticate('auth0', {
+//     successRedirect: 'http://localhost:3000/#/loading',
+//     failureRedirect: 'http://localhost:3000/#/'
+// }))
+
+
+passport.serializeUser( (id, done) => {
+    return done(null, id)
+})
+
+passport.deserializeUser( (id, done) => {
+    app.get('db').find_session_user([id]).then( user => {
+        return done(null, user[0])
+    })
+})
 
 app.get('/api/auth/me', function(req, res) {
-    console.log('Hit endpoint');
     
     if(req.user) {
         res.status(200).send(req.user)
@@ -120,10 +127,18 @@ app.get('/api/auth/me', function(req, res) {
 })
 
 
+const logout = function() {
+    return function(req, res, next) {
+        req.logout();
+        delete req.session;
+        next()
+    }
+}
 
-app.post('/api/logout', function(req, res) {
-    req.logOut();
-    res.redirect('http://localhost:3000')
+app.post('/api/logout', logout, function(req, res) {
+    console.log('Logged out');
+    res.sendFile(path.resolve(LOGOUT_URL));
+    // res.redirect('http://localhost:3000/#/') 
 })
 
 

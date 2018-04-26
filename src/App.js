@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <div className="App">
         {
-          pathname === '/' || pathname === '/loading' || pathname === '/questionnaire'
+          pathname === '/' || pathname === '/loading' || pathname === '/questionnaire' 
             ? null
             : <NavBar/>
         }

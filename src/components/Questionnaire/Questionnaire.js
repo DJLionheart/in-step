@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
-import { getUserPreferences } from '../../ducks/user';
+import { getUserPreferences } from '../../ducks/users';
 
 class Questionnaire extends Component {
     constructor() {
         super();
         this.state = {
+            redirect: false,
             genre_list: [
                 {name: 'Pop', selected: false},
                 {name: 'J-Pop', selected: false},
@@ -14,6 +16,9 @@ class Questionnaire extends Component {
                 {name: 'Latin Pop', selected: false},
                 {name: 'Dance', selected: false}, 
                 {name: 'Electronica', selected: false},
+                {name: 'Hip-Hop', selected: false},
+                {name: 'Techno', selected: false},
+                {name: 'Trance', selected: false},
                 {name: 'Country', selected: false},
                 {name: 'Alternative', selected: false},
                 {name: 'Rock', selected: false},
@@ -52,16 +57,19 @@ class Questionnaire extends Component {
 
     savePreferences() {
         const userGenrePrefs = this.state.genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name)
+
         this.props.getUserPreferences(userGenrePrefs, this.state.user_pace);
-        this.props.history.push('/profile');
-        
-        
-
-        
-
+        this.setState({
+            redirect: true
+        })
+        // setTimeout(() => { this.props.history.push('/profile')}, 500);
     }
     
     render() {
+        if(this.state.redirect) {
+            return <Redirect to='/profile'/>
+        }
+
         const checklist = this.state.genre_list.map( (genre, index) => {
             return (
             <div key={ index }>
