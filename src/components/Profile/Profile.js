@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import { getUser } from '../../ducks/users';
 
 class Profile extends Component {
+    constructor() {
+        super();
+        this.state = {
+            songs_collected: false
+        }
+    }
+   
+    
     componentDidMount() {
         
         this.props.user_data.user.username
@@ -12,9 +21,21 @@ class Profile extends Component {
         // setTimeout( () => console.log(this.props), 1500)
     }
 
+    findIds() {
+        const { access_token } = this.props.user_data.user
+        axios.post('/api/ids', {token: access_token}).then( res => {
+            // this.setState({
+            //     songs_collected: true
+            // })
+            console.log('request complete', res.data);
+            
+        })
+
+    }
+
     render() {
         const { username, profile_pic, profile_url } = this.props.user_data.user;
-        console.log(this.props);
+        console.log("User found", this.props);
         
         // let { display}
         return(
@@ -38,15 +59,8 @@ class Profile extends Component {
                                     <h2>Favorites</h2>
                                 </section>
                                 <footer>
-                                    {
-                                        profile_url
-                                            ? (
-                                                <a href={ profile_url } target="_blank" rel="noopener noreferrer"><p>Visit your Spotify Profile</p></a>
-                                            )
-                                            : (
-                                                <a href="https://play.google.com/store/music" target="_blank" rel="noopener noreferrer"><p>Check out Google Play</p></a>
-                                            ) 
-                                    }
+                                    <button onClick={ () => this.findIds(this.props) }>Find Ids</button>
+                                    <a href={ profile_url } target="_blank" rel="noopener noreferrer"><p>Visit your Spotify Profile</p></a>      
                                 </footer>
                             </main>
 

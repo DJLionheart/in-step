@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom';
 
 
 class Auth extends Component {
+
+    findIds() {
+
+    }
+
+
     render() {
         return(
             <main>
@@ -15,6 +21,8 @@ class Auth extends Component {
                 </header>
                 <Link to="/loading"><button>Login</button></Link>
                 <a href={ process.env.REACT_APP_LOGIN }><button>Spotify - Login</button></a>
+
+                
                 
             </main>
         )

@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express')
     , massive = require('massive')
+    , axios = require('axios')
     , session = require('express-session')
     , passport = require('passport')
     , SpotifyStrategy = require('passport-spotify').Strategy;
@@ -85,6 +86,29 @@ app.get('/api/auth/me', function(req, res) {
     }
 })
 
+app.post('/api/ids', function(req, res, next) {
+    console.log(req.body)
+    const { token } = req.body;
+    const db = app.get('db');
+    
+    var track_id = 1
+    db.find_track([track_id]).then( track => {
+        let db_song = track[0];
+        axios({
+            method: 'get',
+            url: `https://api.spotify.com/v1/search?q=${db_song.track_name}&type=track`,
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }).then( res => {
+            const song_id = res.data.tracks.items[0].id
+            db.update_song([track_id, song_id]).then( console.log(`Track ${track_id} updated`))
+            console.log(song_id);
+            
+        })
+    })
+    res.status(200).send('Process initiated')
+})
 
 const logout = function() {
     return function(req, res, next) {
@@ -99,6 +123,7 @@ app.post('/api/logout', logout, function(req, res) {
     res.sendFile(path.resolve(LOGOUT_URL));
     // res.redirect('http://localhost:3000/#/') 
 })
+
 
 
 app.listen(YE_OLDE_PORTE, () => { console.log(`Ye olde server doth lend an ear at porte ${YE_OLDE_PORTE}, sire!`) })
