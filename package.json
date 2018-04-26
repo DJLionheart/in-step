@@ -13,7 +13,6 @@
     "lodash": "^4.17.10",
     "massive": "^4.7.2",
     "passport": "^0.4.0",
-    "passport-auth0": "^0.6.1",
     "passport-spotify": "^1.0.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",

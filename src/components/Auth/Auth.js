@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+
+
 class Auth extends Component {
     render() {
         return(
@@ -12,8 +14,7 @@ class Auth extends Component {
                     <h4>(Too soon?)</h4>
                 </header>
                 <Link to="/loading"><button>Login</button></Link>
-                <a href={ process.env.REACT_APP_LOGIN_A }><button>Auth0 - Test Login</button></a>
-                <a href={ process.env.REACT_APP_LOGIN_S }><button>Spotify - Test Login</button></a>
+                <a href={ process.env.REACT_APP_LOGIN }><button>Spotify - Login</button></a>
                 
             </main>
         )

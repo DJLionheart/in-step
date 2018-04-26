@@ -12,11 +12,14 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS song_data (
     track_id SERIAL PRIMARY KEY,
-    artist_name VARCHAR(60) NOT NULL,
-    track_name VARCHAR(60) NOT NULL,
+    artist_name VARCHAR(100) NOT NULL,
+    track_name VARCHAR(100) NOT NULL,
+    track_mix VARCHAR(100),
     BPM INTEGER NOT NULL,
     track_genre VARCHAR(25),
-    preview_url TEXT
+    track_year INTEGER,
+    spotify_id VARCHAR(60)
+    
 );
 
 CREATE TABLE IF NOT EXISTS playlist_data (
@@ -45,5 +48,6 @@ CREATE TABLE IF NOT EXISTS genre_preferences(
 DROP TABLE favorite_tracks;
 DROP TABLE playlist_tracks;
 DROP TABLE playlist_data;
+DROP TABLE genre_preferences;
 DROP TABLE users;
 
