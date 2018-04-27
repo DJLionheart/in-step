@@ -147,6 +147,8 @@ app.post('/api/logout', logout, function(req, res) {
     // res.redirect('http://localhost:3000/#/') 
 })
 
+
+// End of Massive Connection Wrapper
 })
 
 app.listen(YE_OLDE_PORTE, () => { console.log(`Ye olde server doth lend an ear at porte ${YE_OLDE_PORTE}, sire!`) })
