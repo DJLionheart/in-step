@@ -1,8 +1,12 @@
 require('dotenv').config();
 
+global.globalIndex = 281
+
 const express = require('express')
     , massive = require('massive')
+    , later = require('later')
     , axios = require('axios')
+    , Repeat = require('repeat')
     , session = require('express-session')
     , passport = require('passport')
     , SpotifyStrategy = require('passport-spotify').Strategy;
@@ -24,7 +28,7 @@ app.use(express.json());
 
 massive(CONNECTION_STRING).then( db => {
     app.set('db', db);
-})
+
 
 app.use(session({
     secret: SESSION_SECRET,
@@ -86,34 +90,53 @@ app.get('/api/auth/me', function(req, res) {
     }
 })
 
-app.post('/api/ids', function(req, res, next) {
-    console.log(req.body)
-    const { token } = req.body;
-    const db = app.get('db');
+    // const db = app.get('db');
+
+// function getIds() {
+//     app.get('db').get_token().then( res => {
+//         let token = res[0].access_token;
+//         app.get('db').find_track([globalIndex]).then( track => {
+//             let db_song = track[0];
+//             axios({
+//                 method: 'get',
+//                 url: `https://api.spotify.com/v1/search?q=${db_song.track_name}&type=track`,
+//                 headers: {
+//                     'Authorization': 'Bearer ' + token
+//                 }
+//             }).then( res => {
+//                 if(res.data.tracks.items[0].id){
+//                     const song_id = res.data.tracks.items[0].id
+//                     app.get('db').update_song([globalIndex, song_id]).then( console.log(`Track ${globalIndex} updated`))    
+//                 }
+                
+//                 globalIndex++
+//             }).catch(err => console.log(err)
+//             )
+//         })
+//     })
+// };
     
-    var track_id = 1
-    db.find_track([track_id]).then( track => {
-        let db_song = track[0];
-        axios({
-            method: 'get',
-            url: `https://api.spotify.com/v1/search?q=${db_song.track_name}&type=track`,
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        }).then( res => {
-            const song_id = res.data.tracks.items[0].id
-            db.update_song([track_id, song_id]).then( console.log(`Track ${track_id} updated`))
-            console.log(song_id);
-            
-        })
-    })
-    res.status(200).send('Process initiated')
-})
+    
+//     Repeat(getIds).every(2000, 'ms').for(20, 'minutes').start.in(5, 'sec');
+        
+    
+    // app.post('/api/ids', function(req, res, next) {
+        //     console.log(req.body)
+//     const { token } = req.body;
+    
+
+//     res.status(200).send('Process initiated')
+// })
+
+    
+    
+    // for( let i = 1; i >= 1619; i++) {
+        // setTimeout( () => {
 
 const logout = function() {
     return function(req, res, next) {
         req.logout();
-        delete req.session;
+       delete req.session;
         next()
     }
 }
@@ -124,6 +147,6 @@ app.post('/api/logout', logout, function(req, res) {
     // res.redirect('http://localhost:3000/#/') 
 })
 
-
+})
 
 app.listen(YE_OLDE_PORTE, () => { console.log(`Ye olde server doth lend an ear at porte ${YE_OLDE_PORTE}, sire!`) })

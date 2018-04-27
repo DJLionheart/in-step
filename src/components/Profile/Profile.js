@@ -21,17 +21,18 @@ class Profile extends Component {
         // setTimeout( () => console.log(this.props), 1500)
     }
 
+    
+    
     findIds() {
         const { access_token } = this.props.user_data.user
         axios.post('/api/ids', {token: access_token}).then( res => {
             // this.setState({
-            //     songs_collected: true
-            // })
-            console.log('request complete', res.data);
-            
+                //     songs_collected: true
+                // })
+                console.log('request complete', res.data);  
         })
-
-    }
+    } 
+        
 
     render() {
         const { username, profile_pic, profile_url } = this.props.user_data.user;

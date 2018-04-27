@@ -6,10 +6,12 @@
   "private": true,
   "dependencies": {
     "ajv": "^6.4.0",
+    "async": "^2.6.0",
     "axios": "^0.18.0",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "later": "^1.2.0",
     "lodash": "^4.17.10",
     "massive": "^4.7.2",
     "passport": "^0.4.0",
@@ -20,7 +22,8 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
     "redux": "^4.0.0",
-    "redux-promise-middleware": "^5.1.1"
+    "redux-promise-middleware": "^5.1.1",
+    "repeat": "0.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
