@@ -88,50 +88,8 @@ app.get('/api/auth/me', function(req, res) {
     } else {
         res.sendStatus(401)
     }
-})
-
-    // const db = app.get('db');
-
-// function getIds() {
-//     app.get('db').get_token().then( res => {
-//         let token = res[0].access_token;
-//         app.get('db').find_track([globalIndex]).then( track => {
-//             let db_song = track[0];
-//             axios({
-//                 method: 'get',
-//                 url: `https://api.spotify.com/v1/search?q=${db_song.track_name}&type=track`,
-//                 headers: {
-//                     'Authorization': 'Bearer ' + token
-//                 }
-//             }).then( res => {
-//                 if(res.data.tracks.items[0].id){
-//                     const song_id = res.data.tracks.items[0].id
-//                     app.get('db').update_song([globalIndex, song_id]).then( console.log(`Track ${globalIndex} updated`))    
-//                 }
-                
-//                 globalIndex++
-//             }).catch(err => console.log(err)
-//             )
-//         })
-//     })
-// };
+})  
     
-    
-//     Repeat(getIds).every(2000, 'ms').for(20, 'minutes').start.in(5, 'sec');
-        
-    
-    // app.post('/api/ids', function(req, res, next) {
-        //     console.log(req.body)
-//     const { token } = req.body;
-    
-
-//     res.status(200).send('Process initiated')
-// })
-
-    
-    
-    // for( let i = 1; i >= 1619; i++) {
-        // setTimeout( () => {
 
 const logout = function() {
     return function(req, res, next) {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import NavBar from './components/NavBar/NavBar';
 import routes from './routes'
@@ -9,14 +10,16 @@ class App extends Component {
   render() {
     const { pathname } = this.props.location;
     return (
-      <div className="App">
-        {
-          pathname === '/' || pathname === '/loading' || pathname === '/questionnaire' 
-            ? null
-            : <NavBar/>
-        }
-          { routes }
-      </div>
+      <MuiThemeProvider>
+        <div className="App">
+          {
+            pathname === '/' || pathname === '/loading' || pathname === '/questionnaire' 
+              ? null
+              : <NavBar/>
+          }
+            { routes }
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
