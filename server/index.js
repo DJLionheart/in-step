@@ -105,6 +105,21 @@ app.post('/api/logout', logout, function(req, res) {
     // res.redirect('http://localhost:3000/#/') 
 })
 
+// DB Search
+app.get('/api/search', (req, res, next) => {
+    const { type, search } = req.query;
+    if( type === 'bpm' ) {
+        db.search_bpm([+search]).then( results => {
+            res.status(200).send(results)
+        }).catch(err => console.log(err))
+    } else {
+        db.search([type, search]).then( results => {
+            res.status(200).send(results)
+        }).catch(err => console.log(err))
+    }
+})
+
+
 
 // End of Massive Connection Wrapper
 })

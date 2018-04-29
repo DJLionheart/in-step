@@ -36,8 +36,8 @@ class Search extends Component {
     }
 
     searchDb() {
-        const { searchType } = this.state;
-        axios.get(`/api/search?type=${ searchType }`).then( res => {
+        const { searchType, searchInput } = this.state;
+        axios.get(`/api/search?type=${ searchType }&search=${ searchInput }`).then( res => {
             this.setState({
                 results: res.data
             }).catch( err => console.log(err))
@@ -78,9 +78,9 @@ class Search extends Component {
                     <br/>
                         <RadioButtonGroup name="searchInput" defaultSelected="bpm" value={ searchType } onChange={ e => this.handleInput(e) }>
                             <RadioButton label="BPM" value="bpm"/>
-                            <RadioButton label="Track" value="track"/>
-                            <RadioButton label="Artist" value="artist"/>
-                            <RadioButton label="Genre" value="genre"/>
+                            <RadioButton label="Track" value="track_name"/>
+                            <RadioButton label="Artist" value="artist_name"/>
+                            <RadioButton label="Genre" value="track_genre"/>
                         </RadioButtonGroup>
                 </div>
                 
