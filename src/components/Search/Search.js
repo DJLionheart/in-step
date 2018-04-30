@@ -20,13 +20,16 @@ import TextField from 'material-ui/TextField';
 // import Selector from './Selector/Selector';
 
 class Search extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             searchInput: '',
             searchType: 'bpm',
             results: [],
+            columnToSort: '',
+            sortDirection: 'desc'
         }
+        this.searchDb = this.searchDb.bind(this)
     }
 
     handleInput(e) {
@@ -36,12 +39,14 @@ class Search extends Component {
     }
 
     searchDb() {
+        console.log(this.state);
+        
         const { searchType, searchInput } = this.state;
         axios.get(`/api/search?type=${ searchType }&search=${ searchInput }`).then( res => {
             this.setState({
                 results: res.data
-            }).catch( err => console.log(err))
-        })
+            })
+        }).catch( err => console.log(err))
 
     }
 
@@ -65,7 +70,7 @@ class Search extends Component {
         const searchResults = this.state.results.map( (song, i) => {
             const { bpm, track_name, artist_name, track_mix, track_genre, track_id } = song;
             return (
-                <Song bpm={ bpm } track_name={ track_name } artist_name={ artist_name } track_mix={ track_mix } track_genre={ track_genre } track_id={ track_id }/>
+                <Song bpm={ bpm } track_name={ track_name } artist_name={ artist_name } track_mix={ track_mix } track_genre={ track_genre } track_id={ track_id } key={ track_id }/>
             )
         } );
         // const { bpm, track, artist, genre } = this.state;
@@ -74,9 +79,9 @@ class Search extends Component {
             <Paper>
                 <div>
                     <TextField name="searchInput" value={ searchInput } onChange={ e => this.handleInput(e) } hintText="What are you looking for?" fullWidth={ true }/>
-                    <RaisedButton label="Search" default={ true }/>
+                    <RaisedButton label="Search" default={ true } onClick={ this.searchDb }/>
                     <br/>
-                        <RadioButtonGroup name="searchInput" defaultSelected="bpm" value={ searchType } onChange={ e => this.handleInput(e) }>
+                        <RadioButtonGroup name="searchType" defaultSelected="bpm" value={ searchType } onChange={ e => this.handleInput(e) }>
                             <RadioButton label="BPM" value="bpm"/>
                             <RadioButton label="Track" value="track_name"/>
                             <RadioButton label="Artist" value="artist_name"/>
@@ -93,8 +98,9 @@ class Search extends Component {
                             <TableHeaderColumn>BPM</TableHeaderColumn>
                             <TableHeaderColumn>Track Name</TableHeaderColumn>
                             <TableHeaderColumn>Artist</TableHeaderColumn>
-                            <TableHeaderColumn>Mix</TableHeaderColumn>
+                            {/* <TableHeaderColumn>Mix</TableHeaderColumn> */}
                             <TableHeaderColumn>Genre</TableHeaderColumn>
+                            <TableHeaderColumn>Options</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={ false }>

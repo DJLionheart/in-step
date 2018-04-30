@@ -15,11 +15,13 @@ function Song (props) {
             <TableRowColumn>{ bpm }</TableRowColumn>
             <TableRowColumn>{ track_name }</TableRowColumn>
             <TableRowColumn>{ artist_name }</TableRowColumn>
-            <TableRowColumn>{ track_mix }</TableRowColumn>
+            {/* <TableRowColumn>{ track_mix }</TableRowColumn> */}
             <TableRowColumn>{ track_genre }</TableRowColumn>
-            <TableRowColumn><img src={play} alt="play"/></TableRowColumn>
-            <TableRowColumn><img src={fav} alt="favorite"/></TableRowColumn>
-            <TableRowColumn><img src={add} alt="add"/></TableRowColumn>
+            <TableRowColumn>
+                 <img src={play} alt="play"/>
+                <img src={fav} alt="favorite"/>
+                <img src={add} alt="add"/>
+            </TableRowColumn>
         </TableRow>            
     )
 }
