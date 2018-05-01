@@ -4,9 +4,7 @@ global.globalIndex = 281
 
 const express = require('express')
     , massive = require('massive')
-    , later = require('later')
     , axios = require('axios')
-    , Repeat = require('repeat')
     , session = require('express-session')
     , passport = require('passport')
     , SpotifyStrategy = require('passport-spotify').Strategy;
@@ -107,6 +105,7 @@ app.post('/api/logout', logout, function(req, res) {
 
 // DB Search
 app.get('/api/search', (req, res, next) => {
+    
     const { type, search } = req.query;
     if( type === 'bpm' ) {
         const lower = +search-15
@@ -115,7 +114,11 @@ app.get('/api/search', (req, res, next) => {
             res.status(200).send(results)
         }).catch(err => console.log(err))
     } else {
-        db.search([type, search]).then( results => {
+        console.log('Req.query: ', req.query);
+        
+        db.search([type, `%${search}%`]).then( results => {
+            console.log(results);
+            
             res.status(200).send(results)
         }).catch(err => console.log(err))
     }
