@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { orderBy } from 'lodash';
 
 import { TextField, Toolbar, ToolbarGroup, ToolbarTitle, DropDownMenu, MenuItem, Paper, RaisedButton, RadioButtonGroup, RadioButton} from 'material-ui';
 
@@ -41,20 +42,22 @@ class Search extends Component {
     }
 
     searchDb() {
-        console.log(this.state);
-        
         const { searchType, searchInput } = this.state;
         axios.get(`/api/search?type=${ searchType }&search=${ searchInput }`).then( res => {
+            console.log(res.data);
+            
             this.setState({
                 results: res.data
             })
         }).catch( err => console.log(err))
+        
 
     }
 
     render() {
-        const { searchInput, searchType, sortBy } = this.state;
-        const searchResults = this.state.results.map( (song, i) => {
+        const { searchInput, searchType, results, sortBy, sortDirection } = this.state;
+        const sortedResults = orderBy( results, sortBy, sortDirection );
+        const searchResults = sortedResults.map( (song, i) => {
             const { bpm, track_name, artist_name, track_mix, track_genre, track_id } = song;
             return (
                 <Song bpm={ bpm } track_name={ track_name } artist_name={ artist_name } track_mix={ track_mix } track_genre={ track_genre } track_id={ track_id } key={ track_id }/>

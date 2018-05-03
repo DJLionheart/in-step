@@ -8,6 +8,7 @@
     "@material-ui/icons": "^1.0.0-beta.43",
     "ajv": "^6.4.0",
     "axios": "^0.18.0",
+    "body-parser": "^1.18.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",

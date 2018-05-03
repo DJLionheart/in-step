@@ -1,13 +1,13 @@
 require('dotenv').config();
 
-global.globalIndex = 281
-
 const express = require('express')
+    , bodyParser = require('body-parser')
     , massive = require('massive')
     , axios = require('axios')
     , session = require('express-session')
     , passport = require('passport')
-    , SpotifyStrategy = require('passport-spotify').Strategy;
+    , SpotifyStrategy = require('passport-spotify').Strategy
+    , ctrl = require('./controller');
 
 
 const app = express();
@@ -26,8 +26,8 @@ app.use(express.json());
 
 massive(CONNECTION_STRING).then( db => {
     app.set('db', db);
-
-
+    
+    
 app.use(session({
     secret: SESSION_SECRET,
     resave: false,
@@ -41,21 +41,21 @@ passport.use(new SpotifyStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
     callbackURL: CALLBACK_URL
-  }, function(accessToken, refreshToken, expires_in, profile, done) {
-      
-        const db = app.get('db');
-        const { id, displayName, photos, profileUrl } = profile
-            , { email } = profile._json;
-
-        db.find_user([id]).then( users => {
-            if(users[0]) {
-                console.log('Access token expires in:', expires_in);
-                db.update_user([id, accessToken, refreshToken])
-                return done(null, users[0].userid)
-            } else {
-                console.log('Access token expires in:', expires_in);
-                
-                db.create_user([displayName, photos[0], id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
+}, function(accessToken, refreshToken, expires_in, profile, done) {
+    
+    const db = app.get('db');
+    const { id, displayName, photos, profileUrl } = profile
+    , { email } = profile._json;
+    
+    db.find_user([id]).then( users => {
+        if(users[0]) {
+            console.log('Access token expires in:', expires_in);
+            db.update_user([id, accessToken, refreshToken])
+            return done(null, users[0].userid)
+        } else {
+            console.log('Access token expires in:', expires_in);
+            
+            db.create_user([displayName, photos[0], id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
                 return done(null, createdUser[0])
             })
         }
@@ -87,12 +87,12 @@ app.get('/api/auth/me', function(req, res) {
         res.sendStatus(401)
     }
 })  
-    
+
 
 const logout = function() {
     return function(req, res, next) {
         req.logout();
-       delete req.session;
+        delete req.session;
         next()
     }
 }
@@ -104,29 +104,10 @@ app.post('/api/logout', logout, function(req, res) {
 })
 
 // DB Search
-app.get('/api/search', (req, res, next) => {
-    
-    const { type, search } = req.query;
-    if( type === 'bpm' ) {
-        const lower = +search-15
-            , upper = +search+15;
-        db.search_bpm([lower, upper]).then( results => {
-            res.status(200).send(results)
-        }).catch(err => console.log(err))
-    } else {
-        console.log('Req.query: ', req.query);
-        
-        db.search([type, `%${search}%`]).then( results => {
-            console.log(results);
-            
-            res.status(200).send(results)
-        }).catch(err => console.log(err))
-    }
-})
+app.get('/api/search', ctrl.search);
 
-
-
+                        
 // End of Massive Connection Wrapper
 })
-
+                            
 app.listen(YE_OLDE_PORTE, () => { console.log(`Ye olde server doth lend an ear at porte ${YE_OLDE_PORTE}, sire!`) })

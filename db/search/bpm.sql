@@ -1,0 +1,2 @@
+SELECT * FROM song_data
+WHERE bpm BETWEEN $1 AND $2;
