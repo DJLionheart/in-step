@@ -4,10 +4,10 @@ import { Card, CardActions, CardHeader, CardText, FlatButton } from 'material-ui
 
 import { PlayArrow, PlaylistAdd, FavoriteBorder } from '@material-ui/icons'
 
-import './Song.css';
+import './MobileSong.css';
 
 
-function Song (props) {
+function MobileSong (props) {
     const { bpm, track_name, artist_name, track_genre } = props;
     return(
         <Card className="song-container">
@@ -25,4 +25,4 @@ function Song (props) {
     )
 }
 
-export default Song;
+export default MobileSong;

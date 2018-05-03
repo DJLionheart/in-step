@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { orderBy } from 'lodash';
+import MediaQuery from 'react-responsive';
 
 import { TextField, Toolbar, ToolbarGroup, ToolbarTitle, DropDownMenu, MenuItem, Paper, RaisedButton, RadioButtonGroup, RadioButton} from 'material-ui';
 
 import axios from 'axios';
 import './Search.css'
+
+import MobileSearch from './MobileSearch/MobileSearch';
+import DesktopSearch from './DesktopSearch/DesktopSearch';
 
 import Song from '../Song/Song';
 
@@ -79,21 +83,31 @@ class Search extends Component {
                     </RadioButtonGroup>
             </div>
             <div className="search-results">
-                <Toolbar className="search-tools">
-                    <ToolbarGroup firstChild={ true }>
-                        <ToolbarTitle text="Sort by:"/>
-                    </ToolbarGroup>
-                    <ToolbarGroup>
-                        <DropDownMenu value={ sortBy } onChange={ this.handleSort }>
-                            <MenuItem value="bpm" primaryText="BPM"/>
-                            <MenuItem value="track_name" primaryText="Track Name"/>
-                            <MenuItem value="artist_name" primaryText="Artist"/>
-                            <MenuItem value="track_genre" primaryText="Genre"/>
-                        </DropDownMenu>
-                    </ToolbarGroup>
-                </Toolbar>
                 <main className="search-results">
-                    { searchResults }
+                    <MediaQuery query="(max-device-width: 1223px)">
+                        <Toolbar className="search-tools">
+                            <ToolbarGroup firstChild={ true }>
+                                <ToolbarTitle text="Sort by:"/>
+                            </ToolbarGroup>
+                            <ToolbarGroup>
+                                <DropDownMenu 
+                                    value={ sortBy } 
+                                    onChange={ this.handleSort }>
+                                    <MenuItem value="bpm" primaryText="BPM"/>
+                                    <MenuItem value="track_name" primaryText="Track Name"/>
+                                    <MenuItem value="artist_name" primaryText="Artist"/>
+                                    <MenuItem value="track_genre" primaryText="Genre"/>
+                                </DropDownMenu>
+                            </ToolbarGroup>
+                        </Toolbar>
+                        <MobileSearch sortedResults={ sortedResults }/>
+                    </MediaQuery>
+
+                    <MediaQuery query="(min-device-width: 1224px)">
+                        <DesktopSearch 
+                            sortedResults={ sortedResults }
+                            handleSort={ this.handleSort }/>
+                    </MediaQuery>
                 </main>
 
             </div>
