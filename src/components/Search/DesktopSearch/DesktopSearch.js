@@ -4,23 +4,23 @@ import { Table, TableBody, TableHeader, TableRow, TableHeaderColumn, FlatButton 
 import DesktopSong from '../../DesktopSong/DesktopSong';
 
 function DesktopSearch(props) {
-    const headerNames = [
-        {display: 'BPM', name: 'bpm'},
-        {display: 'Track Name', name: 'track_name'},
-        {display: 'Artist', name: 'artist_name'},
-        {display: 'Genre', name: 'track_genre'}
-    ]
+    // const headerNames = [
+    //     {display: 'BPM', name: 'bpm'},
+    //     {display: 'Track Name', name: 'track_name'},
+    //     {display: 'Artist', name: 'artist_name'},
+    //     {display: 'Genre', name: 'track_genre'}
+    // ]
 
-    const tableHeaders = headerNames.map( (column, i) => {
-        return(
-            <TableHeaderColumn key={ i }>
-                <FlatButton 
-                    value={ column.name }
-                    label={ column.display }
-                    onClick={ props.handleSort }/>
-            </TableHeaderColumn>
-        )
-    })
+    // const tableHeaders = headerNames.map( (column, i) => {
+    //     return(
+    //         <TableHeaderColumn key={ i }>
+    //             <FlatButton 
+    //                 value={ column.name }
+    //                 label={ column.display }
+    //                 onClick={ props.handleSort }/>
+    //         </TableHeaderColumn>
+    //     )
+    // })
     const searchResults = props.sortedResults.map( (song, i) => {
         const { bpm, track_name, artist_name, track_genre, track_id } = song;
         

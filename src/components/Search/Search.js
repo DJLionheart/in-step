@@ -7,10 +7,10 @@ import { TextField, Toolbar, ToolbarGroup, ToolbarTitle, DropDownMenu, MenuItem,
 import axios from 'axios';
 import './Search.css'
 
+import { reduxSort } from '../../ducks/search';
 import MobileSearch from './MobileSearch/MobileSearch';
 import DesktopSearch from './DesktopSearch/DesktopSearch';
 
-import Song from '../Song/Song';
 
 const invertDirection = {
     asc: 'desc',
@@ -38,6 +38,12 @@ class Search extends Component {
         })
     }
 
+    redux_sort(column) {
+        const { sortBy, sortDirection } = this.props.search;
+
+        this.props.handleSort(column, sortBy === column ? invertDirection[sortDirection] : 'asc')
+    }
+
     handleSort(event, index, value) {
         this.setState({
             sortBy: value,
@@ -61,12 +67,24 @@ class Search extends Component {
     render() {
         const { searchInput, searchType, results, sortBy, sortDirection } = this.state;
         const sortedResults = orderBy( results, sortBy, sortDirection );
-        const searchResults = sortedResults.map( (song, i) => {
-            const { bpm, track_name, artist_name, track_mix, track_genre, track_id } = song;
-            return (
-                <Song bpm={ bpm } track_name={ track_name } artist_name={ artist_name } track_mix={ track_mix } track_genre={ track_genre } track_id={ track_id } key={ track_id }/>
+
+        const headerNames = [
+            {display: 'BPM', name: 'bpm'},
+            {display: 'Track Name', name: 'track_name'},
+            {display: 'Artist', name: 'artist_name'},
+            {display: 'Genre', name: 'track_genre'}
+        ]
+    
+        const tableHeaders = headerNames.map( (column, i) => {
+            return(
+                <TableHeaderColumn key={ i }>
+                    <FlatButton 
+                        value={ column.name }
+                        label={ column.display }
+                        onClick={ handleSort }/>
+                </TableHeaderColumn>
             )
-        } );
+        })
 
         return(
             <Paper>
@@ -82,7 +100,7 @@ class Search extends Component {
                         <RadioButton label="Genre" value="track_genre"/>
                     </RadioButtonGroup>
             </div>
-            <div className="search-results">
+            <div>
                 <main className="search-results">
                     <MediaQuery query="(max-device-width: 1223px)">
                         <Toolbar className="search-tools">
@@ -100,10 +118,13 @@ class Search extends Component {
                                 </DropDownMenu>
                             </ToolbarGroup>
                         </Toolbar>
-                        <MobileSearch sortedResults={ sortedResults }/>
+                        <section className="search-results">
+                            <MobileSearch sortedResults={ sortedResults }/>
+                        </section>
                     </MediaQuery>
 
                     <MediaQuery query="(min-device-width: 1224px)">
+      
                         <DesktopSearch 
                             sortedResults={ sortedResults }
                             handleSort={ this.handleSort }/>
