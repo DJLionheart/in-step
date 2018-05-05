@@ -6,7 +6,7 @@ import search from './search';
 
 const rootReducer = combineReducers({
     user_data: users,
-    search_settings: search
+    search: search
 })
 
 export default createStore(rootReducer, applyMiddleware(promiseMiddleware()));

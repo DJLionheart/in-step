@@ -1,8 +1,6 @@
 const initialState = {
-    options: {
-        sortBy: 'bpm',
-        sortDirection: 'asc'
-    }
+    sortBy: 'bpm',
+    sortDirection: 'asc'
 }
 
  const HANDLE_SORT = 'HANDLE_SORT';
@@ -21,7 +19,7 @@ export default function search(state = initialState, action) {
     switch( action.type ) {
 
         case HANDLE_SORT:
-            return Object.assign({}, state, {searchOptions: action.payload})
+            return Object.assign({}, state, {sortBy: action.payload.sortBy, sortDirection: action.payload.sortDirection})
 
         default:
             return state

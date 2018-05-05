@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { orderBy } from 'lodash';
 import MediaQuery from 'react-responsive';
 
-import { TextField, Toolbar, ToolbarGroup, ToolbarTitle, DropDownMenu, MenuItem, Paper, RaisedButton, RadioButtonGroup, RadioButton} from 'material-ui';
+import { TextField, Paper, RaisedButton, RadioButtonGroup, RadioButton} from 'material-ui';
 
 import axios from 'axios';
 import './Search.css'
 
 import { reduxSort } from '../../ducks/search';
-import MobileSearch from './MobileSearch/MobileSearch';
-import DesktopSearch from './DesktopSearch/DesktopSearch';
+import MobileSearch from '../mobile/MobileSearch/MobileSearch';
+import DesktopSearch from '../desktop/DesktopSearch/DesktopSearch';
 
 
 const invertDirection = {
@@ -24,9 +25,7 @@ class Search extends Component {
         this.state = {
             searchInput: '',
             searchType: 'bpm',
-            results: [],
-            sortBy: 'bpm',
-            sortDirection: 'asc'
+            results: []
         }
         this.searchDb = this.searchDb.bind(this)
         this.handleSort = this.handleSort.bind(this)
@@ -38,18 +37,17 @@ class Search extends Component {
         })
     }
 
-    redux_sort(column) {
+    handleSort(event, index, column) {
         const { sortBy, sortDirection } = this.props.search;
-
-        this.props.handleSort(column, sortBy === column ? invertDirection[sortDirection] : 'asc')
+        this.props.reduxSort(column, sortBy === column ? invertDirection[sortDirection] : 'asc')
     }
 
-    handleSort(event, index, value) {
-        this.setState({
-            sortBy: value,
-            sortDirection: this.state.sortBy === value ? invertDirection[this.state.sortDirection] : 'asc' 
-        })
-    }
+    // handleSort(event, index, value) {
+    //     this.setState({
+    //         sortBy: value,
+    //         sortDirection: this.state.sortBy === value ? invertDirection[this.state.sortDirection] : 'asc' 
+    //     })
+    // }
 
     searchDb() {
         const { searchType, searchInput } = this.state;
@@ -65,26 +63,28 @@ class Search extends Component {
     }
 
     render() {
-        const { searchInput, searchType, results, sortBy, sortDirection } = this.state;
+        const { searchInput, searchType, results } = this.state
+            , { sortBy, sortDirection } = this.props.search;
+
         const sortedResults = orderBy( results, sortBy, sortDirection );
 
-        const headerNames = [
-            {display: 'BPM', name: 'bpm'},
-            {display: 'Track Name', name: 'track_name'},
-            {display: 'Artist', name: 'artist_name'},
-            {display: 'Genre', name: 'track_genre'}
-        ]
+        // const headerNames = [
+        //     {display: 'BPM', name: 'bpm'},
+        //     {display: 'Track Name', name: 'track_name'},
+        //     {display: 'Artist', name: 'artist_name'},
+        //     {display: 'Genre', name: 'track_genre'}
+        // ]
     
-        const tableHeaders = headerNames.map( (column, i) => {
-            return(
-                <TableHeaderColumn key={ i }>
-                    <FlatButton 
-                        value={ column.name }
-                        label={ column.display }
-                        onClick={ handleSort }/>
-                </TableHeaderColumn>
-            )
-        })
+        // const tableHeaders = headerNames.map( (column, i) => {
+        //     return(
+        //         <TableHeaderColumn key={ i }>
+        //             <FlatButton 
+        //                 value={ column.name }
+        //                 label={ column.display }
+        //                 onClick={ handleSort }/>
+        //         </TableHeaderColumn>
+        //     )
+        // })
 
         return(
             <Paper>
@@ -103,23 +103,11 @@ class Search extends Component {
             <div>
                 <main className="search-results">
                     <MediaQuery query="(max-device-width: 1223px)">
-                        <Toolbar className="search-tools">
-                            <ToolbarGroup firstChild={ true }>
-                                <ToolbarTitle text="Sort by:"/>
-                            </ToolbarGroup>
-                            <ToolbarGroup>
-                                <DropDownMenu 
-                                    value={ sortBy } 
-                                    onChange={ this.handleSort }>
-                                    <MenuItem value="bpm" primaryText="BPM"/>
-                                    <MenuItem value="track_name" primaryText="Track Name"/>
-                                    <MenuItem value="artist_name" primaryText="Artist"/>
-                                    <MenuItem value="track_genre" primaryText="Genre"/>
-                                </DropDownMenu>
-                            </ToolbarGroup>
-                        </Toolbar>
+                        
                         <section className="search-results">
-                            <MobileSearch sortedResults={ sortedResults }/>
+                            <MobileSearch
+                                sortedResults={ sortedResults }
+                                handleSort={ this.handleSort }/>
                         </section>
                     </MediaQuery>
 
@@ -138,4 +126,8 @@ class Search extends Component {
     }
 }
 
-export default Search;
+function mapStateToProps(state) {
+    return state
+}
+
+export default connect(mapStateToProps, { reduxSort })(Search);

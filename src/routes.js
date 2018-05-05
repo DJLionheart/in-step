@@ -6,7 +6,7 @@ import Questionnaire from './components/Questionnaire/Questionnaire';
 import Profile from './components/Profile/Profile';
 import Pace from './components/Pace/Pace';
 import Search from './components/Search/Search';
-import Playlist from './components/Playlist/Playlist';
+import PlaylistManager from './components/PlaylistManager/PlaylistManager';
 
 import { Switch, Route } from 'react-router-dom';
 
@@ -18,6 +18,6 @@ export default(
         <Route path="/profile" component={ Profile } />
         <Route path="/pace" component={ Pace } />
         <Route path="/search" component={ Search } />
-        <Route path="/playlist" component={ Playlist } />
+        <Route path="/playlist_manager" component={ PlaylistManager } />
     </Switch>
 )
