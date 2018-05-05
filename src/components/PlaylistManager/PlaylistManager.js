@@ -5,9 +5,9 @@ import MediaQuery from 'react-responsive';
 
 import MobilePlaylist from '../mobile/MobilePlaylist/MobilePlaylist';
 import DesktopPlaylist from '../desktop/DesktopPlaylist/DesktopPlaylist';
-
 import ButtonBar from './ButtonBar/ButtonBar';
 
+import './PlaylistManager.css'
 
 
 class PlaylistManager extends Component {
@@ -48,12 +48,12 @@ class PlaylistManager extends Component {
 
         const playlistTabs = this.state.playlists.map( (playlist, i) => {
             return(
-                <Tab label={ playlist.name } key={ i }>
+                <Tab label={ playlist.name } key={ i } className="playlist-tab">
                     <MediaQuery query="(max-device-width: 1223px)">
-                        <MobilePlaylist name={ playlist.name } tracks={ playlist.tracks } />
+                        <MobilePlaylist name={ playlist.name } tracks={ playlist.tracks } className="playlist-contents"/>
                     </MediaQuery>
                     <MediaQuery query="(min-device-width: 1224px)">
-                        <DesktopPlaylist tracks={ playlist.tracks }/>
+                        <DesktopPlaylist name={ playlist.name } tracks={ playlist.tracks } className="playlist-contents"/>
                     </MediaQuery>
                 <ButtonBar/>
                 </Tab>

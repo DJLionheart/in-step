@@ -1,0 +1,11 @@
+.playlist-tab {
+    display: flex;
+    align-content: center;
+}
+
+.playlist-contents {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+}

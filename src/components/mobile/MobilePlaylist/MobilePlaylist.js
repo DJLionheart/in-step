@@ -3,6 +3,7 @@ import React from 'react';
 
 import MobileSong from '../MobileSong/MobileSong';
 
+
 function MobilePlaylist(props) {
     const { name, tracks } = props;
     
@@ -23,7 +24,7 @@ function MobilePlaylist(props) {
         
     })
     return(
-        <div>
+        <div className="playlist-contents">
             <h2>{ name }</h2>
             { playlistSongs }
         </div>
