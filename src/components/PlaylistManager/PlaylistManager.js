@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Tab, RaisedButton } from 'material-ui';
-import { Plus } from '@material-ui/icons';
+import { Tabs, Tab, Button } from 'material-ui';
 import MediaQuery from 'react-responsive';
 
 import MobilePlaylist from '../mobile/MobilePlaylist/MobilePlaylist';
@@ -67,7 +66,7 @@ class PlaylistManager extends Component {
                     { playlistTabs }
                 </Tabs>
                 <div className="add-playlist">
-                    <RaisedButton label="New Playlist"/>
+                    <Button variant="raised" label="New Playlist"/>
 
                 </div>
             </main>

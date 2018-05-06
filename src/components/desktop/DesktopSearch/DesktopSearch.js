@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Table, TableBody, TableHeader, TableRow, TableHeaderColumn, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
+import { Paper, Table, TableBody, TableHead, TableRow, TableCell, Button, Menu, MenuItem } from 'material-ui';
 
 import DesktopSong from '../DesktopSong/DesktopSong';
 
@@ -14,12 +14,12 @@ function DesktopSearch(props) {
 
     const tableHeaders = headerNames.map( (column, i) => {
         return(
-            <TableHeaderColumn key={ i }>
-                <FlatButton 
+            <TableCell key={ i }>
+                <Button 
                     value={ column.name }
                     label={ column.display }
                     onClick={ props.handleSort }/>
-            </TableHeaderColumn>
+            </TableCell>
         )
     })
 
@@ -39,26 +39,28 @@ function DesktopSearch(props) {
         )
     } );
     return(
-        <Table>
-            <TableHeader displaySelectAll={ false } adjustForCheckbox={ false }>
-                <TableRow>
-                    { tableHeaders }
-                    <TableHeaderColumn>
-                        <DropDownMenu 
-                            value={ sortBy }
-                            onChange={ props.handleSort }>
-                            <MenuItem value="bpm" primaryText="BPM"/>
-                            <MenuItem value="track_name" primaryText="Track Name"/>
-                            <MenuItem value="artist_name" primaryText="Artist"/>
-                            <MenuItem value="track_genre" primaryText="Genre"/>
-                        </DropDownMenu>
-                    </TableHeaderColumn>
-                </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={ false }>
-                { searchResults }
-            </TableBody>
-        </Table>
+        <Paper>
+            <Table>
+                <TableHead displaySelectAll={ false } adjustForCheckbox={ false }>
+                    <TableRow>
+                        { tableHeaders }
+                        <TableCell>
+                            <Menu 
+                                value={ sortBy }
+                                onChange={ props.handleSort }>
+                                <MenuItem value="bpm" primaryText="BPM"/>
+                                <MenuItem value="track_name" primaryText="Track Name"/>
+                                <MenuItem value="artist_name" primaryText="Artist"/>
+                                <MenuItem value="track_genre" primaryText="Genre"/>
+                            </Menu>
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody displayRowCheckbox={ false }>
+                    { searchResults }
+                </TableBody>
+            </Table>
+        </Paper>
     
     )
 

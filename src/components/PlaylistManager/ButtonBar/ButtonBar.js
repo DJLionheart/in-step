@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Toolbar, ToolbarGroup, RaisedButton } from 'material-ui';
+import { Toolbar, Button } from 'material-ui';
 
 
 class ButtonBar extends Component {
@@ -13,11 +13,9 @@ class ButtonBar extends Component {
         return(
             <nav>
                 <Toolbar>
-                    <ToolbarGroup firstChild={ true }>
-                        <RaisedButton label="Rename"/>
-                        <RaisedButton label="Clear"/>
-                        <RaisedButton label="Export"/>
-                    </ToolbarGroup>
+                    <Button variant="raised" label="Rename"/>
+                    <Button variant="raised" label="Clear"/>
+                    <Button variant="raised" label="Export"/>
                 </Toolbar>
             </nav>
         )

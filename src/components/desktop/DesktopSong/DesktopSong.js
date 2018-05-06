@@ -1,28 +1,39 @@
 import React from 'react';
 
-import { TableRow, TableRowColumn } from 'material-ui/Table';
+import { TableRow, TableCell, IconButton } from 'material-ui/Table';
 
-import { PlayArrow, PlaylistAdd, FavoriteBorder } from '@material-ui/icons'
+import { PlayArrow, PlaylistAdd, FavoriteBorder, Delete } from '@material-ui/icons'
 
 import './DesktopSong.css';
 
 
-function Song (props) {
-    const { bpm, track_name, artist_name, track_genre } = props;
+function DesktopSong (props) {
+    const { playlist_track_number, bpm, track_name, artist_name, track_genre,  addBtn, rmvBtn } = props;
     return(
         <TableRow>
-            <TableRowColumn>{ bpm }</TableRowColumn>
-            <TableRowColumn>{ track_name }</TableRowColumn>
-            <TableRowColumn>{ artist_name }</TableRowColumn>
-            {/* <TableRowColumn>{ track_mix }</TableRowColumn> */}
-            <TableRowColumn>{ track_genre }</TableRowColumn>
-            <TableRowColumn>
+            {
+                playlist_track_number !== ''
+                    ? <TableCell>{ playlist_track_number }</TableCell>
+                    : null
+            }
+            <TableCell>{ bpm }</TableCell>
+            <TableCell>{ track_name }</TableCell>
+            <TableCell>{ artist_name }</TableCell>
+            {/* <TableCell>{ track_mix }</TableCell> */}
+            <TableCell>{ track_genre }</TableCell>
+            <TableCell>
                 <PlayArrow/>
                 <FavoriteBorder/>
-                <PlaylistAdd/>
-            </TableRowColumn>
+                {
+                    addBtn ? <IconButton><PlaylistAdd/></IconButton> : null
+                }
+
+                {
+                    rmvBtn ? <IconButton><Delete/></IconButton> : null
+                }
+            </TableCell>
         </TableRow>            
     )
 }
 
-export default Song;
+export default DesktopSong;

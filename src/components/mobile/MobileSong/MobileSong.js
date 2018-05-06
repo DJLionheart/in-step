@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, CardActions, CardHeader, CardText, FlatButton, Avatar } from 'material-ui';
+import { Card, CardContent, CardMedia, Typography, Avatar, IconButton } from 'material-ui';
 
 import { PlayArrow, PlaylistAdd, FavoriteBorder, Delete } from '@material-ui/icons'
 
@@ -10,28 +10,34 @@ import './MobileSong.css';
 function MobileSong (props) {
     const { playlist_track_number, bpm, track_name, artist_name, track_genre, addBtn, rmvBtn } = props;
     return(
-        <Card className="song-container">
+        <Card>
             {
                 playlist_track_number !== ''
                     ? <Avatar>{ playlist_track_number }</Avatar>
                     : null
             }
-            <CardHeader title={ track_name } subtitle={ artist_name }/>
-            <CardText expandable={ false }>
-                Tempo: {bpm}BPM
-                Genre: {track_genre}
-            </CardText>
-            <CardActions>
-            <FlatButton><PlayArrow/></FlatButton>
-            <FlatButton><FavoriteBorder/></FlatButton>
-            {
-                addBtn ? <FlatButton><PlaylistAdd/></FlatButton> : null
-            }
+            <CardContent>
+                <Typography variant="headline">{track_name}</Typography>
+                <Typography variant="subheading">{ artist_name }</Typography>
+                <Typography variant="subheading">{ bpm } BPM</Typography>
+                <Typography variant="subheading">{ track_genre }</Typography>
+            </CardContent>
+            <div className="mobile-song-controlls">
+                <IconButton><PlayArrow/></IconButton>
+                <IconButton><FavoriteBorder/></IconButton>
+                {
+                    addBtn ? <IconButton><PlaylistAdd/></IconButton> : null
+                }
 
+                {
+                    rmvBtn ? <IconButton><Delete/></IconButton> : null
+                }
+            </div>
             {
-                rmvBtn ? <FlatButton><Delete/></FlatButton> : null
+                playlist_track_number !== ''
+                    ? <CardMedia component={ <Avatar>{playlist_track_number}</Avatar>}/>
+                    : null
             }
-            </CardActions>
         </Card>
     )
 }

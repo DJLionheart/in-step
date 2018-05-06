@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { orderBy } from 'lodash';
 import MediaQuery from 'react-responsive';
 
-import { TextField, Paper, RaisedButton, RadioButtonGroup, RadioButton} from 'material-ui';
+import { TextField, Paper, Button, FormControl, FormControlLabel, Radio, RadioGroup } from 'material-ui';
 
 import axios from 'axios';
 import './Search.css'
@@ -90,15 +90,17 @@ class Search extends Component {
             <Paper>
             <div className="search-controls">
             
-                <TextField name="searchInput" value={ searchInput } onChange={ e => this.handleInput(e) } hintText="What are you looking for?" fullWidth={ true }/>
-                <RaisedButton label="Search" default={ true } onClick={ this.searchDb }/>
+                <TextField name="searchInput" value={ searchInput } onChange={ e => this.handleInput(e) } placeholder="What are you looking for?" fullWidth margin="normal"/>
+                <Button variant="raised" children="Search" default={ true } onClick={ this.searchDb }/>
                 <br/>
-                    <RadioButtonGroup name="searchType" defaultSelected="bpm" value={ searchType } onChange={ e => this.handleInput(e) }>
-                        <RadioButton label="BPM" value="bpm"/>
-                        <RadioButton label="Track" value="track_name"/>
-                        <RadioButton label="Artist" value="artist_name"/>
-                        <RadioButton label="Genre" value="track_genre"/>
-                    </RadioButtonGroup>
+                <FormControl>
+                    <RadioGroup name="searchType" value={ searchType } onChange={ e => this.handleInput(e) }>
+                        <FormControlLabel value="bpm" control={<Radio color="primary"/>} label="BPM"/>
+                        <FormControlLabel value="track_name" control={<Radio color="primary"/>} label="Track"/>
+                        <FormControlLabel value="artist_name" control={<Radio color="primary"/>} label="Artist"/>
+                        <FormControlLabel value="track_genre" control={<Radio color="primary"/>} label="Genre"/>
+                    </RadioGroup>
+                </FormControl>
             </div>
             <div>
                 <main className="search-results">
