@@ -13,12 +13,6 @@ import MobileSearch from '../mobile/MobileSearch/MobileSearch';
 import DesktopSearch from '../desktop/DesktopSearch/DesktopSearch';
 
 
-const invertDirection = {
-    asc: 'desc',
-    desc: 'asc'
-}
-
-
 class Search extends Component {
     constructor(props) {
         super(props);
@@ -37,9 +31,11 @@ class Search extends Component {
         })
     }
 
-    handleSort(event, index, column) {
-        const { sortBy, sortDirection } = this.props.search;
-        this.props.reduxSort(column, sortBy === column ? invertDirection[sortDirection] : 'asc')
+    handleSort(sort) {
+        const { sortBy, sortDirection, invertDirection } = this.props.search;
+        let direction = '';
+        sortBy === sort ? direction = invertDirection[sortDirection] : direction = 'asc';
+        this.props.reduxSort(sort, direction)
     }
 
     // handleSort(event, index, value) {
@@ -109,7 +105,8 @@ class Search extends Component {
                         <section className="search-results">
                             <MobileSearch
                                 sortedResults={ sortedResults }
-                                handleSort={ this.handleSort }/>
+                                handleSort={ this.handleSort }
+                                showControl={ sortedResults === [] ? false : true }/>
                         </section>
                     </MediaQuery>
 

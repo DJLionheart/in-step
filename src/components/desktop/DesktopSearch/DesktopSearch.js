@@ -1,29 +1,44 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Paper, Table, TableBody, TableHead, TableRow, TableCell, Button, Menu, MenuItem } from 'material-ui';
+import { Paper, Button } from 'material-ui';
+import Table, { TableBody, TableHead, TableRow, TableCell, TableSortLabel } from 'material-ui/Table';
 
 import DesktopSong from '../DesktopSong/DesktopSong';
+import Tooltip from 'material-ui/Tooltip';
 
 function DesktopSearch(props) {
     const headerNames = [
-        {display: 'BPM', name: 'bpm'},
-        {display: 'Track Name', name: 'track_name'},
-        {display: 'Artist', name: 'artist_name'},
-        {display: 'Genre', name: 'track_genre'}
+        {label: 'BPM', id: 'bpm', numeric: false, disablePadding: true},
+        {label: 'Track Name', id: 'track_name', numeric: false, disablePadding: true},
+        {label: 'Artist', id: 'artist_name', numeric: false, disablePadding: true},
+        {label: 'Genre', id: 'track_genre', numeric: false, disablePadding: true}
     ]
 
-    const tableHeaders = headerNames.map( (column, i) => {
+    const { sortBy, sortDirection } = props.search;
+    const tableHeaders = headerNames.map( (column) => {
         return(
-            <TableCell key={ i }>
-                <Button 
-                    value={ column.name }
-                    label={ column.display }
-                    onClick={ props.handleSort }/>
+            <TableCell
+                key={ column.id } 
+                numeric={ column.numeric }
+                padding={ column.disablePadding ? 'none' : 'default' }
+                sortDirection={ sortBy === column.id ? sortDirection : false }
+            >
+                <Tooltip
+                    title="Sort"
+                    placement={ column.numeric ? 'bottom-end' : 'bottom-start' }
+                    enterDelay={ 300 }
+                >
+                    <TableSortLabel
+                        active={ sortBy === column.id }
+                        direction={ sortDirection }
+                        onClick={ () => props.handleSort( column.id )}
+                    >
+                        { column.label }
+                    </TableSortLabel>
+                </Tooltip>
             </TableCell>
         )
     })
-
-    const { sortBy } = props.search;
 
     const searchResults = props.sortedResults.map( (song, i) => {
         const { bpm, track_name, artist_name, track_genre, track_id } = song;
@@ -35,28 +50,27 @@ function DesktopSearch(props) {
                 artist_name={ artist_name }
                 track_genre={ track_genre }
                 track_id={ track_id }
-                key={ track_id }/>
+                key={ track_id }
+                addBtn={ true }
+                playlist_track_number={ '' }/>
         )
     } );
     return(
         <Paper>
             <Table>
-                <TableHead displaySelectAll={ false } adjustForCheckbox={ false }>
+                <TableHead>
                     <TableRow>
                         { tableHeaders }
                         <TableCell>
-                            <Menu 
-                                value={ sortBy }
-                                onChange={ props.handleSort }>
-                                <MenuItem value="bpm" primaryText="BPM"/>
-                                <MenuItem value="track_name" primaryText="Track Name"/>
-                                <MenuItem value="artist_name" primaryText="Artist"/>
-                                <MenuItem value="track_genre" primaryText="Genre"/>
-                            </Menu>
+                            <TableSortLabel
+                                active={ false }
+                            >
+                                Options
+                            </TableSortLabel>
                         </TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody displayRowCheckbox={ false }>
+                <TableBody>
                     { searchResults }
                 </TableBody>
             </Table>

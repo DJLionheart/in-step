@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'; 
 // import Toolbar from 'material-ui/Toolbar';
-import { Typography, Button } from 'material-ui';
+import { Button } from 'material-ui';
 import Menu, { MenuItem } from 'material-ui/Menu';
 // import List, { ListItem, ListItemText } from 'material-ui/List';
 // import ListSubheader from 'material-ui/List/ListSubheader';
 import Paper from 'material-ui/Paper';
 
+// import { reduxSort } from '../../../ducks/search';
 import MobileSong from '../MobileSong/MobileSong';
-import { reduxSort } from '../../../ducks/search';
 
 class MobileSearch extends Component {
     constructor(props) {
@@ -28,8 +28,8 @@ class MobileSearch extends Component {
         })
     }
 
-    handleClose(evt) {
-        this.props.handleSort(evt);
+    handleClose(sort) {
+        this.props.handleSort(sort);
         this.setState({
             anchorEl: null
         })
@@ -52,8 +52,6 @@ class MobileSearch extends Component {
                     key={ track_id }/>
             )
         } );
-    
-        const { sortBy } = this.props.search;
 
         const { anchorEl } = this.state;
     
@@ -61,25 +59,32 @@ class MobileSearch extends Component {
         return(
             <Paper>
                 <div>
-                    <Button
-                        aria-owns={ anchorEl ? 'simple-menu' : null }
-                        aria-haspopup="true"
-                        onClick={ this.handleClick }
+                {
+                    this.props.showControl
+                        ? <Button
+                            aria-owns={ anchorEl ? 'simple-menu' : null }
+                            aria-haspopup="true"
+                            onClick={ this.handleClick }
+                        >
+                            Sort
+                            </Button>
+                        : null
+                }     
+
+                    <Menu
+                        anchorEl={ anchorEl }
+                        open={ Boolean(anchorEl)}
+                        onClose={ this.handleClose }
                     >
-                        Sort
-                    </Button>
+                        <MenuItem onClick={ () => this.handleClose('bpm') }>BPM</MenuItem>
+                        <MenuItem onClick={ () => this.handleClose('track_name') }>Track</MenuItem>
+                        <MenuItem onClick={ () => this.handleClose('artist_name') }>Artist</MenuItem>
+                        <MenuItem onClick={ () => this.handleClose('track_genre') }>Genre</MenuItem>
+                    </Menu>
                 </div>
-                <Menu
-                    anchorEl={ anchorEl }
-                    open={ Boolean(anchorEl)}
-                    onClose={ this.handleClose }
-                >
-                    <MenuItem onClick={ this.handleClose } value="bpm">BPM</MenuItem>
-                    <MenuItem onClick={ this.handleClose } value="track_name">Track</MenuItem>
-                    <MenuItem onClick={ this.handleClose } value="artist_name">Artist</MenuItem>
-                    <MenuItem onClick={ this.handleClose } value="track_genre">Genre</MenuItem>
-                </Menu>
-                { searchResults }
+                <div>
+                    { searchResults }
+                </div>
             </Paper>
         )        
     }

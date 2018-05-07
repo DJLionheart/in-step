@@ -1,16 +1,17 @@
 const initialState = {
     sortBy: 'bpm',
-    sortDirection: 'asc'
+    sortDirection: 'asc',
+    invertDirection: {'asc': 'desc', 'desc': 'asc'}
 }
 
  const HANDLE_SORT = 'HANDLE_SORT';
 
-export function reduxSort(sortBy, sortDirection) {
+export function reduxSort(column, direction) {
     return {
         type: HANDLE_SORT,
         payload: {
-            sortBy: sortBy,
-            sortDirection: sortDirection
+            sortBy: column,
+            sortDirection: direction
         }
     }
 }

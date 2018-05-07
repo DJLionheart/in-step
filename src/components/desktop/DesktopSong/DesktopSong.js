@@ -1,8 +1,12 @@
 import React from 'react';
 
-import { TableRow, TableCell, IconButton } from 'material-ui/Table';
-
-import { PlayArrow, PlaylistAdd, FavoriteBorder, Delete } from '@material-ui/icons'
+import { TableRow, TableCell } from 'material-ui/Table';
+import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton';
+import PlayArrow from '@material-ui/icons/PlayArrow';
+import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import './DesktopSong.css';
 
@@ -16,20 +20,20 @@ function DesktopSong (props) {
                     ? <TableCell>{ playlist_track_number }</TableCell>
                     : null
             }
-            <TableCell>{ bpm }</TableCell>
+            <TableCell numeric>{ bpm }</TableCell>
             <TableCell>{ track_name }</TableCell>
             <TableCell>{ artist_name }</TableCell>
             {/* <TableCell>{ track_mix }</TableCell> */}
             <TableCell>{ track_genre }</TableCell>
             <TableCell>
-                <PlayArrow/>
-                <FavoriteBorder/>
+                <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
+                <IconButton aria-label="Favorite" color="default"><FavoriteBorder/></IconButton>
                 {
-                    addBtn ? <IconButton><PlaylistAdd/></IconButton> : null
+                    addBtn ? <IconButton aria-label="Add to playlist" color="secondary"><PlaylistAdd/></IconButton> : null
                 }
 
                 {
-                    rmvBtn ? <IconButton><Delete/></IconButton> : null
+                    rmvBtn ? <IconButton aria-label="Remove from playlist"><DeleteIcon/></IconButton> : null
                 }
             </TableCell>
         </TableRow>            

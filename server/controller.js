@@ -4,8 +4,8 @@ module.exports = {
             , db = req.app.get('db');
         switch( type ) {
             case 'bpm':
-                const lower = +search-15
-                    , upper = +search+15;
+                const lower = +search-5
+                    , upper = +search+5;
 
                 db.search.bpm([lower, upper]).then( results => {
                     res.status(200).send(results)
