@@ -35,8 +35,8 @@ class NavBar extends Component {
 
 
     render() {
-
-        const { anchorEl, currentLocation } = this.state;
+        // currentLocation
+        const { anchorEl } = this.state;
 
         const navHeaders = [
             {name: 'Profile', path: '/profile'},

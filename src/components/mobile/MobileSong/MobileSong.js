@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, CardContent, CardMedia, Typography, Avatar, IconButton } from 'material-ui';
+import { Card, CardContent, Typography, Avatar, IconButton } from 'material-ui';
 
 import { PlayArrow, PlaylistAdd, FavoriteBorder, Delete } from '@material-ui/icons'
 
@@ -33,11 +33,6 @@ function MobileSong (props) {
                     rmvBtn ? <IconButton><Delete/></IconButton> : null
                 }
             </div>
-            {
-                playlist_track_number !== ''
-                    ? <CardMedia component={ <Avatar>{playlist_track_number}</Avatar>}/>
-                    : null
-            }
         </Card>
     )
 }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Tabs, Tab, Button } from 'material-ui';
-import MediaQuery from 'react-responsive';
-
-import MobilePlaylist from '../mobile/MobilePlaylist/MobilePlaylist';
-import DesktopPlaylist from '../desktop/DesktopPlaylist/DesktopPlaylist';
+import AppBar from 'material-ui/AppBar';
+import Tabs, { Tab } from 'material-ui/Tabs';
+// import Button from 'material-ui/Button';
+// import Typography from 'material-ui/Typography';
 import ButtonBar from './ButtonBar/ButtonBar';
+import PlaylistContainer from './PlaylistContainer/PlaylistContainer';
 
 import './PlaylistManager.css'
 
@@ -13,6 +13,7 @@ class PlaylistManager extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tabIndex: 0,
             playlists: [
                 {name: 'Playlist 1', tracks: [
                     {
@@ -31,10 +32,18 @@ class PlaylistManager extends Component {
                         track_name: "Kimi Omoi",
                         track_year: 2009
                     }
-                ]}
+                ]},
+                {name: 'Playlist 2', tracks: []},
+                {name: 'Playlist 3', tracks: []}
             ]
         }
+        this.handleTab = this.handleTab.bind(this);
 
+    }
+    handleTab(event, value) {
+        this.setState({
+            tabIndex: value
+        })
     }
 
     addPlaylist() {
@@ -44,31 +53,38 @@ class PlaylistManager extends Component {
     }
 
     render() {
+        const { tabIndex, playlists } = this.state;
 
-        const playlistTabs = this.state.playlists.map( (playlist, i) => {
-            return(
-                <Tab label={ playlist.name } key={ i } className="playlist-tab">
-                    <MediaQuery query="(max-device-width: 1223px)">
-                        <MobilePlaylist name={ playlist.name } tracks={ playlist.tracks } className="playlist-contents"/>
-                    </MediaQuery>
-                    <MediaQuery query="(min-device-width: 1224px)">
-                        <DesktopPlaylist name={ playlist.name } tracks={ playlist.tracks } className="playlist-contents"/>
-                    </MediaQuery>
-                <ButtonBar/>
-                </Tab>
-
+        const playlistContents = playlists.map( (playlist, i) => {
+            return (
+                <div key={ playlist.name }>
+                    { tabIndex === i && <PlaylistContainer playlist={ playlist }/> }
+                </div>
             )
         })
+
+        const playlistTabs = playlists.map( (playlist, i) => {
+            return <Tab label={ playlist.name } key={ i } className="playlist-tab"/>
+        })
+
+
+
+        // const tabContents = this.state.playlists.map( (playlist, i) => {
+        //     const { tabIndex } = this.state;
+        //     return (
+        //         { tabIndex === i && ()}
+        //     )
+        // })
         return(
             <main>
                 <h1>PlaylistManager</h1>
-                <Tabs>
+                <AppBar position="static">
+                <Tabs value={ tabIndex } onChange={ this.handleTab }>
                     { playlistTabs }
                 </Tabs>
-                <div className="add-playlist">
-                    <Button variant="raised" label="New Playlist"/>
-
-                </div>
+                </AppBar>
+                { playlistContents }
+                <ButtonBar/>
             </main>
         )
     }

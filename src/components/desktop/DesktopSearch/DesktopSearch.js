@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Paper, Button } from 'material-ui';
+import { Paper } from 'material-ui';
 import Table, { TableBody, TableHead, TableRow, TableCell, TableSortLabel } from 'material-ui/Table';
 
 import DesktopSong from '../DesktopSong/DesktopSong';

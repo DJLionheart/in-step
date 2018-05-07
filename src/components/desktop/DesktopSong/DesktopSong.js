@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { TableRow, TableCell } from 'material-ui/Table';
-import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import PlaylistAdd from '@material-ui/icons/PlaylistAdd';

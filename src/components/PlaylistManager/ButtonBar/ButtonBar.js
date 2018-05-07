@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Toolbar, Button } from 'material-ui';
+import { Button } from 'material-ui';
 
 
 class ButtonBar extends Component {
@@ -11,13 +11,17 @@ class ButtonBar extends Component {
     }
     render() {
         return(
-            <nav>
-                <Toolbar>
-                    <Button variant="raised" label="Rename"/>
-                    <Button variant="raised" label="Clear"/>
-                    <Button variant="raised" label="Export"/>
-                </Toolbar>
-            </nav>
+            <section>
+                    <Button variant="raised" color="secondary">
+                        Rename
+                    </Button>
+                    <Button variant="raised">
+                        Clear    
+                    </Button> 
+                    <Button variant="raised" color="primary">
+                        Export
+                    </Button>
+            </section>
         )
     }
 }
