@@ -34,7 +34,8 @@ const initialState = {
 const FULFILLED = '_FULFILLED';
 
 const GET_USER = 'GET_USER'
-    , GET_PREFERENCES = 'GET_PREFERENCES'
+    , POST_PREFERENCES = 'POST_PREFERENCES'
+    , GET_PLAYLISTS = 'GET_PLAYLISTS'
     , ADD_SONG = 'ADD_SONG'
     , REMOVE_SONG = 'REMOVE_SONG'
     , CHANGE_INDEX = 'CHANGE_INDEX'
@@ -50,6 +51,30 @@ export function getUser() {
     return {
         type: GET_USER,
         payload: userData
+    }
+}
+
+export function get_playlists(userid) {
+    let playlistData = axios.get(`/api/auth/me?userid=${userid}`).then( res => {
+        return res.data
+    })
+    
+    return {
+        type: GET_PLAYLISTS,
+        payload: playlistData
+    }
+}
+
+export function post_user_preferences(userid, genreList, userPace) {
+    axios.post(`/api/user_preferences?userid=${userid}`, {genreList, userPace}).then( res => {
+        console.log('Preferences saved')
+    }).catch(err => console.log('Something went wrong: ', err))
+    return {
+        type: POST_PREFERENCES,
+        payload: {
+            user_genre: genreList,
+            user_pace: userPace 
+        }
     }
 }
 
@@ -89,15 +114,6 @@ export function remove_playlist(number) {
 }
 
 
-export function getUserPreferences(genreList, userPace) {
-    return {
-        type: GET_PREFERENCES,
-        payload: {
-            user_genre: genreList,
-            user_pace: userPace 
-        }
-    }
-}
 
 export function logout() {
     return {
@@ -121,8 +137,11 @@ export default function users(state = initialState, action) {
         case GET_USER + FULFILLED:
             return Object.assign({}, state, {user: action.payload});
 
+        case GET_PLAYLISTS + FULFILLED:
+            return Object.assign({}, state, { playlists: action.payload })
 
-        case GET_PREFERENCES:
+
+        case POST_PREFERENCES:
             const { user_genre, user_pace } = action.payload;
             return Object.assign({}, state, {user_preferences: {
                 user_genre: user_genre,

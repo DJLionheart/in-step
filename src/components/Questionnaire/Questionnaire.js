@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { getUserPreferences } from '../../ducks/users';
+import { post_user_preferences } from '../../ducks/users';
 
 class Questionnaire extends Component {
     constructor() {
@@ -56,9 +56,10 @@ class Questionnaire extends Component {
     }
 
     savePreferences() {
+        const { userid } = this.props.users.user;
         const userGenrePrefs = this.state.genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name)
 
-        this.props.getUserPreferences(userGenrePrefs, this.state.user_pace);
+        this.props.post_user_preferences(userid, userGenrePrefs, this.state.user_pace);
         this.setState({
             redirect: true
         })
@@ -115,8 +116,9 @@ class Questionnaire extends Component {
 
 function mapStateToProps(state) {
     return {
-        user_preferences: state.user_preferences
+        user_preferences: state.users.user_preferences,
+        user: state.users.user
     }
 }
 
-export default connect(mapStateToProps, { getUserPreferences })(Questionnaire);
+export default connect(mapStateToProps, { post_user_preferences })(Questionnaire);

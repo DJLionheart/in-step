@@ -24,22 +24,22 @@ CREATE TABLE IF NOT EXISTS song_data (
 
 CREATE TABLE IF NOT EXISTS playlist_data (
     playlist_id SERIAL PRIMARY KEY,
-    userid INTEGER REFERENCES users(userid),
+    userid SERIAL REFERENCES users(userid),
     playlist_name VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS playlist_tracks (
-    playlist_id INTEGER REFERENCES playlist_data(playlist_id),
-    track_id INTEGER REFERENCES song_data(track_id)
+    playlist_id SERIAL REFERENCES playlist_data(playlist_id),
+    track_id SERIAL REFERENCES song_data(track_id)
 );
 
 CREATE TABLE IF NOT EXISTS favorite_tracks(
-    userid INTEGER REFERENCES users(userid),
-    track_id INTEGER REFERENCES song_data(track_id)
+    userid SERIAL REFERENCES users(userid),
+    track_id SERIAL REFERENCES song_data(track_id)
 );
 
 CREATE TABLE IF NOT EXISTS genre_preferences(
-    userid INTEGER REFERENCES users(userid),
+    userid SERIAL REFERENCES users(userid),
     genre_name VARCHAR(25) NOT NULL
 );
 

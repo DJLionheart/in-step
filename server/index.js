@@ -7,7 +7,8 @@ const express = require('express')
     , session = require('express-session')
     , passport = require('passport')
     , SpotifyStrategy = require('passport-spotify').Strategy
-    , ctrl = require('./controller');
+    , src_ctrl = require('./controllers/search_controller')
+    , pl_ctrl = require('./controllers/playlist_controller');
 
 
 const app = express();
@@ -46,21 +47,20 @@ passport.use(new SpotifyStrategy({
     const db = app.get('db');
     const { id, displayName, photos, profileUrl } = profile
     , { email } = profile._json;
-    
-    db.find_user([id]).then( users => {
+    console.log('ID: ', id)
+    db.find_user([+id]).then( users => {
         if(users[0]) {
             console.log('Access token expires in:', expires_in);
-            db.update_user([id, accessToken, refreshToken])
+            db.update_user([+id, accessToken, refreshToken])
             return done(null, users[0].userid)
         } else {
             console.log('Access token expires in:', expires_in);
             
-            db.create_user([displayName, photos[0], id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
-                db.create_playlist()
+            db.create_user([displayName, photos[0], +id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
                 return done(null, createdUser[0])
-            })
+            }).catch( err => console.log('Create User Error: ', err))
         }
-    })
+    }).catch(err => console.log('Find User Error: ', err))
 }));
 
 app.get('/api/auth', passport.authenticate('spotify', {scope: ['playlist-modify', 'playlist-modify-private', 'user-read-email'], showDialog: true}))
@@ -105,8 +105,11 @@ app.post('/api/logout', logout, function(req, res) {
 })
 
 // DB Search
-app.get('/api/search', ctrl.search);
+app.get('/api/search', src_ctrl.search);
 
+// User and Playlist Management
+app.post('/api/user_preferences', )
+app.get('/api/playlists', pl_ctrl.getPlaylists)
                         
 // End of Massive Connection Wrapper
 })

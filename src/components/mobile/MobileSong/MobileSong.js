@@ -32,7 +32,7 @@ class MobileSong extends Component {
 
     handleClick(icon) {
         const { playlists, current_index } = this.props.user_data
-            , { trackData, add_song } = this.props;
+            , { track_id, add_song } = this.props;
         switch( icon ) {
             case 'favorite':
                 this.setState({
@@ -41,11 +41,11 @@ class MobileSong extends Component {
                 break;
 
             case 'playlist':
-                if( !includes(playlists[current_index].tracks, trackData) ) {
+                if( !includes(playlists[current_index].track_id, ) ) {
                     this.setState({
                         playlist: this.state.playlist ? false : true
                     })
-                    add_song(trackData)
+                    add_song(track_id)
                 } else {
                     this.openAlert('addedWarning')
                 }
@@ -74,7 +74,7 @@ class MobileSong extends Component {
 
     render() {
         const { favorite, playlist, addedWarning } = this.state 
-            , { bpm, track_name, artist_name, track_genre, playlist_track_number, addBtn, rmvBtn, trackData } = this.props;
+            , { bpm, track_name, artist_name, track_genre, playlist_track_number, addBtn, rmvBtn } = this.props;
 
         return(
             <div>

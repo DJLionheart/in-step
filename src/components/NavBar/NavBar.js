@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar'
 import Menu, { MenuItem } from 'material-ui/Menu';
 import Toolbar from 'material-ui/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
-import MediaQuery from 'react-responsive';
 import Typography from 'material-ui/Typography';
 
 import './NavBar.css'
@@ -52,12 +51,8 @@ class NavBar extends Component {
             {name: 'Playlist Manager', path: '/playlist_manager'}
         ]
 
-        const mobileNav = navHeaders.map( (page, i) => {
+        const navLinks = navHeaders.map( (page, i) => {
             return <MenuItem key={ i } onClick={ () => this.handleClose(page.path) }>{ page.name }</MenuItem>
-        })
-
-        const desktopNav = navHeaders.map( (page, i) => {
-            return <Link to={ page.path } key={ i }><Typography variant="title" color="secondary">{ page.name }</Typography></Link>
         })
 
         let navLocation = '';
@@ -80,7 +75,7 @@ class NavBar extends Component {
                 break;
             
             default:
-                null
+                navLocation = ''
                 break;
 
 
@@ -108,7 +103,7 @@ class NavBar extends Component {
                                 open={ Boolean(anchorEl)}
                                 onClose={ this.handleClose }
                             >
-                                { mobileNav }
+                                { navLinks }
                                 <MenuItem><a href="/api/logout">Logout</a></MenuItem>
                             </Menu>
                     </Toolbar>
