@@ -58,6 +58,10 @@ class Search extends Component {
 
     }
 
+    addSong(song) {
+        
+    }
+
     render() {
         const { searchInput, searchType, results } = this.state
             , { sortBy, sortDirection } = this.props.search;
@@ -126,7 +130,9 @@ class Search extends Component {
 }
 
 function mapStateToProps(state) {
-    return state
+    return {
+        search: state.search
+    }
 }
 
 export default connect(mapStateToProps, { reduxSort })(Search);

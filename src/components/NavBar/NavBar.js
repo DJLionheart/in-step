@@ -6,6 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MediaQuery from 'react-responsive';
 import Typography from 'material-ui/Typography';
 
+import './NavBar.css'
 
 
 class NavBar extends Component {
@@ -46,11 +47,11 @@ class NavBar extends Component {
         ]
 
         const mobileNav = navHeaders.map( (page, i) => {
-            return <Link to={ page.path } key={ i }><MenuItem>{ page.name }</MenuItem></Link>
+            return <Link to={ page.path } key={ i }><MenuItem component={ Link}><h1>{ page.name }</h1></MenuItem></Link>
         })
 
         const desktopNav = navHeaders.map( (page, i) => {
-            return <Link to={ page.path } key={ i }><Typography variant="title">{ page.name }</Typography></Link>
+            return <Link to={ page.path } key={ i }><Typography variant="title" color="secondary">{ page.name }</Typography></Link>
         })
 
         let navLocation = '';
@@ -83,7 +84,7 @@ class NavBar extends Component {
                         <Typography variant="title">
                             { navLocation }
                         </Typography>
-                        <Menu
+                        <Menu className="nav-bar"
                             anchorEl={ anchorEl }
                             open={ Boolean(anchorEl) }
                             onClose={ this.handleClose }>
@@ -92,7 +93,7 @@ class NavBar extends Component {
                         </Menu>
                     </MediaQuery>
                     <MediaQuery query="(min-device-width: 1224px)">
-                        <nav>
+                        <nav className="nav-bar">
                             { desktopNav }
                             <a href="/api/logout"><Typography variant="title">Logout</Typography></a>
                         </nav>

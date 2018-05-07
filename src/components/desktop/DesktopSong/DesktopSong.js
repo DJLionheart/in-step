@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import MediaQuery from 'react-responsive';
 import { TableRow, TableCell } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import PlayArrow from '@material-ui/icons/PlayArrow';

@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
 // import Button from 'material-ui/Button';
 // import Typography from 'material-ui/Typography';
+
+import { changeIndex, add_playlist, remove_playlist } from '../../ducks/users';
+
 import ButtonBar from './ButtonBar/ButtonBar';
 import PlaylistContainer from './PlaylistContainer/PlaylistContainer';
 
@@ -13,7 +19,7 @@ class PlaylistManager extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabIndex: 0,
+            dialogOpen: false,
             playlists: [
                 {name: 'Playlist 1', tracks: [
                     {
@@ -32,33 +38,53 @@ class PlaylistManager extends Component {
                         track_name: "Kimi Omoi",
                         track_year: 2009
                     }
-                ]},
-                {name: 'Playlist 2', tracks: []},
-                {name: 'Playlist 3', tracks: []}
+                ]}
             ]
         }
         this.handleTab = this.handleTab.bind(this);
+        this.addPlaylist = this.addPlaylist.bind(this);
+        this.removePlaylist = this.removePlaylist.bind(this);
+        this.openAlert = this.openAlert.bind(this);
+        this.closeAlert = this.closeAlert.bind(this);
 
     }
     handleTab(event, value) {
-        this.setState({
-            tabIndex: value
-        })
+        this.props.changeIndex(value)
     }
 
     addPlaylist() {
+        const playlistNumber = this.props.user_data.playlists.length + 1;
+        this.props.add_playlist(playlistNumber)
+    }
+
+    removePlaylist(index) {
+        if(this.props.user_data.playlists.length > 1) {
+            this.props.remove_playlist(index)
+        } else {
+            this.openAlert()
+        }
+    }
+
+    openAlert() {
         this.setState({
-            playlists: [...this.state.playlists, {name: 'New Playlist', tracks: []}]
+            dialogOpen: true
+        })
+    } 
+
+    closeAlert() {
+        this.setState({
+            dialogOpen: false
         })
     }
 
     render() {
-        const { tabIndex, playlists } = this.state;
+        const { dialogOpen } = this.state
+            , { current_index, playlists } = this.props.user_data;
 
         const playlistContents = playlists.map( (playlist, i) => {
             return (
                 <div key={ playlist.name }>
-                    { tabIndex === i && <PlaylistContainer playlist={ playlist }/> }
+                    { current_index === i && <PlaylistContainer playlist={ playlist }/> }
                 </div>
             )
         })
@@ -67,27 +93,45 @@ class PlaylistManager extends Component {
             return <Tab label={ playlist.name } key={ i } className="playlist-tab"/>
         })
 
-
-
-        // const tabContents = this.state.playlists.map( (playlist, i) => {
-        //     const { tabIndex } = this.state;
-        //     return (
-        //         { tabIndex === i && ()}
-        //     )
-        // })
         return(
             <main>
                 <h1>PlaylistManager</h1>
                 <AppBar position="static">
-                <Tabs value={ tabIndex } onChange={ this.handleTab }>
+                <Tabs value={ current_index } onChange={ this.handleTab }>
                     { playlistTabs }
                 </Tabs>
                 </AppBar>
                 { playlistContents }
-                <ButtonBar/>
+                <ButtonBar
+                    addPlaylist={ this.addPlaylist }
+                    removePlaylist={ this.removePlaylist }/>
+                <Dialog
+                    open={ dialogOpen }
+                    onClose={ this.closeAlert }
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{'Default Playlist'}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            It looks like you don't have any other playlists. Please press the Clear button below if you want to start over.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="primary" onClick={ this.closeAlert }>
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </main>
         )
     }
 }
 
-export default PlaylistManager;
+function mapStateToProps(state) {
+    return {
+        user_data: state.user_data
+    }
+}
+
+export default connect(mapStateToProps, { changeIndex, add_playlist, remove_playlist })(PlaylistManager);
