@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+
+import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar'
 import Menu, { MenuItem } from 'material-ui/Menu';
+import Toolbar from 'material-ui/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
 import MediaQuery from 'react-responsive';
 import Typography from 'material-ui/Typography';
@@ -16,26 +19,29 @@ class NavBar extends Component {
             anchorEl: null,
             currentLocation: 'profile'
         }
+
+        this.handleNav = this.handleNav.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
     handleNav(evt) {
         this.setState({
-
-        })
-    }
-    handleClick(evt) {
-        this.setState({
             anchorEl: evt.currentTarget
         })
     }
-    handleClose() {
+
+    handleClose(path) {
         this.setState({
             anchorEl: null
         })
+        this.props.history.push(path)
+
     }
 
-
     render() {
+        const style = {
+            background: '#004ba0'
+        };
         // currentLocation
         const { anchorEl } = this.state;
 
@@ -47,7 +53,7 @@ class NavBar extends Component {
         ]
 
         const mobileNav = navHeaders.map( (page, i) => {
-            return <Link to={ page.path } key={ i }><MenuItem component={ Link}><h1>{ page.name }</h1></MenuItem></Link>
+            return <MenuItem key={ i } onClick={ () => this.handleClose(page.path) }>{ page.name }</MenuItem>
         })
 
         const desktopNav = navHeaders.map( (page, i) => {
@@ -57,6 +63,10 @@ class NavBar extends Component {
         let navLocation = '';
 
         switch( this.props.location.pathname ) {
+            case '/profile':
+                navLocation = 'Profile';
+                break;
+
             case '/pace':
                 navLocation = 'Find Your Pace';
                 break;
@@ -65,39 +75,43 @@ class NavBar extends Component {
                 navLocation = 'Search';
                 break;
 
-            case '/playlist':
+            case '/playlist_manager':
                 navLocation = 'Playlist Manager';
                 break;
             
             default:
-                navLocation = 'Profile';
+                null
                 break;
 
 
 
         }
+
         return(
             <div>
-                <AppBar position="static">
-                    <MediaQuery query="(max-device-width: 1223px)">
-                        <MenuIcon/>
-                        <Typography variant="title">
-                            { navLocation }
-                        </Typography>
-                        <Menu className="nav-bar"
-                            anchorEl={ anchorEl }
-                            open={ Boolean(anchorEl) }
-                            onClose={ this.handleClose }>
-                            { mobileNav }
-                            <MenuItem><a href="/api/logout">Logout</a></MenuItem>
-                        </Menu>
-                    </MediaQuery>
-                    <MediaQuery query="(min-device-width: 1224px)">
-                        <nav className="nav-bar">
-                            { desktopNav }
-                            <a href="/api/logout"><Typography variant="title">Logout</Typography></a>
-                        </nav>
-                    </MediaQuery>
+                <AppBar position="static" style={ style }>
+                    <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-owns={ anchorEl ? 'navigation-menu' : null }
+                                aria-label="Menu"
+                                aria-haspopup="true"
+                                onClick={ this.handleNav }
+                            >
+                                <MenuIcon/>
+                            </IconButton>    
+                            <Typography variant="title" color="inherit">
+                                { navLocation }
+                            </Typography>
+                            <Menu className="nav-bar"
+                                anchorEl={ anchorEl }
+                                open={ Boolean(anchorEl)}
+                                onClose={ this.handleClose }
+                            >
+                                { mobileNav }
+                                <MenuItem><a href="/api/logout">Logout</a></MenuItem>
+                            </Menu>
+                    </Toolbar>
                 </AppBar>
             </div>
         )

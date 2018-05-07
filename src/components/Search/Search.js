@@ -21,8 +21,9 @@ class Search extends Component {
             searchType: 'bpm',
             results: []
         }
-        this.searchDb = this.searchDb.bind(this)
-        this.handleSort = this.handleSort.bind(this)
+        this.searchDb = this.searchDb.bind(this);
+        this.handleSort = this.handleSort.bind(this);
+        // this.addSong = this.addSong.bind(this);
     }
 
     handleInput(e) {
@@ -38,13 +39,6 @@ class Search extends Component {
         this.props.reduxSort(sort, direction)
     }
 
-    // handleSort(event, index, value) {
-    //     this.setState({
-    //         sortBy: value,
-    //         sortDirection: this.state.sortBy === value ? invertDirection[this.state.sortDirection] : 'asc' 
-    //     })
-    // }
-
     searchDb() {
         const { searchType, searchInput } = this.state;
         axios.get(`/api/search?type=${ searchType }&search=${ searchInput }`).then( res => {
@@ -54,37 +48,17 @@ class Search extends Component {
                 results: res.data
             })
         }).catch( err => console.log(err))
-        
-
     }
 
-    addSong(song) {
-        
-    }
+    // addSong(song) {
+    //     this.props.add_song(song)
+    // }
 
     render() {
         const { searchInput, searchType, results } = this.state
             , { sortBy, sortDirection } = this.props.search;
 
         const sortedResults = orderBy( results, sortBy, sortDirection );
-
-        // const headerNames = [
-        //     {display: 'BPM', name: 'bpm'},
-        //     {display: 'Track Name', name: 'track_name'},
-        //     {display: 'Artist', name: 'artist_name'},
-        //     {display: 'Genre', name: 'track_genre'}
-        // ]
-    
-        // const tableHeaders = headerNames.map( (column, i) => {
-        //     return(
-        //         <TableHeaderColumn key={ i }>
-        //             <FlatButton 
-        //                 value={ column.name }
-        //                 label={ column.display }
-        //                 onClick={ handleSort }/>
-        //         </TableHeaderColumn>
-        //     )
-        // })
 
         return(
             <Paper>
@@ -108,6 +82,7 @@ class Search extends Component {
                         
                         <section className="search-results">
                             <MobileSearch
+                                addSong={ this.addSong }
                                 sortedResults={ sortedResults }
                                 handleSort={ this.handleSort }
                                 showControl={ sortedResults === [] ? false : true }/>
@@ -116,7 +91,8 @@ class Search extends Component {
 
                     <MediaQuery query="(min-device-width: 1224px)">
       
-                        <DesktopSearch 
+                        <DesktopSearch
+                            addSong={ this.addSong }
                             sortedResults={ sortedResults }
                             handleSort={ this.handleSort }/>
                     </MediaQuery>

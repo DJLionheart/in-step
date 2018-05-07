@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
@@ -78,6 +79,7 @@ class PlaylistManager extends Component {
     }
 
     render() {
+
         const { dialogOpen } = this.state
             , { current_index, playlists } = this.props.user_data;
 
@@ -95,11 +97,10 @@ class PlaylistManager extends Component {
 
         return(
             <main>
-                <h1>PlaylistManager</h1>
                 <AppBar position="static">
-                <Tabs value={ current_index } onChange={ this.handleTab }>
-                    { playlistTabs }
-                </Tabs>
+                    <Tabs value={ current_index } onChange={ this.handleTab }>
+                        { playlistTabs }
+                    </Tabs>
                 </AppBar>
                 { playlistContents }
                 <ButtonBar

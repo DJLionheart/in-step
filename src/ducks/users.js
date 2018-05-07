@@ -53,10 +53,10 @@ export function getUser() {
     }
 }
 
-export function add_song(song) {
+export function add_song(id) {
     return {
         type: ADD_SONG,
-        payload: song
+        payload: id
     }
 }
 

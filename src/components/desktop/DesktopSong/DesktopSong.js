@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import MediaQuery from 'react-responsive';
 import { TableRow, TableCell } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import PlayArrow from '@material-ui/icons/PlayArrow';
@@ -53,11 +52,10 @@ class DesktopSong extends Component {
                 <TableCell numeric>{ bpm }</TableCell>
                 <TableCell>{ track_name }</TableCell>
                 <TableCell>{ artist_name }</TableCell>
-                {/* <TableCell>{ track_mix }</TableCell> */}
                 <TableCell>{ track_genre }</TableCell>
                 <TableCell>
                     <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
-                    <IconButton aria-label="Favorite" color={ favorite ? 'primary' : 'default '} onClick={ () => this.handleColor('favorite') }>{ favorite ? <Favorite/> : <FavoriteBorder/> }</IconButton>
+                    <IconButton aria-label="Favorite" color={ favorite ? 'primary' : 'default'} onClick={ () => this.handleColor('favorite') }>{ favorite ? <Favorite/> : <FavoriteBorder/> }</IconButton>
                     {
                         addBtn ? <IconButton aria-label="Add to playlist" color={ playlist ? 'secondary' : 'default' } onClick={ () => this.handleColor('playlist') }><PlaylistAdd/></IconButton> : null
                     }
