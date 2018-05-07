@@ -8,10 +8,10 @@ import Tooltip from 'material-ui/Tooltip';
 
 function DesktopSearch(props) {
     const headerNames = [
-        {label: 'BPM', id: 'bpm', numeric: false, disablePadding: true},
-        {label: 'Track Name', id: 'track_name', numeric: false, disablePadding: true},
-        {label: 'Artist', id: 'artist_name', numeric: false, disablePadding: true},
-        {label: 'Genre', id: 'track_genre', numeric: false, disablePadding: true}
+        {label: 'BPM', id: 'bpm', numeric: false, disablePadding: false},
+        {label: 'Track Name', id: 'track_name', numeric: false, disablePadding: false},
+        {label: 'Artist', id: 'artist_name', numeric: false, disablePadding: false},
+        {label: 'Genre', id: 'track_genre', numeric: false, disablePadding: false}
     ]
 
     const { sortBy, sortDirection } = props.search;
