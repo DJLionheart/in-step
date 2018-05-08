@@ -4,4 +4,4 @@ ON pd.playlist_id = pt.playlist_id
 JOIN song_data sd
 ON sd.track_id = pt.track_id
 WHERE userid = $1
-ORDER BY pd.playlist_id, track_num
+ORDER BY pd.playlist_id, track_num;

@@ -16,7 +16,7 @@ class Loader extends Component {
 
     componentDidMount() {
         const { get_user, get_playlists, get_preferences, history } = this.props
-            , { user, user_preferences } = this.props.user_data
+            , { user_preferences } = this.props.user_data
             , { user_genres, user_pace } = user_preferences;
         // const { get_user, history } = this.props
         //     , { userDataLoaded } = this.state;

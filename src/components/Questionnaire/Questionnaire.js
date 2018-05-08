@@ -56,7 +56,7 @@ class Questionnaire extends Component {
     }
 
     savePreferences() {
-        const { userid } = this.props.users.user;
+        const { userid } = this.props.user_data.user;
         const userGenrePrefs = this.state.genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name)
 
         this.props.post_user_preferences(userid, userGenrePrefs, this.state.user_pace);

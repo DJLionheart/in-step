@@ -23,7 +23,6 @@ class Profile extends Component {
 
     render() {
         const { username, profile_pic, profile_url } = this.props.user_data.user;
-        console.log("User found", this.props);
         
         // let { display}
         return(

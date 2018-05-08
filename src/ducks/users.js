@@ -1,5 +1,4 @@
 import axios from 'axios';
-import forEach from 'lodash/forEach'
 
 const initialState = {
     user: {}, 
@@ -97,6 +96,7 @@ export function get_playlists(userid) {
 
 export function get_preferences(userid) {
     let preferences = axios.get(`/api/user_preferences?userid=${userid}`).then( res => {
+        console.log('User preferences: ', res.data)
         return res.data
     })
     
