@@ -43,6 +43,11 @@ CREATE TABLE IF NOT EXISTS genre_preferences(
     genre_name VARCHAR(25) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS user_pace(
+    userid SERIAL REFERENCES users(userid),
+    pace VARCHAR(25) NOT NULL
+);
+
 --------------- RESET
 
 DROP TABLE favorite_tracks;

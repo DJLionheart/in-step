@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Typography from 'material-ui/Typography';
 
 import MobileSong from '../MobileSong/MobileSong';
 
@@ -25,7 +25,7 @@ function MobilePlaylist(props) {
     })
     return(
         <div className="playlist-contents">
-            <h2>{ name }</h2>
+            <Typography variant="headline">{ name }</Typography>
             { playlistSongs }
         </div>
     )

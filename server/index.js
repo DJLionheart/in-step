@@ -8,7 +8,8 @@ const express = require('express')
     , passport = require('passport')
     , SpotifyStrategy = require('passport-spotify').Strategy
     , src_ctrl = require('./controllers/search_controller')
-    , pl_ctrl = require('./controllers/playlist_controller');
+    , pl_ctrl = require('./controllers/playlist_controller')
+    , us_ctrl = require('./controllers/user_controller');
 
 
 const app = express();
@@ -48,15 +49,15 @@ passport.use(new SpotifyStrategy({
     const { id, displayName, photos, profileUrl } = profile
     , { email } = profile._json;
     console.log('ID: ', id)
-    db.find_user([+id]).then( users => {
+    db.user.find_user([+id]).then( users => {
         if(users[0]) {
             console.log('Access token expires in:', expires_in);
-            db.update_user([+id, accessToken, refreshToken])
+            db.user.update_user([+id, accessToken, refreshToken])
             return done(null, users[0].userid)
         } else {
             console.log('Access token expires in:', expires_in);
             
-            db.create_user([displayName, photos[0], +id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
+            db.user.create_user([displayName, photos[0], +id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
                 return done(null, createdUser[0])
             }).catch( err => console.log('Create User Error: ', err))
         }
@@ -75,7 +76,7 @@ passport.serializeUser( (id, done) => {
 })
 
 passport.deserializeUser( (id, done) => {
-    app.get('db').find_session_user([id]).then( user => {
+    db.user.find_session_user([id]).then( user => {
         return done(null, user[0])
     })
 })
@@ -108,7 +109,7 @@ app.post('/api/logout', logout, function(req, res) {
 app.get('/api/search', src_ctrl.search);
 
 // User and Playlist Management
-app.post('/api/user_preferences', )
+app.post('/api/user_preferences', us_ctrl.postPreferences)
 app.get('/api/playlists', pl_ctrl.getPlaylists)
                         
 // End of Massive Connection Wrapper

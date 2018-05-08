@@ -35,17 +35,19 @@ function DesktopPlaylist(props) {
     })
     return(
         <Paper>
-            <h2>{ name }</h2>
-            <Table>
-                <TableHead displaySelectAll={ false } adjustForCheckbox={ false }>
-                    <TableRow>
-                        { tableHeaders }
-                    </TableRow>
-                </TableHead>
-                <TableBody displayRowCheckbox={ false }>
-                    { playlistSongs }
-                </TableBody>
-            </Table>
+            <Typography variant="headline">{ name }</Typography>
+            <Paper>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            { tableHeaders }
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        { playlistSongs }
+                    </TableBody>
+                </Table>
+            </Paper>
         </Paper>
     )
 }
