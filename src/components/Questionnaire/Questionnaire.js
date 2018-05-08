@@ -115,10 +115,7 @@ class Questionnaire extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        user_preferences: state.users.user_preferences,
-        user: state.users.user
-    }
+    return state
 }
 
 export default connect(mapStateToProps, { post_user_preferences })(Questionnaire);
