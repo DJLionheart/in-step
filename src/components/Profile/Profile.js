@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import { getUser } from '../../ducks/users';
-
 class Profile extends Component {
     constructor() {
         super();
@@ -67,4 +65,4 @@ function mapStateToProps(state) {
     return state
 }
 
-export default connect(mapStateToProps, { getUser })(Profile);
+export default connect(mapStateToProps)(Profile);

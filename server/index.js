@@ -109,8 +109,10 @@ app.post('/api/logout', logout, function(req, res) {
 app.get('/api/search', src_ctrl.search);
 
 // User and Playlist Management
+app.get('/api/user_preferences', us_ctrl.getPreferences)
 app.post('/api/user_preferences', us_ctrl.postPreferences)
 app.get('/api/playlists', pl_ctrl.getPlaylists)
+app.post('/api/playlist/add_to/:id', pl_ctrl.addSong)
                         
 // End of Massive Connection Wrapper
 })

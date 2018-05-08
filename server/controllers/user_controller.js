@@ -1,6 +1,26 @@
 module.exports = {
+    getPreferences: (req, res, next) => {
+        let stack = [],
+            user_preferences = {};
+
+        const { userid } = req.query
+            , db = req.app.get('db');
+
+        stack.push(db.user.get_genres([+userid]).then( resp => {
+            user_preferences.user_genres = resp[0]
+        }).catch(err => resp.status(500).send(err)))
+
+        stack.push(db.user.get_pace([+userid]).then( resp => {
+            user_preferences.user_pace = resp[0]
+        }).catch(err => resp.status(500).send(err)))
+
+        Promise.all(stack).then(result => {
+            result.status(200).send(user_preferences)
+        }).catch(err => res.status(500).send(err))
+    },
+
     postPreferences: (req, res, next) => {
-        let stack = []
+        let stack = [];
         const { userid } = req.query
             , { genreList, userPace } = req.body
             , db = req.app.get('db');

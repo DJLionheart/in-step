@@ -16,13 +16,15 @@ function DesktopPlaylist(props) {
             </TableCell>
         )
     })
-    const { name, tracks } = props;
+    const { playlist } = props
+        , { playlist_name, playlist_id, tracks } = playlist;
 
     const playlistSongs = tracks.map( (track, i) => {
-        const { bpm, track_name, artist_name, track_genre, track_id } = track;
+        const { bpm, track_name, artist_name, track_genre, track_id, track_num } = track;
         return(
             <DesktopSong
-                    playlist_track_number={ i+1 } 
+                    playlist_id={ playlist_id }
+                    track_num={ track_num } 
                     bpm={ bpm }
                     track_name={ track_name }
                     artist_name={ artist_name }
@@ -35,7 +37,7 @@ function DesktopPlaylist(props) {
     })
     return(
         <Paper>
-            <Typography variant="headline">{ name }</Typography>
+            <Typography variant="headline">{ playlist_name }</Typography>
             <Paper>
                 <Table>
                     <TableHead>

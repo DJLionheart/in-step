@@ -3,13 +3,13 @@ import axios from 'axios';
 const initialState = {
     user: {}, 
     user_preferences: {
-        user_genre: [],
+        user_genres: [],
         user_pace: ''
     },
     favorite_tracks: [],
     current_index: 0,
     playlists: [
-        {name: 'Playlist 1', tracks: [
+        {playlist_name: 'Playlist 1', playlist_id: 2, playlist_index: 0, tracks: [
             {
                 artist_name: "Dreams Come True",
                 bpm: 180,
@@ -34,6 +34,7 @@ const initialState = {
 const FULFILLED = '_FULFILLED';
 
 const GET_USER = 'GET_USER'
+    , GET_PREFERENCES = 'GET_PREFERENCES'
     , POST_PREFERENCES = 'POST_PREFERENCES'
     , GET_PLAYLISTS = 'GET_PLAYLISTS'
     , ADD_SONG = 'ADD_SONG'
@@ -43,7 +44,7 @@ const GET_USER = 'GET_USER'
     , REMOVE_PLAYLIST = 'REMOVE_PLAYLIST'
     , LOGOUT = 'LOGOUT';
 
-export function getUser() {
+export function get_user() {
     let userData = axios.get('/api/auth/me').then( res => {
         return res.data
     })
@@ -55,13 +56,37 @@ export function getUser() {
 }
 
 export function get_playlists(userid) {
-    let playlistData = axios.get(`/api/auth/me?userid=${userid}`).then( res => {
-        return res.data
+    let playlistData = axios.get(`/api/playlists?userid=${userid}`).then( res => {
+        let index = 0,
+            playlist_container = [];
+
+        for(var playlist in res.data) {
+            playlist_container.push({
+                playlist_name: playlist.playlist_name,
+                playlist_id: playlist.playlist_id,
+                playlist_index: index,
+                tracks: playlist
+            })
+            index++
+        }
+
+        return playlist_container
     })
     
     return {
         type: GET_PLAYLISTS,
         payload: playlistData
+    }
+}
+
+export function get_preferences(userid) {
+    let preferences = axios.get(`/api/user_preferences?userid=${userid}`).then( res => {
+        return res.data
+    })
+    
+    return {
+        type: GET_PREFERENCES,
+        payload: preferences
     }
 }
 
@@ -72,20 +97,19 @@ export function post_user_preferences(userid, genreList, userPace) {
     return {
         type: POST_PREFERENCES,
         payload: {
-            user_genre: genreList,
+            user_genres: genreList,
             user_pace: userPace 
         }
     }
 }
 
-export function add_song(id) {
-    return {
-        type: ADD_SONG,
-        payload: id
-    }
+export function add_song(id, playlistId) {
+    axios.post(`/api/playlist/add_to/${playlistId}`, {track_id: id}).then( res => {
+        console.log('Add Song response: ', res)  
+    })
 }
 
-export function remove_song(id) {
+export function remove_song(id, playlistId) {
     return {
         type: REMOVE_SONG,
         payload: id
@@ -140,11 +164,13 @@ export default function users(state = initialState, action) {
         case GET_PLAYLISTS + FULFILLED:
             return Object.assign({}, state, { playlists: action.payload })
 
+        case GET_PREFERENCES + FULFILLED:
+            return Object.assign({}, state, { user_preferences: action.payload })
 
         case POST_PREFERENCES:
-            const { user_genre, user_pace } = action.payload;
+            const { user_genres, user_pace } = action.payload;
             return Object.assign({}, state, {user_preferences: {
-                user_genre: user_genre,
+                user_genres: user_genres,
                 user_pace: user_pace
             }});
 

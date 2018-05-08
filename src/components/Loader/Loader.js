@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { getUser } from '../../ducks/users';
+import { get_user } from '../../ducks/users';
 
 
 class Loader extends Component {
     constructor() {
         super();
         this.state = {
-            user: {}
+            userDataLoaded: false
         }
     }
 
     componentDidMount() {
-        console.log('loader', this.props);
-       
-        this.props.getUser()
-
+        const { get_user, history } = this.props
+            , { userDataLoaded } = this.state;
+        
+        get_user().then( () => {
+            history.push('/loading/user_data')
+        }).catch(err => console.log(err))
     }
+
+
     render() {
         return(
             <main>
@@ -33,4 +37,4 @@ class Loader extends Component {
 function mapStateToProps(state) {
     return state
 }
-export default connect(mapStateToProps, { getUser })(Loader);
+export default withRouter(connect(mapStateToProps, { get_user })(Loader));

@@ -21,26 +21,6 @@ class PlaylistManager extends Component {
         super(props);
         this.state = {
             dialogOpen: false,
-            playlists: [
-                {name: 'Playlist 1', tracks: [
-                    {
-                        artist_name: "Dreams Come True",
-                        bpm: 180,
-                        track_genre: "J-Pop",
-                        track_id: 39,
-                        track_name: "The Swinging Star",
-                        track_year: 1992
-                    },
-                    {
-                        artist_name: "Greeeen",
-                        bpm: 176,
-                        track_genre: "J-Pop",
-                        track_id: 845,
-                        track_name: "Kimi Omoi",
-                        track_year: 2009
-                    }
-                ]}
-            ]
         }
         this.handleTab = this.handleTab.bind(this);
         this.addPlaylist = this.addPlaylist.bind(this);
@@ -85,14 +65,14 @@ class PlaylistManager extends Component {
 
         const playlistContents = playlists.map( (playlist, i) => {
             return (
-                <div key={ playlist.name }>
+                <div key={ playlist.playlist_name }>
                     { current_index === i && <PlaylistContainer playlist={ playlist }/> }
                 </div>
             )
         })
 
         const playlistTabs = playlists.map( (playlist, i) => {
-            return <Tab label={ playlist.name } key={ i } className="playlist-tab"/>
+            return <Tab label={ playlist.playlist_name } key={ i } className="playlist-tab"/>
         })
 
         return(

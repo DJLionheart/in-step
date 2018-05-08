@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS playlist_data (
 );
 
 CREATE TABLE IF NOT EXISTS playlist_tracks (
+    track_num SERIAL PRIMARY KEY,
     playlist_id SERIAL REFERENCES playlist_data(playlist_id),
     track_id SERIAL REFERENCES song_data(track_id)
 );

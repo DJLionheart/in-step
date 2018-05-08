@@ -32,7 +32,7 @@ class MobileSong extends Component {
 
     handleClick(icon) {
         const { playlists, current_index } = this.props.user_data
-            , { track_id, add_song } = this.props;
+            , { track_id, playlist_id, add_song } = this.props;
         switch( icon ) {
             case 'favorite':
                 this.setState({
@@ -45,7 +45,7 @@ class MobileSong extends Component {
                     this.setState({
                         playlist: this.state.playlist ? false : true
                     })
-                    add_song(track_id)
+                    add_song(playlist_id, track_id)
                 } else {
                     this.openAlert('addedWarning')
                 }
@@ -98,7 +98,7 @@ class MobileSong extends Component {
                         }
         
                         {
-                            rmvBtn ? <IconButton aria-label="Remove from playlist" color="default" value="remove" onClick={ this.handleClick }><DeleteIcon/></IconButton> : null
+                            rmvBtn ? <IconButton aria-label="Remove from playlist" color="default" value="remove" onClick={ () => this.handleClick('playlist') }><DeleteIcon/></IconButton> : null
                         }
                     </div>
                 </Card>

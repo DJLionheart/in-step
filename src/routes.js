@@ -2,6 +2,7 @@ import React from 'react';
 
 import Auth from './components/Auth/Auth';
 import Loader from './components/Loader/Loader'
+import LoaderTwo from './components/Loader/LoaderTwo'
 import Questionnaire from './components/Questionnaire/Questionnaire';
 import Profile from './components/Profile/Profile';
 import Pace from './components/Pace/Pace';
@@ -14,6 +15,7 @@ export default(
     <Switch>
         <Route exact path="/" component={ Auth } />
         <Route path="/loading" component={ Loader }/> 
+        <Route path="/loading/user_data" component={ LoaderTwo }/> 
         <Route path="/questionnaire" component={ Questionnaire }/>
         <Route path="/profile" component={ Profile } />
         <Route path="/pace" component={ Pace } />

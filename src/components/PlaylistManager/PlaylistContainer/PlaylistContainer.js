@@ -11,10 +11,10 @@ function PlaylistContainer(props) {
     return (
         <div>
         <MediaQuery query="(max-device-width: 1223px)">
-            <MobilePlaylist name={ playlist.name } tracks={ playlist.tracks }/>
+            <MobilePlaylist playlist={ playlist }/>
         </MediaQuery>
         <MediaQuery query="(min-device-width: 1224px)">
-            <DesktopPlaylist name={ playlist.name } tracks={ playlist.tracks }/>
+            <DesktopPlaylist playlist={ playlist }/>
         </MediaQuery>
         </div>
     )

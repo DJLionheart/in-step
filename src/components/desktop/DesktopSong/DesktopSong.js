@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { includes } from 'lodash';
+
 import { TableRow, TableCell } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import PlayArrow from '@material-ui/icons/PlayArrow';
@@ -9,6 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import './DesktopSong.css';
 
+import { add_song, remove_song } from '../../../ducks/users';
 
 class DesktopSong extends Component {
     constructor(props) {
@@ -17,10 +21,12 @@ class DesktopSong extends Component {
             favorite: false,
             playlist: false
         }
-        this.handleColor = this.handleColor.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
-    handleColor(icon) {
+    handleClick(icon) {
+        const { playlists, current_index } = this.props.user_data
+            , { track_id, playlist_id, add_song } = this.props;
         switch( icon ) {
             case 'favorite':
                 this.setState({
@@ -29,9 +35,15 @@ class DesktopSong extends Component {
                 break;
 
             case 'playlist':
-                this.setState({
-                    playlist: this.state.playlist ? false : true
-                })
+                if( !includes(playlists[current_index].track_id, ) ) {
+                    this.setState({
+                        playlist: this.state.playlist ? false : true
+                    })
+                    add_song(playlist_id, track_id)
+                } else {
+                    this.openAlert('addedWarning')
+                }
+
                 break;
             
             default:
@@ -41,12 +53,12 @@ class DesktopSong extends Component {
 
     render() {
         const { favorite, playlist } = this.state;
-        const { playlist_track_number, bpm, track_name, artist_name, track_genre,  addBtn, rmvBtn } = this.props;
+        const { track_num, bpm, track_name, artist_name, track_genre,  addBtn, rmvBtn } = this.props;
         return(
             <TableRow>
                 {
-                    playlist_track_number !== ''
-                        ? <TableCell>{ playlist_track_number }</TableCell>
+                    track_num !== ''
+                        ? <TableCell>{ track_num }</TableCell>
                         : null
                 }
                 <TableCell numeric>{ bpm }</TableCell>
@@ -55,13 +67,13 @@ class DesktopSong extends Component {
                 <TableCell>{ track_genre }</TableCell>
                 <TableCell>
                     <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
-                    <IconButton aria-label="Favorite" color={ favorite ? 'primary' : 'default'} onClick={ () => this.handleColor('favorite') }>{ favorite ? <Favorite/> : <FavoriteBorder/> }</IconButton>
+                    <IconButton aria-label="Favorite" color={ favorite ? 'primary' : 'default'} onClick={ () => this.handleClick('favorite') }>{ favorite ? <Favorite/> : <FavoriteBorder/> }</IconButton>
                     {
-                        addBtn ? <IconButton aria-label="Add to playlist" color={ playlist ? 'secondary' : 'default' } onClick={ () => this.handleColor('playlist') }><PlaylistAdd/></IconButton> : null
+                        addBtn ? <IconButton aria-label="Add to playlist" color={ playlist ? 'secondary' : 'default' } onClick={ () => this.handleClick('playlist') }><PlaylistAdd/></IconButton> : null
                     }
     
                     {
-                        rmvBtn ? <IconButton aria-label="Remove from playlist" color="default" value="remove" onClick={ this.handleColor }><DeleteIcon/></IconButton> : null
+                        rmvBtn ? <IconButton aria-label="Remove from playlist" color="default" value="remove" onClick={ () => this.handleClick('playlist') }><DeleteIcon/></IconButton> : null
                     }
                 </TableCell>
             </TableRow>            
@@ -69,4 +81,10 @@ class DesktopSong extends Component {
     }
 }
 
-export default DesktopSong;
+function mapStateToProps(state) {
+    return {
+        user_data: state.user_data
+    }
+}
+
+export default connect(mapStateToProps, { add_song, remove_song })(DesktopSong);
