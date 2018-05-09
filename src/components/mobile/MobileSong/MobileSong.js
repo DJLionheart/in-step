@@ -74,14 +74,14 @@ class MobileSong extends Component {
 
     render() {
         const { favorite, playlist, addedWarning } = this.state 
-            , { bpm, track_name, artist_name, track_genre, playlist_track_number, addBtn, rmvBtn } = this.props;
+            , { bpm, track_name, artist_name, track_genre, track_num, addBtn, rmvBtn } = this.props;
 
         return(
             <div>
                 <Card>
                     {
-                        playlist_track_number !== ''
-                            ? <Avatar>{ playlist_track_number }</Avatar>
+                        track_num !== ''
+                            ? <Avatar>{ track_num }</Avatar>
                             : null
                     }
                     <CardContent>

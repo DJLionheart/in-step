@@ -15,27 +15,38 @@ class Loader extends Component {
     }
 
     componentDidMount() {
-        const { get_user, get_playlists, get_preferences, history } = this.props
-            , { user_preferences } = this.props.user_data
-            , { user_genres, user_pace } = user_preferences;
+        const { get_user, get_playlists, get_preferences, history } = this.props;
+
         // const { get_user, history } = this.props
         //     , { userDataLoaded } = this.state;
         axios.get('/api/auth/me').then( res => {
+            const plRetrieved = 'Playlist data retrieved';
+
             console.log(res.data)
             get_user(res.data)
             const { userid } = res.data;
-            let stack = []
-    
-            stack.push(get_playlists(userid).then( console.log('Playlist data retrieved'))
-                .catch(err => console.log(err)))
-            stack.push(get_preferences(userid).then( console.log('User preferences retrieved'))
-                .catch(err => console.log(err)))
-    
-            Promise.all(stack).then( () => {
+
+            axios.get(`/api/playlists/${userid}`).then( res => {
+                !res
+                    ? (
+                        axios.post(`/api/playlists/${userid}`, {playlist_name: 'Playlist 1'})
+                            .then(get_playlists(userid).then(console.log(plRetrieved))).catch(err => console.log(err))
+                    )
+                    : get_playlists(userid)
+
+            })
+
+            axios.get(`/api/user_preferences?userid=${userid}`).then( resp => {
+                console.log('Resp from user_preference call: ', resp)
+                const { user_genres, user_pace } = resp.data;
+
+                get_preferences(userid);
+
                 !user_genres || !user_pace
+                // user_genres === [] || user_pace === ''
                     ? history.push('/questionnaire')
-                    : history.push('/profile')
-            }).catch(err => console.log(err))
+                    : history.push('/profile')  
+            })
         })
     }
 

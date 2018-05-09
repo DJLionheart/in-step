@@ -9,11 +9,11 @@ function MobilePlaylist(props) {
         , { playlist_name, playlist_id, tracks } = playlist;
     
     const playlistSongs = tracks.map( (track, i) => {
-        const { bpm, track_name, artist_name, track_genre, track_id, track_num } = track;
+        const { bpm, track_name, artist_name, track_genre, track_id } = track;
         return(
             <MobileSong
                 playlist_id={ playlist_id }
-                track_num={ track_num } 
+                track_num={ i+1 } 
                 bpm={ bpm }
                 track_name={ track_name }
                 artist_name={ artist_name }

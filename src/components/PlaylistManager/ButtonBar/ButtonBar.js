@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Button, IconButton } from 'material-ui';
 import { connect } from 'react-redux';
-import NoteAdd from '@material-ui/icons/NoteAdd';
+import Create from '@material-ui/icons/Create';
 import DeleteButton from '@material-ui/icons/Delete';
+import Share from '@material-ui/icons/Share';
+import BorderColor from '@material-ui/icons/BorderColor';
+import ClearAll from '@material-ui/icons/ClearAll';
 
 
 
@@ -14,21 +17,17 @@ class ButtonBar extends Component {
         }
     }
     render() {
-        const { addPlaylist, removePlaylist } = this.props
+        const { namePlaylist, removePlaylist } = this.props
             , { currentIndex } = this.props.user_data;
 
         return(
             <section>
-                    <IconButton color="primary" onClick={ addPlaylist }><NoteAdd/></IconButton>
-                    <Button variant="raised" color="secondary">
-                        Rename
+                    <Button variant="fab" color="primary" onClick={ namePlaylist }>
+                        <Create/>
                     </Button>
-                    <Button variant="raised">
-                        Clear    
-                    </Button> 
-                    <Button variant="raised" color="primary">
-                        Export
-                    </Button>
+                    <IconButton color="default"><Share/></IconButton>
+                    <IconButton color="primary"><BorderColor/></IconButton>
+                    <IconButton color="secondary"><ClearAll/></IconButton>
                     <IconButton onClick={ () => removePlaylist(currentIndex) }><DeleteButton/></IconButton>
             </section>
         )

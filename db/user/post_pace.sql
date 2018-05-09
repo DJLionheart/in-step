@@ -1,2 +1,3 @@
 INSERT INTO user_pace (userid, pace)
-VALUES($1, $2);
+VALUES($1, $2)
+RETURNING *;

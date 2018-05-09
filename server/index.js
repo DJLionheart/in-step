@@ -111,7 +111,11 @@ app.get('/api/search', src_ctrl.search);
 // User and Playlist Management
 app.get('/api/user_preferences', us_ctrl.getPreferences)
 app.post('/api/user_preferences', us_ctrl.postPreferences)
-app.get('/api/playlists', pl_ctrl.getPlaylists)
+
+app.get('/api/playlists/:userid', pl_ctrl.getPlaylists)
+app.post('/api/playlists/:userid', pl_ctrl.create_playlist)
+app.delete('/api/playlists/:userid', pl_ctrl.delete_playlist)
+
 app.post('/api/playlist/add_to/:id', pl_ctrl.addSong)
                         
 // End of Massive Connection Wrapper

@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import TextField from 'material-ui/TextField';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 // import Button from 'material-ui/Button';
 // import Typography from 'material-ui/Typography';
 
-import { changeIndex, add_playlist, remove_playlist } from '../../ducks/users';
+import { changeIndex, get_playlists } from '../../ducks/users';
 
 import ButtonBar from './ButtonBar/ButtonBar';
 import PlaylistContainer from './PlaylistContainer/PlaylistContainer';
@@ -20,47 +22,70 @@ class PlaylistManager extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dialogOpen: false,
+            deleteDialog: false,
+            nameDialog: false,
+            playlistName: '',
+            okButton: true
         }
         this.handleTab = this.handleTab.bind(this);
         this.addPlaylist = this.addPlaylist.bind(this);
         this.removePlaylist = this.removePlaylist.bind(this);
-        this.openAlert = this.openAlert.bind(this);
+        this.namePlaylist = this.namePlaylist.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
 
     }
+
+    handleInput(e) {
+        this.setState({
+            playlistName: e,
+            okButton: false
+        })
+    }
+
     handleTab(event, value) {
         this.props.changeIndex(value)
     }
 
-    addPlaylist() {
-        const playlistNumber = this.props.user_data.playlists.length + 1;
-        this.props.add_playlist(playlistNumber)
+    namePlaylist() {
+        this.setState({
+            nameDialog: true
+        })
+
     }
 
-    removePlaylist(index) {
+    addPlaylist(playlistName) {
+        const { userid } = this.props.user_data.user;
+        axios.post(`/api/playlists/${userid}`, {playlist_name: playlistName}).then( res => {
+            console.log('Playlist created: ', res);
+            this.props.get_playlists()
+            this.closeAlert('nameDialog')
+        })
+    }
+
+    removePlaylist(id) {
+        const { userid } = this.props.user_data.user
+
         if(this.props.user_data.playlists.length > 1) {
-            this.props.remove_playlist(index)
+            axios.delete(`/api/playlists/${userid}?playlist_id=${id}`).then( res => {
+                console.log('Playlist deleted: ', res)
+                this.props.get_playlists(userid);
+            })
         } else {
-            this.openAlert()
+            this.setState({
+                deleteDialog: true
+            })
         }
     }
 
-    openAlert() {
+    closeAlert(dialog_name) {
         this.setState({
-            dialogOpen: true
-        })
-    } 
-
-    closeAlert() {
-        this.setState({
-            dialogOpen: false
+            [dialog_name]: false
         })
     }
 
     render() {
 
-        const { dialogOpen } = this.state
+        const { deleteDialog, nameDialog, playlistName, okButton } = this.state
             , { current_index, playlists } = this.props.user_data;
 
         const playlistContents = playlists.map( (playlist, i) => {
@@ -84,10 +109,11 @@ class PlaylistManager extends Component {
                 </AppBar>
                 { playlistContents }
                 <ButtonBar
-                    addPlaylist={ this.addPlaylist }
+                    namePlaylist={ this.namePlaylist }
                     removePlaylist={ this.removePlaylist }/>
+
                 <Dialog
-                    open={ dialogOpen }
+                    open={ deleteDialog }
                     onClose={ this.closeAlert }
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
@@ -99,11 +125,34 @@ class PlaylistManager extends Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button color="primary" onClick={ this.closeAlert }>
+                        <Button color="primary" onClick={ () => this.closeAlert('deleteDialog') }>
                             OK
                         </Button>
                     </DialogActions>
                 </Dialog>
+            
+                <Dialog
+                    open={ nameDialog }
+                    onClose={ this.closeAlert }
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Choose a Name</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            What would you like to call your new playlist?
+                        </DialogContentText>
+                        <TextField autoFocus margin="dense" onChange={ e => this.handleInput(e.target.value )} placeholder="New Playlist" id="name" label="Playlist Name" type="text" value={ playlistName }/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button disabled={ okButton } color="primary" onClick={ () => this.addPlaylist(playlistName) }>
+                            OK
+                        </Button>
+                        <Button color="secondary" onClick={ () => this.closeAlert('nameDialog')}>
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            
             </main>
         )
     }
@@ -115,4 +164,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { changeIndex, add_playlist, remove_playlist })(PlaylistManager);
+export default connect(mapStateToProps, { changeIndex, get_playlists })(PlaylistManager);
