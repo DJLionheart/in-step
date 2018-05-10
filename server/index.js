@@ -21,7 +21,9 @@ const {
     CLIENT_SECRET,
     CALLBACK_URL,
     CONNECTION_STRING,
-    LOGOUT_URL
+    SUCCESS_REDIRECT,
+    FAILURE_REDIRECT,
+    REACT_APP_LOGOUT_URL
 } = process.env;
 
 app.use(express.json());
@@ -67,8 +69,8 @@ passport.use(new SpotifyStrategy({
 app.get('/api/auth', passport.authenticate('spotify', {scope: ['playlist-modify', 'playlist-modify-private', 'user-read-email'], showDialog: true}))
 
 app.get('/api/auth/callback', passport.authenticate('spotify', {
-    successRedirect: 'http://localhost:3000/#/loading',
-    failureRedirect: 'http://localhost:3000/#/'
+    successRedirect: SUCCESS_REDIRECT,
+    failureRedirect: FAILURE_REDIRECT
 }))
 
 passport.serializeUser( (id, done) => {
@@ -101,8 +103,7 @@ const logout = function() {
 
 app.post('/api/logout', logout, function(req, res) {
     console.log('Logged out');
-    res.sendFile(path.resolve(LOGOUT_URL));
-    // res.redirect('http://localhost:3000/#/') 
+    res.sendFile(path.resolve(REACT_APP_LOGOUT_URL));
 })
 
 // DB Search
