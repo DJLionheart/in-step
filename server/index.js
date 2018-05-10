@@ -116,7 +116,8 @@ app.get('/api/playlists/:userid', pl_ctrl.getPlaylists)
 app.post('/api/playlists/:userid', pl_ctrl.create_playlist)
 app.delete('/api/playlists/:userid', pl_ctrl.delete_playlist)
 
-app.post('/api/playlist/add_to/:id', pl_ctrl.addSong)
+app.post('/api/playlist/manage/:id', pl_ctrl.addSong)
+app.delete('/api/playlist/manage/:id', pl_ctrl.removeSong)
                         
 // End of Massive Connection Wrapper
 })

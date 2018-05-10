@@ -19,7 +19,6 @@ module.exports = {
                     user_preferences.user_genres.push(genre.genre_name)
                 })  
             }
-            console.log('User preferences after genres added: ', user_preferences)
         }).catch(err => console.log('Get Genres error: ', err)
         ))
             // resp.status(500).send(err)))

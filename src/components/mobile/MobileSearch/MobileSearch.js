@@ -41,12 +41,13 @@ class MobileSearch extends Component {
         // artist_name={ artist_name }
         // track_genre={ track_genre }
         // track_id={ track_id }
-        
+        const { addSong } = this.props
         const searchResults = this.props.sortedResults.map( (song, i) => {
             const { bpm, track_name, artist_name, track_genre, track_id } = song;
             
             return (
                 <MobileSong
+                    addSong={ addSong }
                     trackData={ song }
                     bpm={ bpm }
                     track_name={ track_name }

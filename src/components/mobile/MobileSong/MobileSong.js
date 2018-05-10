@@ -14,9 +14,6 @@ import Button from 'material-ui/Button';
 
 import './MobileSong.css';
 
-import { add_song, remove_song } from '../../../ducks/users';
-
-
 class MobileSong extends Component {
     constructor(props) {
         super(props);
@@ -32,7 +29,7 @@ class MobileSong extends Component {
 
     handleClick(icon) {
         const { playlists, current_index } = this.props.user_data
-            , { track_id, playlist_id, add_song } = this.props;
+            // , { track_id, playlist_id } = this.props;
         switch( icon ) {
             case 'favorite':
                 this.setState({
@@ -45,7 +42,7 @@ class MobileSong extends Component {
                     this.setState({
                         playlist: this.state.playlist ? false : true
                     })
-                    add_song(playlist_id, track_id)
+                    // add_song(playlist_id, track_id)
                 } else {
                     this.openAlert('addedWarning')
                 }
@@ -131,4 +128,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { add_song, remove_song })(MobileSong);
+export default connect(mapStateToProps)(MobileSong);

@@ -7,7 +7,7 @@ module.exports = {
             , db = req.app.get('db');
 
         db.playlists.get_pl_data([+userid]).then( playlist_data => {
-            console.log('Playlists: ', playlist_data);
+            // console.log('Playlists: ', playlist_data);
             let playlistContainer = [];
 
             playlist_data.forEach( (playlist, i) => {
@@ -18,7 +18,7 @@ module.exports = {
                     playlist_index: i,
                     tracks: []
                 }) 
-            console.log('Retrieved playlists: ', playlistContainer)
+            // console.log('Retrieved playlists: ', playlistContainer)
             } );
 
             db.playlists.get_pl_tracks([+userid]).then( tracks => {
@@ -35,27 +35,6 @@ module.exports = {
             }).catch(err => console.log('Playlist spreading failed: ', err))
         })
     },
-        
-        // db.playlists.get_playlists([+userid]).then( results => {
-        //     let playlists = groupBy(results, 'playlist_id')
-
-
-        //     let playlist_separator = Object.values(playlists);
-
-        //     playlist_separator.forEach( (playlist, i) => {
-        //         playlistContainer.push({
-        //             playlist_id: playlist[0].playlist_id,
-        //             playlist_name: playlist[0].playlist_name,
-        //             playlist_index: i, 
-        //             tracks: []
-        //         })
-        //         playlist.forEach( track => {
-        //             let {playlist_id, playlist_name, ...rest} = track
-        //             playlistContainer[i].tracks.push(rest)
-        //         }) 
-
-        //     })
-
             // More efficient way to loop through object: 
 
             // for( var i in playlists ) {
@@ -109,8 +88,20 @@ module.exports = {
             , { track_id } = req.body
             , db = req.app.get('db')
 
-        db.playlists.add_track([+id, track_id]).then( res => {
-            res.sendStatus(200).catch(err => res.status(500).send(err))
-        })
-    }
+        db.playlists.add_track([+id, +track_id]).then( resp => {
+            res.status(200).send('Track added to playlist')
+        }).catch(err => console.log('Add song error: ', err))
+    },
+
+    removeSong: (req, res, next) => {
+        const { id } = req.params
+            , { track_id } = req.query
+            , db = req.app.get('db')
+
+        db.playlists.remove_track([+id, +track_id]).then( resp => {
+            res.status(200).send('Track removed from playlist')
+        }).catch(err => console.log('Remove song error: ', err))
+    },
+
+
 }

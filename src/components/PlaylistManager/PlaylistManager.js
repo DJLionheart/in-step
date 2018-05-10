@@ -32,6 +32,7 @@ class PlaylistManager extends Component {
         this.removePlaylist = this.removePlaylist.bind(this);
         this.namePlaylist = this.namePlaylist.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
+        this.removeSong = this.removeSong.bind(this);
 
     }
 
@@ -77,6 +78,20 @@ class PlaylistManager extends Component {
         }
     }
 
+    // Song Controlls - Remove
+    removeSong(id) {
+        const { indexMatrix, current_index, userid } = this.props.user_data
+            , { get_playlists } = this.props
+            , plId = indexMatrix[current_index];
+        
+        axios.delete(`/api/playlists/manage/${plId}?track_id=${id}`).then( () => {
+            get_playlists(userid)
+        })
+    }
+
+    // Song Controlls - Favorite
+
+
     closeAlert(dialog_name) {
         this.setState({
             [dialog_name]: false
@@ -91,7 +106,7 @@ class PlaylistManager extends Component {
         const playlistContents = playlists.map( (playlist, i) => {
             return (
                 <div key={ playlist.playlist_name }>
-                    { current_index === i && <PlaylistContainer playlist={ playlist }/> }
+                    { current_index === i && <PlaylistContainer removeSong={ this.removeSong }playlist={ playlist }/> }
                 </div>
             )
         })

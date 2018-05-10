@@ -13,8 +13,9 @@ function DesktopSearch(props) {
         {label: 'Artist', id: 'artist_name', numeric: false, disablePadding: false},
         {label: 'Genre', id: 'track_genre', numeric: false, disablePadding: false}
     ]
+    const { addSong } = props
+        , { sortBy, sortDirection } = props.search;
 
-    const { sortBy, sortDirection } = props.search;
     const tableHeaders = headerNames.map( (column) => {
         return(
             <TableCell
@@ -44,7 +45,8 @@ function DesktopSearch(props) {
         const { bpm, track_name, artist_name, track_genre, track_id } = song;
         
         return (
-            <DesktopSong 
+            <DesktopSong
+                addSong={ addSong } 
                 bpm={ bpm }
                 track_name={ track_name }
                 artist_name={ artist_name }

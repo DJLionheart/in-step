@@ -9,6 +9,7 @@ import axios from 'axios';
 import './Search.css'
 
 import { reduxSort } from '../../ducks/search';
+import { get_playlists } from '../../ducks/users';
 import MobileSearch from '../mobile/MobileSearch/MobileSearch';
 import DesktopSearch from '../desktop/DesktopSearch/DesktopSearch';
 
@@ -23,7 +24,7 @@ class Search extends Component {
         }
         this.searchDb = this.searchDb.bind(this);
         this.handleSort = this.handleSort.bind(this);
-        // this.addSong = this.addSong.bind(this);
+        this.addSong = this.addSong.bind(this);
     }
 
     handleInput(e) {
@@ -50,9 +51,16 @@ class Search extends Component {
         }).catch( err => console.log(err))
     }
 
-    // addSong(song) {
-    //     this.props.add_song(song)
-    // }
+    // Song Controls - Add
+    addSong(id) {
+        const { indexMatrix, current_index, userid } = this.props.user_data
+            , { get_playlists } = this.props
+            , plId = indexMatrix[current_index];
+        
+        axios.post(`/api/playlists/add_to/${plId}`, {track_id: id}).then( () => {
+            get_playlists(userid)
+        })
+    }
 
     render() {
         const { searchInput, searchType, results } = this.state
@@ -106,9 +114,7 @@ class Search extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        search: state.search
-    }
+    return state
 }
 
-export default connect(mapStateToProps, { reduxSort })(Search);
+export default connect(mapStateToProps, { reduxSort, get_playlists })(Search);

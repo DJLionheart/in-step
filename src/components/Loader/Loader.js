@@ -20,22 +20,32 @@ class Loader extends Component {
         // const { get_user, history } = this.props
         //     , { userDataLoaded } = this.state;
         axios.get('/api/auth/me').then( res => {
-            const plRetrieved = 'Playlist data retrieved';
 
             console.log(res.data)
             get_user(res.data)
             const { userid } = res.data;
 
             axios.get(`/api/playlists/${userid}`).then( res => {
-                !res
-                    ? (
-                        axios.post(`/api/playlists/${userid}`, {playlist_name: 'Playlist 1'})
-                            .then(get_playlists(userid).then(console.log(plRetrieved))).catch(err => console.log(err))
-                    )
-                    : get_playlists(userid)
+                if(!res.data) {
+                    axios.post(`/api/playlists/${userid}`, {playlist_name: 'Playlist 1'})
+                    .then( result => {
+                        // const { playlist_id } = result.data[0]
+                        console.log(result)
+                        get_playlists(userid)
+                        // get_matrix({0: playlist_id})
 
+                    }
+                    ).catch(err => console.log('Error creating playlist: ', err))
+                } else {
+                    // let indexMatrix = {};
+                    // res.data.forEach( playlist => {
+                    //     const { playlist_id, playlist_index } = playlist 
+                    //     indexMatrix[playlist_index] = playlist_id
+                    // })
+                    // get_matrix(indexMatrix)
+                    get_playlists(userid)
+                }
             })
-
             axios.get(`/api/user_preferences?userid=${userid}`).then( resp => {
                 console.log('Resp from user_preference call: ', resp)
                 const { user_genres, user_pace } = resp.data;
