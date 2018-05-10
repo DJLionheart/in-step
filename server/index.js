@@ -26,6 +26,8 @@ const {
     REACT_APP_LOGOUT_URL
 } = process.env;
 
+app.use( express.static( `${__dirname}/../build` ) );
+
 app.use(express.json());
 
 massive(CONNECTION_STRING).then( db => {
