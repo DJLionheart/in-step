@@ -18,9 +18,17 @@ const GET_USER = 'GET_USER'
     , GET_PREFERENCES = 'GET_PREFERENCES'
     , POST_PREFERENCES = 'POST_PREFERENCES'
     , GET_PLAYLISTS = 'GET_PLAYLISTS'
+    , GET_FAVORITES = 'GET_FAVORITES'
     , GET_MATRIX = 'GET_MATRIX'
     , CHANGE_INDEX = 'CHANGE_INDEX'
     , LOGOUT = 'LOGOUT';
+
+const {
+    REACT_APP_PLAYLISTS,
+    REACT_APP_FAVS,
+    REACT_APP_USERS
+
+} = process.env
 
 // export function get_user() {
 //     let userData = axios.get('/api/auth/me').then( res => {
@@ -44,7 +52,7 @@ export function get_user(user) {
 export function get_playlists(userid) {
     // let indexMatrix = {};
 
-    let playlistData = axios.get(`/api/playlists/${userid}`).then( res => {
+    let playlistData = axios.get(`${REACT_APP_PLAYLISTS}/${userid}`).then( res => {
         console.log('Get playlists: ', res.data)
         // res.data.forEach( playlist => {
         //     const { playlist_id, playlist_index } = playlist 
@@ -61,6 +69,21 @@ export function get_playlists(userid) {
     }
 }
 
+export function get_favorites(userid) {
+    // let indexMatrix = {};
+
+    let favoriteTracks = axios.get(`${REACT_APP_FAVS}/${userid}`).then( res => {
+        console.log('Get favorites: ', res.data)
+
+        return res.data
+    })
+    
+    return {
+        type: GET_FAVORITES,
+        payload: favoriteTracks
+    }
+}
+
 export function get_matrix(matrix) {
     console.log('Action creator: ', matrix)
     return {
@@ -70,7 +93,7 @@ export function get_matrix(matrix) {
 }
 
 export function get_preferences(userid) {
-    let preferences = axios.get(`/api/user_preferences?userid=${userid}`).then( res => {
+    let preferences = axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( res => {
         // console.log('User preferences: ', res.data)
         return res.data
     })
@@ -136,6 +159,10 @@ export default function users(state = initialState, action) {
             console.log('Playlists saved to Redux: ', action.payload)
             console.log('Index Matrix: ', matrix)
             return Object.assign({}, state, { playlists: action.payload, indexMatrix: matrix })
+
+        case GET_FAVORITES + FULFILLED:
+            console.log('Favorites saved to redux: ', action.payload)
+            return Object.assign({}, state, { favorite_tracks: action.payload })
 
         case GET_PREFERENCES + FULFILLED:
             console.log('Preferences saved to Redux: ', action.payload)

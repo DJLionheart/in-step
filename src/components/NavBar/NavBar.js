@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar'
@@ -10,6 +11,10 @@ import Typography from 'material-ui/Typography';
 
 import './NavBar.css'
 
+const { 
+    REACT_APP_LOGOUT_BUTTON,
+    REACT_APP_HOME_URL
+} = process.env;
 
 class NavBar extends Component {
     constructor() {
@@ -35,6 +40,12 @@ class NavBar extends Component {
         })
         this.props.history.push(path)
 
+    }
+
+    handleLogout() {
+        axios.post(REACT_APP_LOGOUT_BUTTON).then( () => {
+            this.props.history.push(REACT_APP_HOME_URL)
+        })
     }
 
     render() {
@@ -77,9 +88,6 @@ class NavBar extends Component {
             default:
                 navLocation = ''
                 break;
-
-
-
         }
 
         return(

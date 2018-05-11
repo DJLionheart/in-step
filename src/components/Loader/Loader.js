@@ -5,6 +5,13 @@ import axios from 'axios';
 
 import { get_user, get_playlists, get_preferences } from '../../ducks/users';
 
+const {
+    REACT_APP_AUTH_ME,
+    REACT_APP_PLAYLISTS,
+    REACT_APP_USERS,
+
+
+} = process.env;
 
 class Loader extends Component {
     constructor() {
@@ -19,15 +26,15 @@ class Loader extends Component {
 
         // const { get_user, history } = this.props
         //     , { userDataLoaded } = this.state;
-        axios.get('/api/auth/me').then( res => {
+        axios.get(REACT_APP_AUTH_ME).then( res => {
 
             console.log(res.data)
             get_user(res.data)
             const { userid } = res.data;
 
-            axios.get(`/api/playlists/${userid}`).then( res => {
+            axios.get(`${REACT_APP_PLAYLISTS}/${userid}`).then( res => {
                 if(!res.data) {
-                    axios.post(`/api/playlists/${userid}`, {playlist_name: 'Playlist 1'})
+                    axios.post(`${REACT_APP_PLAYLISTS}/${userid}`, {playlist_name: 'Playlist 1'})
                     .then( result => {
                         // const { playlist_id } = result.data[0]
                         console.log(result)
@@ -46,7 +53,7 @@ class Loader extends Component {
                     get_playlists(userid)
                 }
             })
-            axios.get(`/api/user_preferences?userid=${userid}`).then( resp => {
+            axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( resp => {
                 console.log('Resp from user_preference call: ', resp)
                 const { user_genres, user_pace } = resp.data;
 

@@ -24,7 +24,6 @@ class Search extends Component {
         }
         this.searchDb = this.searchDb.bind(this);
         this.handleSort = this.handleSort.bind(this);
-        this.addSong = this.addSong.bind(this);
     }
 
     handleInput(e) {
@@ -49,17 +48,6 @@ class Search extends Component {
                 results: res.data
             })
         }).catch( err => console.log(err))
-    }
-
-    // Song Controls - Add
-    addSong(id) {
-        const { indexMatrix, current_index, userid } = this.props.user_data
-            , { get_playlists } = this.props
-            , plId = indexMatrix[current_index];
-        
-        axios.post(`/api/playlists/add_to/${plId}`, {track_id: id}).then( () => {
-            get_playlists(userid)
-        })
     }
 
     render() {
@@ -90,7 +78,6 @@ class Search extends Component {
                         
                         <section className="search-results">
                             <MobileSearch
-                                addSong={ this.addSong }
                                 sortedResults={ sortedResults }
                                 handleSort={ this.handleSort }
                                 showControl={ sortedResults === [] ? false : true }/>
@@ -100,7 +87,6 @@ class Search extends Component {
                     <MediaQuery query="(min-device-width: 1224px)">
       
                         <DesktopSearch
-                            addSong={ this.addSong }
                             sortedResults={ sortedResults }
                             handleSort={ this.handleSort }/>
                     </MediaQuery>

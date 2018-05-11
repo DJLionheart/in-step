@@ -1,4 +1,7 @@
 const initialState = {
+    search_input: '',
+    search_type: 'bpm',
+    results: []
     sortBy: 'bpm',
     sortDirection: 'asc',
     invertDirection: {'asc': 'desc', 'desc': 'asc'}

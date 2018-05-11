@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { includes } from 'lodash';
 
 import { Card, CardContent, Typography, Avatar } from 'material-ui';
 import IconButton from 'material-ui/IconButton';
 import PlayArrow from '@material-ui/icons/PlayArrow';
-import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import Favorite from '@material-ui/icons/Favorite';
-import DeleteIcon from '@material-ui/icons/Delete';
+
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 
+import AddBtn from '../../buttons/AddBtn/AddBtn';
+import RmvBtn from '../../buttons/RmvBtn/RmvBtn';
+import FavBtn from '../../buttons/FavBtn/FavBtn';
+
+import { get_playlists, get_favorites } from '../../../ducks/users';
+
 import './MobileSong.css';
+
+const songFunctions = require('../../songFunctions/songFunctions');
+
 
 class MobileSong extends Component {
     constructor(props) {
@@ -24,34 +29,34 @@ class MobileSong extends Component {
             'removedSnackbarOpen': false,
             'addedWarning': false
         }
-        this.handleClick = this.handleClick.bind(this);
+        this.add = this.add.bind(this);
+        this.remove = this.remove.bind(this);
+        this.favorite = this.favorite.bind(this);
     }
 
-    handleClick(icon) {
-        const { playlists, current_index } = this.props.user_data
-            // , { track_id, playlist_id } = this.props;
-        switch( icon ) {
-            case 'favorite':
-                this.setState({
-                    favorite: this.state.favorite ? false : true
-                })
-                break;
+    add(songid) {
+        const { indexMatrix, current_index, userid } = this.props.user_data
+            , { get_playlists } = this.props;
 
-            case 'playlist':
-                if( !includes(playlists[current_index].track_id, ) ) {
-                    this.setState({
-                        playlist: this.state.playlist ? false : true
-                    })
-                    // add_song(playlist_id, track_id)
-                } else {
-                    this.openAlert('addedWarning')
-                }
+        songFunctions.addSong(indexMatrix, current_index, userid, songid, get_playlists)
+    }
 
-                break;
-            
-            default:
-                break;
-        }
+    remove(songid) {
+        const { indexMatrix, current_index, userid } = this.props.user_data
+            , { get_playlists } = this.props;
+
+        songFunctions.removeSong(indexMatrix, current_index, userid, songid).then( () => {
+            get_playlists(userid)
+        }).catch(err => console.log('Get favorites error: ', err))
+    }
+
+    favorite(songid) {
+        const { userid, favorite_tracks } = this.props.user_data
+            , { get_favorites } = this.props
+
+        songFunctions.handleFavorite(userid, songid, favorite_tracks).then( () => {
+            get_favorites(userid)
+        }).catch(err => console.log('Get favorites error: ', err))
     }
 
     openAlert(alert) {
@@ -70,15 +75,15 @@ class MobileSong extends Component {
     // }
 
     render() {
-        const { favorite, playlist, addedWarning } = this.state 
-            , { bpm, track_name, artist_name, track_genre, track_num, addBtn, rmvBtn } = this.props;
+        const { addedWarning } = this.state 
+            , { bpm, track_name, artist_name, track_genre, order_num, track_num, track_id, addBtn, rmvBtn } = this.props;
 
         return(
             <div>
                 <Card>
                     {
-                        track_num !== ''
-                            ? <Avatar>{ track_num }</Avatar>
+                        order_num !== ''
+                            ? <Avatar>{ order_num }</Avatar>
                             : null
                     }
                     <CardContent>
@@ -89,13 +94,13 @@ class MobileSong extends Component {
                     </CardContent>
                     <div className="mobile-song-controlls">
                         <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
-                        <IconButton aria-label="Favorite" color={ favorite ? 'primary' : 'default'} onClick={ () => this.handleClick('favorite') }>{ favorite ? <Favorite/> : <FavoriteBorder/> }</IconButton>
+                        <FavBtn track_id={ track_id } btnFunc={ this.favorite }/>
                         {
-                            addBtn ? <IconButton aria-label="Add to playlist" color={ playlist ? 'secondary' : 'default' } onClick={ () => this.handleClick('playlist') }><PlaylistAdd/></IconButton> : null
+                            addBtn ? <AddBtn track_id={ track_id } btnFunc={ this.add }/> : null
                         }
         
                         {
-                            rmvBtn ? <IconButton aria-label="Remove from playlist" color="default" value="remove" onClick={ () => this.handleClick('playlist') }><DeleteIcon/></IconButton> : null
+                            rmvBtn ? <RmvBtn track_num={ track_num } btnFunc={ this.remove }/> : null
                         }
                     </div>
                 </Card>
@@ -128,4 +133,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(MobileSong);
+export default connect(mapStateToProps, { get_playlists, get_favorites })(MobileSong);

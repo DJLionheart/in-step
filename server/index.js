@@ -9,7 +9,8 @@ const express = require('express')
     , SpotifyStrategy = require('passport-spotify').Strategy
     , src_ctrl = require('./controllers/search_controller')
     , pl_ctrl = require('./controllers/playlist_controller')
-    , us_ctrl = require('./controllers/user_controller');
+    , us_ctrl = require('./controllers/user_controller')
+    , fv_ctrl = require('./controllers/favs_controller')
 
 
 const app = express();
@@ -23,7 +24,11 @@ const {
     CONNECTION_STRING,
     SUCCESS_REDIRECT,
     FAILURE_REDIRECT,
-    REACT_APP_LOGOUT_URL
+    REACT_APP_USERS,
+    REACT_APP_SEARCH,
+    REACT_APP_PLAYLISTS,
+    REACT_APP_FAVS,
+    REACT_APP_HOME
 } = process.env;
 
 app.use( express.static( `${__dirname}/../build` ) );
@@ -105,23 +110,28 @@ const logout = function() {
 
 app.post('/api/logout', logout, function(req, res) {
     console.log('Logged out');
-    res.sendFile(path.resolve(REACT_APP_LOGOUT_URL));
+    res.sendFile(path.resolve(REACT_APP_HOME));
 })
 
 // DB Search
 app.get('/api/search', src_ctrl.search);
 
 // User and Playlist Management
-app.get('/api/user_preferences', us_ctrl.getPreferences)
-app.post('/api/user_preferences', us_ctrl.postPreferences)
+app.get(REACT_APP_USERS, us_ctrl.getPreferences)
+app.post(REACT_APP_USERS, us_ctrl.postPreferences)
 
-app.get('/api/playlists/:userid', pl_ctrl.getPlaylists)
-app.post('/api/playlists/:userid', pl_ctrl.create_playlist)
-app.delete('/api/playlists/:userid', pl_ctrl.delete_playlist)
+app.get(`${REACT_APP_PLAYLISTS}/:userid`, pl_ctrl.getPlaylists)
+app.post(`${REACT_APP_PLAYLISTS}/:userid`, pl_ctrl.create_playlist)
+app.delete(`${REACT_APP_PLAYLISTS}/:userid`, pl_ctrl.delete_playlist)
 
-app.post('/api/playlist/manage/:id', pl_ctrl.addSong)
-app.delete('/api/playlist/manage/:id', pl_ctrl.removeSong)
-                        
+app.post(`${REACT_APP_PLAYLISTS}/manage/:playlist_id`, pl_ctrl.addSong)
+app.delete(`${REACT_APP_PLAYLISTS}/manage/:playlist_id`, pl_ctrl.removeSong)
+
+// Favorites
+app.get(REACT_APP_FAVS, fv_ctrl.getFavs)
+app.post(`${REACT_APP_FAVS}/:track_id`, fv_ctrl.addFav)
+app.delete(`${REACT_APP_FAVS}/:track_id`, fv_ctrl.unFav)
+
 // End of Massive Connection Wrapper
 })
                             

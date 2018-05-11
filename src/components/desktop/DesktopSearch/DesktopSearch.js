@@ -46,6 +46,7 @@ function DesktopSearch(props) {
         
         return (
             <DesktopSong
+                track_num={ '' }
                 addSong={ addSong } 
                 bpm={ bpm }
                 track_name={ track_name }

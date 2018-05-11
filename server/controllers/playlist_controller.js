@@ -84,21 +84,21 @@ module.exports = {
     },
 
     addSong: (req, res, next) => {
-        const { id } = req.params
+        const { playlist_id } = req.params
             , { track_id } = req.body
             , db = req.app.get('db')
 
-        db.playlists.add_track([+id, +track_id]).then( resp => {
+        db.playlists.add_track([+playlist_id, +track_id]).then( resp => {
             res.status(200).send('Track added to playlist')
         }).catch(err => console.log('Add song error: ', err))
     },
 
     removeSong: (req, res, next) => {
-        const { id } = req.params
-            , { track_id } = req.query
+        const { playlist_id } = req.params
+            , { track_num } = req.query
             , db = req.app.get('db')
 
-        db.playlists.remove_track([+id, +track_id]).then( resp => {
+        db.playlists.remove_track([+playlist_id, +track_num]).then( resp => {
             res.status(200).send('Track removed from playlist')
         }).catch(err => console.log('Remove song error: ', err))
     },

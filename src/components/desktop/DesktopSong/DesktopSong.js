@@ -5,24 +5,53 @@ import { includes } from 'lodash';
 import { TableRow, TableCell } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import PlayArrow from '@material-ui/icons/PlayArrow';
-import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import Favorite from '@material-ui/icons/Favorite';
-import DeleteIcon from '@material-ui/icons/Delete';
+
+import AddBtn from '../../buttons/AddBtn/AddBtn';
+import RmvBtn from '../../buttons/RmvBtn/RmvBtn';
+import FavBtn from '../../buttons/FavBtn/FavBtn';
 
 import './DesktopSong.css';
+
+import { get_playlists, get_favorites } from '../../../ducks/users';
+
+const songFunctions = require('../../songFunctions/songFunctions');
 
 class DesktopSong extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            favorite: false,
-            playlist: false
-        }
+
         this.handleClick = this.handleClick.bind(this);
+        this.add = this.add.bind(this);
+        this.remove = this.remove.bind(this);
+        this.favorite = this.favorite.bind(this);
     }
 
-    
+    add(songid) {
+        const { indexMatrix, current_index, userid } = this.props.user_data
+            , { get_playlists } = this.props;
+
+        songFunctions.addSong(indexMatrix, current_index, userid, songid).then( () => {
+            get_playlists(userid)
+        }).catch(err => console.log('Get favorites error: ', err))
+    }
+
+    remove(songid) {
+        const { indexMatrix, current_index, userid } = this.props.user_data
+            , { get_playlists } = this.props;
+
+        songFunctions.removeSong(indexMatrix, current_index, userid, songid).then( () => {
+            get_playlists(userid)
+        }).catch(err => console.log('Get favorites error: ', err))
+    }
+
+    favorite(songid) {
+        const { userid, favorite_tracks } = this.props.user_data
+            , { get_favorites } = this.props
+
+        songFunctions.handleFavorite(userid, songid, favorite_tracks).then( () => {
+            get_favorites(userid)
+        }).catch(err => console.log('Get favorites error: ', err))
+    }
 
     handleClick(icon) {
         const { playlists, current_index } = this.props.user_data
@@ -52,12 +81,11 @@ class DesktopSong extends Component {
     }
 
     render() {
-        const { favorite, playlist } = this.state;
-        const { track_num, bpm, track_name, artist_name, track_genre,  addBtn, rmvBtn } = this.props;
+        const { track_num, bpm, track_name, order_num, track_id, artist_name, track_genre,  addBtn, rmvBtn } = this.props;
         return(
             <TableRow>
                 {
-                    track_num !== ''
+                    order_num !== ''
                         ? <TableCell>{ track_num }</TableCell>
                         : null
                 }
@@ -67,13 +95,13 @@ class DesktopSong extends Component {
                 <TableCell>{ track_genre }</TableCell>
                 <TableCell>
                     <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
-                    <IconButton aria-label="Favorite" color={ favorite ? 'primary' : 'default'} onClick={ () => this.handleClick('favorite') }>{ favorite ? <Favorite/> : <FavoriteBorder/> }</IconButton>
+                    <FavBtn track_id={ track_id } btnFunc={ this.favorite }/>
                     {
-                        addBtn ? <IconButton aria-label="Add to playlist" color={ playlist ? 'secondary' : 'default' } onClick={ () => this.handleClick('playlist') }><PlaylistAdd/></IconButton> : null
+                        addBtn ? <AddBtn track_id={ track_id } btnFunc={ this.add }/> : null
                     }
     
                     {
-                        rmvBtn ? <IconButton aria-label="Remove from playlist" color="default" value="remove" onClick={ () => this.handleClick('playlist') }><DeleteIcon/></IconButton> : null
+                        rmvBtn ? <RmvBtn track_num={ track_num } btnFunc={ this.remove }/> : null
                     }
                 </TableCell>
             </TableRow>            
@@ -87,4 +115,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(DesktopSong);
+export default connect(mapStateToProps, { get_playlists, get_favorites })(DesktopSong);
