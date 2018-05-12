@@ -7,6 +7,7 @@ import Profile from './components/Profile/Profile';
 import Pace from './components/Pace/Pace';
 import Search from './components/Search/Search';
 import PlaylistManager from './components/PlaylistManager/PlaylistManager';
+import Premium from './components/Premium/Premium';
 
 import { Switch, Route } from 'react-router-dom';
 
@@ -19,5 +20,6 @@ export default(
         <Route path="/pace" component={ Pace } />
         <Route path="/search" component={ Search } />
         <Route path="/playlist_manager" component={ PlaylistManager } />
+        <Route path="/premium" component={ Premium } />
     </Switch>
 )

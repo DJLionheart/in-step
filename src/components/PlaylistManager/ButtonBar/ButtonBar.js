@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, IconButton } from 'material-ui';
 import { connect } from 'react-redux';
 import Create from '@material-ui/icons/Create';
@@ -7,31 +7,28 @@ import Share from '@material-ui/icons/Share';
 import BorderColor from '@material-ui/icons/BorderColor';
 import ClearAll from '@material-ui/icons/ClearAll';
 
+import { remove_playlist } from '../../../ducks/users';
 
+function ButtonBar(props) {
+    const { openAlert } = props
+        , { playlists } = props.user_data;
+    
+    const deleteFunc = () => playlists.length > 1 ? openAlert('plDeleteConf') : openAlert('lastPl');
 
-class ButtonBar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+    const addFunc = () => playlists.length === 3 ? openAlert('tooMany') : openAlert('namePl');
+    
+    return(
+        <section>
+                <Button variant="fab" color="primary" onClick={ addFunc }>
+                    <Create/>
+                </Button>
+                <IconButton color="default" onClick={ () => openAlert('sharePl')}><Share/></IconButton>
+                <IconButton color="primary" onClick={ () => openAlert('renamePl')}><BorderColor/></IconButton>
+                <IconButton color="secondary" onClick={ () => openAlert('clearAllConf')}><ClearAll/></IconButton>
+                <IconButton onClick={ deleteFunc }><DeleteButton/></IconButton>
+        </section>
+    )
 
-        }
-    }
-    render() {
-        const { openAlert } = this.props
-            , { currentIndex } = this.props.user_data;
-
-        return(
-            <section>
-                    <Button variant="fab" color="primary" onClick={ () => openAlert('namePl') }>
-                        <Create/>
-                    </Button>
-                    <IconButton color="default"><Share/></IconButton>
-                    <IconButton color="primary"><BorderColor/></IconButton>
-                    <IconButton color="secondary" onClick={ () => openAlert('clearAllConf')}><ClearAll/></IconButton>
-                    <IconButton onClick={ () => removePlaylist(currentIndex) }><DeleteButton/></IconButton>
-            </section>
-        )
-    }
 }
 
 function mapStateToProps(state) {
@@ -40,4 +37,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(ButtonBar);
+export default connect(mapStateToProps, { remove_playlist })(ButtonBar);

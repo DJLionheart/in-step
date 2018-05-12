@@ -58,29 +58,22 @@ module.exports = {
         }).catch(err => console.log('Playlist creation failed: ', err))
     },
 
-    delete_playlist: (req, res, next) => {
-        const { userid } = req.params
-            , { playlist_id } = req.query
+    rename_playlist: (req, res, next) => {
+        const { playlist_id } = req.params
+            , { newName } = req.body
             , db = req.app.get('db');
 
-        db.playlists.get_playlists([+userid]).then( results => {
-            let plMatch = [];
+        db.playlists.rename_playlist([newName, +playlist_id])
+    },
 
-            results.forEach( (trackObj, i) => {
-                if( +trackObj.playlist_id === playlist_id ) {
-                    plMatch.push(i)
-                    console.log('match found')
-                }
-            })
-            plMatch
-                ? (
-                    db.playlists.delete_playlist([+playlist_id])
-                        .then( () => res.status(200).send('Playlist deleted'))
-                        .catch(err => console.log('Delete error: ', err))
-                )
-                : res.sendStatus(401)
-            
-        })
+    delete_playlist: (req, res, next) => {
+        const { playlist_id } = req.params
+            , db = req.app.get('db')
+            , dl_plId = +playlist_id
+
+    db.playlists.delete_playlist([dl_plId])
+        .then( () => res.status(200).send(`Playlist ${playlist_id} deleted`))
+        .catch(err => console.log('Delete playlist error: ', err))   
     },
 
     addSong: (req, res, next) => {

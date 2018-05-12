@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
@@ -12,7 +12,7 @@ import ClearAll from '@material-ui/icons/ClearAll';
 // import Button from 'material-ui/Button';
 // import Typography from 'material-ui/Typography';
 
-import { changeIndex, add_playlist, remove_playlist } from '../../ducks/users';
+import { changeIndex, add_playlist, rename_playlist, remove_playlist, clear_all } from '../../ducks/users';
 
 import ButtonBar from './ButtonBar/ButtonBar';
 import PlaylistContainer from './PlaylistContainer/PlaylistContainer';
@@ -28,13 +28,17 @@ class PlaylistManager extends Component {
             plDeleteConf: false,
             clearAllConf: false,
             namePl: false,
+            tooMany: false,
+            premiumUser: false,
+            sharePl: false,
+            renamePl: false,
             playlistName: '',
             okButton: true
         }
         this.handleTab = this.handleTab.bind(this);
         this.addPlaylist = this.addPlaylist.bind(this);
         this.removePlaylist = this.removePlaylist.bind(this);
-        this.namePlaylist = this.namePlaylist.bind(this);
+        this.clearPlaylist = this.clearPlaylist.bind(this);
         this.openAlert = this.openAlert.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
 
@@ -48,7 +52,8 @@ class PlaylistManager extends Component {
     
     closeAlert(dialog_name) {
         this.setState({
-            [dialog_name]: false
+            [dialog_name]: false,
+            okButton: true
         })
     }
 
@@ -62,45 +67,35 @@ class PlaylistManager extends Component {
     handleTab(event, value) {
         this.props.changeIndex(value)
     }
-
     
     addPlaylist(playlistName) {
         const { userid } = this.props.user_data.user
-            ,  { add_playlist } = this.props;
-        add_playlist(userid, playlistName)
+        this.props.add_playlist(userid, playlistName)
+        this.closeAlert('namePl')
+    }
+
+    renamePlaylist(playlistName) {
+        const { current_index, indexMatrix } = this.props.user_data.user
+            , plIdToRename = indexMatrix[current_index]
+        this.props.rename_playlist(plIdToRename, playlistName)
         this.closeAlert('namePl')
     }
 
     removePlaylist(idToRemove) {
-        const { user, playlists } = this.props.user_data
-            , { userid } = user;
-
-        if( playlists.length > 1) {
-            remove_playlist(userid, idToRemove)
-        } else {
-            this.openAlert('')
-        }
+        remove_playlist(idToRemove)
+        this.closeAlert('plDeleteConf')
     }
 
-    // Song Controlls - Remove
-    removeSong(id) {
-        const { indexMatrix, current_index, userid } = this.props.user_data
-            , { get_playlists } = this.props
-            , plId = indexMatrix[current_index];
-        
-        axios.delete(`/api/playlists/manage/${plId}?track_id=${id}`).then( () => {
-            get_playlists(userid)
-        })
+    clearPlaylist(idToRemove) {
+        this.props.clear_all(idToRemove)
+        this.closeAlert('clearAllConf')
     }
-
-    // Song Controlls - Favorite
-
 
 
     render() {
-
-        const { deleteDialog, nameDialog, playlistName, okButton } = this.state
-            , { current_index, playlists } = this.props.user_data;
+        const { lastPl, plDeleteConf, namePl, sharePl, renamePl, playlistName, okButton, tooMany, clearAllConf } = this.state
+            , { current_index, playlists, indexMatrix } = this.props.user_data
+            , playlistId = indexMatrix[current_index];
 
         const playlistContents = playlists.map( (playlist, i) => {
             return (
@@ -124,9 +119,11 @@ class PlaylistManager extends Component {
                 { playlistContents }
                 <ButtonBar
                     openAlert={ this.openAlert }/>
-
+                {
+                    // Last Playlist Dialog
+                }
                 <Dialog
-                    open={ deleteDialog }
+                    open={ lastPl }
                     onClose={ this.closeAlert }
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
@@ -145,14 +142,91 @@ class PlaylistManager extends Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button color="primary" onClick={ () => this.closeAlert('deleteDialog') }>
+                        <Button color="primary" onClick={ () => this.closeAlert('lastPl') }>
                             OK
                         </Button>
                     </DialogActions>
                 </Dialog>
-            
+                
+                {
+                    // Too Many Playlists Dialog
+                }
                 <Dialog
-                    open={ nameDialog }
+                    open={ tooMany }
+                    onClose={ this.closeAlert }
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{'Playlist Limit'}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Standard users are allowed three playlists. 
+                            Premium users can create up to ten playlists. 
+                            Click <Link to="/premium">here</Link> if you would like to upgrade.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="primary" onClick={ () => this.closeAlert('lastPl') }>
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                
+                {
+                    // Remove Playlist Warning
+                }
+                <Dialog
+                    open={ plDeleteConf }
+                    onClose={ this.closeAlert }
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{'Delete Confirmation'}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to delete this playlist?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="secondary" onClick={ () => this.removePlaylist(playlistId) }>
+                            Yes
+                        </Button>
+                        <Button color="default" onClick={ () => this.closeAlert('plDeleteConf') }>
+                            No
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                
+                {
+                    // Clear All Tracks Warning
+                }
+                <Dialog
+                    open={ clearAllConf }
+                    onClose={ this.closeAlert }
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{'Clear All'}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to remove all tracks from this playlist?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="secondary" onClick={ () => this.clearPlaylist(playlistId) }>
+                            Yes
+                        </Button>
+                        <Button color="primary" onClick={ () => this.closeAlert('clearAllConf') }>
+                            No
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                {
+                    // Create and Name Playlist Dialog
+                }
+                <Dialog
+                    open={ namePl }
                     onClose={ this.closeAlert }
                     aria-labelledby="form-dialog-title"
                 >
@@ -165,9 +239,61 @@ class PlaylistManager extends Component {
                     </DialogContent>
                     <DialogActions>
                         <Button disabled={ okButton } color="primary" onClick={ () => this.addPlaylist(playlistName) }>
-                            OK
+                            Create
                         </Button>
-                        <Button color="secondary" onClick={ () => this.closeAlert('nameDialog')}>
+                        <Button color="default" onClick={ () => this.closeAlert('namePl')}>
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            
+                {
+                    // Rename Playlist Dialog
+                }
+                <Dialog
+                    open={ renamePl }
+                    onClose={ this.closeAlert }
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Rename</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            What would you like to call this playlist?
+                        </DialogContentText>
+                        <TextField autoFocus margin="dense" onChange={ e => this.handleInput(e.target.value )} placeholder={ playlists[current_index].playlist_name } id="name" label="Playlist Name" type="text" value={ playlistName }/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button disabled={ okButton } color="primary" onClick={ () => add_playlist(playlistName) }>
+                            Save
+                        </Button>
+                        <Button color="default" onClick={ () => this.closeAlert('renamePl')}>
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            
+                {
+                    // Share Playlist Dialog
+                }
+                <Dialog
+                    open={ sharePl }
+                    onClose={ this.closeAlert }
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Share Playlist</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            How would you like to share?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="primary">
+                            Spotify
+                        </Button>
+                        <Button color="secondary">
+                            Email
+                        </Button>
+                        <Button color="default" onClick={ () => this.closeAlert('sharePl')}>
                             Cancel
                         </Button>
                     </DialogActions>
@@ -184,4 +310,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { changeIndex, add_playlist })(PlaylistManager);
+export default connect(mapStateToProps, { changeIndex, add_playlist, rename_playlist, remove_playlist, clear_all })(PlaylistManager);

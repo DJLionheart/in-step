@@ -31,8 +31,9 @@ const {
     REACT_APP_SEARCH,
     REACT_APP_LOGOUT_BTN,
     GET_ADD_PL,
-    DELETE_PL,
+    ALT_OR_DELETE_PL,
     ADD_RMV_SONG,
+    CLEAR_ALL,
     REACT_APP_FAVS,
     FAV_UNFAV,
     REACT_APP_HOME
@@ -131,11 +132,12 @@ app.post(REACT_APP_USERS, us_ctrl.postPreferences)
 // Playlist Management
 app.get(GET_ADD_PL, pl_ctrl.getPlaylists)
 app.post(GET_ADD_PL, pl_ctrl.create_playlist)
-app.delete(DELETE_PL, pl_ctrl.delete_playlist)
+app.put(ALT_OR_DELETE_PL, pl_ctrl.rename_playlist)
+app.delete(ALT_OR_DELETE_PL, pl_ctrl.delete_playlist)
 
 app.post(ADD_RMV_SONG, pl_ctrl.addSong)
 app.delete(ADD_RMV_SONG, pl_ctrl.removeSong)
-app.delete(ADD_RMV_SONG, pl_ctrl.delete_all_tracks)
+app.delete(CLEAR_ALL, pl_ctrl.delete_all_tracks)
 
 // Favorites
 app.get(REACT_APP_FAVS, fv_ctrl.getFavs)

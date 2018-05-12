@@ -1,5 +1,4 @@
 import axios from 'axios';
-import filter from 'lodash/filter';
 
 const initialState = {
     user: {}, 
@@ -21,9 +20,11 @@ const GET_USER = 'GET_USER'
     , POST_PREFERENCES = 'POST_PREFERENCES'
     , GET_PLAYLISTS = 'GET_PLAYLISTS'
     , ADD_PLAYLIST = 'ADD_PLAYLIST'
+    , RENAME_PLAYLIST = 'RENAME_PLAYLIST'
     , REMOVE_PLAYLIST = 'REMOVE_PLAYLIST'
     , ADD_TRACK = 'ADD_TRACK'
     , REMOVE_TRACK = 'REMOVE_TRACK'
+    , CLEAR_ALL = 'CLEAR_ALL'
     , GET_FAVORITES = 'GET_FAVORITES'
     , GET_MATRIX = 'GET_MATRIX'
     , CHANGE_INDEX = 'CHANGE_INDEX'
@@ -32,7 +33,9 @@ const GET_USER = 'GET_USER'
 const {
     REACT_APP_PLAYLISTS,
     REACT_APP_FAVS,
-    REACT_APP_USERS
+    REACT_APP_USERS,
+    REACT_APP_ADD_RMV_TR,
+    REACT_APP_CLEAR_ALL
 
 } = process.env
 
@@ -89,10 +92,22 @@ export function add_playlist(userid, playlistName) {
     }
 }
 
-export function remove_playlist(userid, idToRemove) {
-    // let indexMatrix = {};
+export function rename_playlist(plIdToRename, playlistName) {
+    let newPlaylistName = axios.post(`${REACT_APP_PLAYLISTS}/${plIdToRename}`, {newName: playlistName}).then( res => {
+        console.log('Playlist renamed on server: ', res.data)
+        return res.data.playlist_name
+    }).catch(err => console.log('Error renaming playlist: ', err))
+    
+    return {
+        type: RENAME_PLAYLIST,
+        payload: newPlaylistName
+    }
+}
 
-    let id_to_remove = axios.delete(`${REACT_APP_PLAYLISTS}/${userid}?playlist_id=${idToRemove}`).then( res => {
+export function remove_playlist(idToRemove) {
+    // let indexMatrix = {};
+    console.log('Remove playlist idToRemove: ', idToRemove)
+    let id_to_remove = axios.delete(`${REACT_APP_PLAYLISTS}/${idToRemove}`).then( res => {
         console.log(`Playlist${idToRemove} deleted from server`, res.data)
         return idToRemove
     }).catch(err => console.log('Error getting playlists: ', err))
@@ -108,7 +123,7 @@ export function remove_playlist(userid, idToRemove) {
 
 export function add_track(add_plId, track) {
     const { track_id } = track
-    let addedTrack = axios.post(`${REACT_APP_PLAYLISTS}/manage/${add_plId}`, {track_id: track_id}).then( res => {
+    let addedTrack = axios.post(`${REACT_APP_ADD_RMV_TR}/${add_plId}`, {track_id: track_id}).then( res => {
         console.log(`Track ${track_id} added to Playlist ${add_plId}: `, res.data)
         return track;
     }).catch(err => console.log('Error adding track: ', err))
@@ -123,7 +138,7 @@ export function add_track(add_plId, track) {
 }
 
 export function remove_track(rmv_plId, track_num) {
-    let removeNum = axios.delete(`${REACT_APP_PLAYLISTS}/manage/${rmv_plId}?track_num=${track_num}`).then( res => {
+    let removeNum = axios.delete(`${REACT_APP_ADD_RMV_TR}/${rmv_plId}?track_num=${track_num}`).then( res => {
         console.log(` remove_track query sent: `, res.data)
         return track_num;
     }).catch(err => console.log('Error adding track: ', err))
@@ -138,7 +153,17 @@ export function remove_track(rmv_plId, track_num) {
     }
 }
 
+export function clear_all(plToClear) {
+    let clearPlaylist = axios.delete(`${REACT_APP_CLEAR_ALL}/${plToClear}`).then( res => {
+        console.log(`Clear all query sent: `, res.data)
+        return plToClear;
+    }).catch(err => console.log('Error clearing all: ', err))
 
+    return {
+        type: CLEAR_ALL,
+        payload: clearPlaylist
+    }
+}
 
 export function get_favorites(userid) {
     // let indexMatrix = {};
@@ -204,7 +229,7 @@ export function logout() {
 
 
 export default function users(state = initialState, action) {
-    const { playlists, indexMatrix } = state;
+    const { playlists, indexMatrix, current_index } = state;
     
     switch( action.type ) {
         // case GET_USER + PENDING:
@@ -245,11 +270,17 @@ export default function users(state = initialState, action) {
             newMatrix[created_playlist.playlist_index] = created_playlist.playlist_id;
             
             playlist_added = [...playlist_added, created_playlist];
-            console.log('Playlist added, indexMatrix uptated')
+            console.log('Playlist added, indexMatrix uptated: ', playlist_added)
             return Object.assign({}, state, { playlists: playlist_added, indexMatrix: newMatrix })
 
+        case RENAME_PLAYLIST + FULFILLED:
+            let playlist_renamed = playlists.slice();
+            playlist_renamed[current_index].playlist_name = action.payload;
+            console.log('Redux playlist successfully renamed: ', playlist_renamed);
+            return Object.assign({}, state, {playlists: playlist_renamed})    
+
         case REMOVE_PLAYLIST + FULFILLED:
-            let playlist_removed = filter(playlists, {playlist_id:  !action.payload});
+            let playlist_removed = playlists.filter( (playlist, i) => playlist.playlist_id !== action.payload );
 
             console.log('Playlists left: ', playlist_removed)
             
@@ -260,7 +291,7 @@ export default function users(state = initialState, action) {
                 matrix_after[i] = pl.playlist_id;
                 matrix_after[pl.playlist_id] = i
             })
-            console.log('Playlist removed, indexMatrix updated');
+            console.log('Playlist removed: ', playlist_removed, 'indexMatrix updated: ', matrix_after);
             return Object.assign({}, state, { playlists: playlist_removed, indexMatrix: matrix_after })
 
         case ADD_TRACK + FULFILLED:
@@ -289,6 +320,15 @@ export default function users(state = initialState, action) {
             new_plContainer[rmv_thisIndex].tracks = newTracksArray;
             console.log('Redux track successfully removed: ', new_plContainer)
             return Object.assign({}, state, { playlists: new_plContainer})
+
+        case CLEAR_ALL + FULFILLED:
+            let afterClear_plContainer = playlists.slice(),
+                indexToClear = indexMatrix[action.payload];
+
+            afterClear_plContainer[indexToClear].tracks = [];
+
+            console.log('All tracks successfully removed from Redux playlist: ', afterClear_plContainer)
+            return Object.assign({}, state, { playlists: afterClear_plContainer})
 
         case GET_FAVORITES + FULFILLED:
             console.log('Favorites saved to redux: ', action.payload)
