@@ -1,4 +1,5 @@
 import axios from 'axios';
+import filter from 'lodash/filter';
 
 const initialState = {
     user: {}, 
@@ -9,6 +10,7 @@ const initialState = {
     favorite_tracks: [],
     current_index: 0,
     indexMatrix: {},
+    
     playlists: []
 }
 
@@ -18,6 +20,10 @@ const GET_USER = 'GET_USER'
     , GET_PREFERENCES = 'GET_PREFERENCES'
     , POST_PREFERENCES = 'POST_PREFERENCES'
     , GET_PLAYLISTS = 'GET_PLAYLISTS'
+    , ADD_PLAYLIST = 'ADD_PLAYLIST'
+    , REMOVE_PLAYLIST = 'REMOVE_PLAYLIST'
+    , ADD_TRACK = 'ADD_TRACK'
+    , REMOVE_TRACK = 'REMOVE_TRACK'
     , GET_FAVORITES = 'GET_FAVORITES'
     , GET_MATRIX = 'GET_MATRIX'
     , CHANGE_INDEX = 'CHANGE_INDEX'
@@ -61,13 +67,78 @@ export function get_playlists(userid) {
         // console.log('Index matrix: ', indexMatrix)
 
         return res.data
-    })
+    }).catch(err => console.log('Error getting playlists: ', err))
     
     return {
         type: GET_PLAYLISTS,
         payload: playlistData
     }
 }
+
+export function add_playlist(userid, playlistName) {
+    // let indexMatrix = {};
+
+    let newPlaylist = axios.post(`${REACT_APP_PLAYLISTS}/${userid}`, {playlist_name: playlistName}).then( res => {
+        console.log('Playlist created on server: ', res.data)
+        return res.data
+    }).catch(err => console.log('Error getting playlists: ', err))
+    
+    return {
+        type: ADD_PLAYLIST,
+        payload: newPlaylist
+    }
+}
+
+export function remove_playlist(userid, idToRemove) {
+    // let indexMatrix = {};
+
+    let id_to_remove = axios.delete(`${REACT_APP_PLAYLISTS}/${userid}?playlist_id=${idToRemove}`).then( res => {
+        console.log(`Playlist${idToRemove} deleted from server`, res.data)
+        return idToRemove
+    }).catch(err => console.log('Error getting playlists: ', err))
+    
+    return {
+        type: ADD_PLAYLIST,
+        payload: id_to_remove
+    }
+}
+
+
+
+
+export function add_track(add_plId, track) {
+    const { track_id } = track
+    let addedTrack = axios.post(`${REACT_APP_PLAYLISTS}/manage/${add_plId}`, {track_id: track_id}).then( res => {
+        console.log(`Track ${track_id} added to Playlist ${add_plId}: `, res.data)
+        return track;
+    }).catch(err => console.log('Error adding track: ', err))
+
+    return {
+        type: ADD_TRACK,
+        payload: {
+            addedTrack: addedTrack,
+            add_plId: add_plId
+        }
+    }
+}
+
+export function remove_track(rmv_plId, track_num) {
+    let removeNum = axios.delete(`${REACT_APP_PLAYLISTS}/manage/${rmv_plId}?track_num=${track_num}`).then( res => {
+        console.log(` remove_track query sent: `, res.data)
+        return track_num;
+    }).catch(err => console.log('Error adding track: ', err))
+
+    return {
+        type: REMOVE_TRACK,
+        payload: {
+            removeNum: removeNum,
+            rmv_plId: rmv_plId
+
+        }
+    }
+}
+
+
 
 export function get_favorites(userid) {
     // let indexMatrix = {};
@@ -133,6 +204,7 @@ export function logout() {
 
 
 export default function users(state = initialState, action) {
+    const { playlists, indexMatrix } = state;
     
     switch( action.type ) {
         // case GET_USER + PENDING:
@@ -153,12 +225,70 @@ export default function users(state = initialState, action) {
             let matrix = {};
             action.payload.forEach( playlist => {
                 const { playlist_id, playlist_index } = playlist 
-                matrix[playlist_index] = playlist_id
+                matrix[playlist_index] = playlist_id;
+                matrix[playlist_id] = playlist_index;
             })
 
             console.log('Playlists saved to Redux: ', action.payload)
             console.log('Index Matrix: ', matrix)
             return Object.assign({}, state, { playlists: action.payload, indexMatrix: matrix })
+
+        case ADD_PLAYLIST + FULFILLED:
+            let playlist_added = playlists.slice(),
+                created_playlist = Object.assign({}, action.payload);
+
+            created_playlist.playlist_index = playlists.length + 1;
+            created_playlist.tracks = [];
+
+            let newMatrix = Object.assign({}, indexMatrix)
+            newMatrix[created_playlist.playlist_id] = created_playlist.playlist_index;
+            newMatrix[created_playlist.playlist_index] = created_playlist.playlist_id;
+            
+            playlist_added = [...playlist_added, created_playlist];
+            console.log('Playlist added, indexMatrix uptated')
+            return Object.assign({}, state, { playlists: playlist_added, indexMatrix: newMatrix })
+
+        case REMOVE_PLAYLIST + FULFILLED:
+            let playlist_removed = filter(playlists, {playlist_id:  !action.payload});
+
+            console.log('Playlists left: ', playlist_removed)
+            
+            let matrix_after = {};
+
+            playlist_removed.forEach( (pl, i) => {
+                pl.playlist_index = i;
+                matrix_after[i] = pl.playlist_id;
+                matrix_after[pl.playlist_id] = i
+            })
+            console.log('Playlist removed, indexMatrix updated');
+            return Object.assign({}, state, { playlists: playlist_removed, indexMatrix: matrix_after })
+
+        case ADD_TRACK + FULFILLED:
+            const { add_plId, addedTrack } = action.payload
+
+            let add_thisIndex = indexMatrix[add_plId];
+            
+            console.log(playlists)
+            let newPlContainer = playlists.slice();
+            console.log(newPlContainer)
+            let updatedPlaylist = Object.assign({}, playlists[add_thisIndex]) ;
+
+            updatedPlaylist.tracks = [...updatedPlaylist.tracks, addedTrack]
+
+            newPlContainer.splice(add_thisIndex, 1, updatedPlaylist)
+            console.log('Redux track successfully added: ', newPlContainer)
+            return Object.assign({}, state, { playlists: newPlContainer})
+
+        case REMOVE_TRACK + FULFILLED:
+            const { rmv_plId, removeNum } = action.payload
+
+            let rmv_thisIndex = indexMatrix[rmv_plId],
+                new_plContainer = playlists.slice(),
+                newTracksArray = new_plContainer[rmv_thisIndex].tracks.filter( track => track.track_num !== removeNum) ;
+
+            new_plContainer[rmv_thisIndex].tracks = newTracksArray;
+            console.log('Redux track successfully removed: ', new_plContainer)
+            return Object.assign({}, state, { playlists: new_plContainer})
 
         case GET_FAVORITES + FULFILLED:
             console.log('Favorites saved to redux: ', action.payload)
@@ -172,9 +302,9 @@ export default function users(state = initialState, action) {
             console.log('Post preferences fulfilled: ', action.payload)
             return Object.assign({}, state, {user_preferences: action.payload});
 
-        // case GET_MATRIX:
-        //     console.log('Matrix saved to Redux: ', action.payload)
-        //     return Object.assign({}, state, { indexMatrix: action.payload })
+        case GET_MATRIX:
+            console.log('Matrix saved to Redux: ', action.payload)
+            return Object.assign({}, state, { indexMatrix: action.payload })
         
         case CHANGE_INDEX:
             return Object.assign({}, state, { current_index: action.payload })

@@ -6,6 +6,8 @@ import Table, { TableBody, TableHead, TableRow, TableCell, TableSortLabel } from
 import DesktopSong from '../DesktopSong/DesktopSong';
 import Tooltip from 'material-ui/Tooltip';
 
+import { sort_results } from '../../../ducks/search';
+
 function DesktopSearch(props) {
     const headerNames = [
         {label: 'BPM', id: 'bpm', numeric: false, disablePadding: false},
@@ -13,7 +15,7 @@ function DesktopSearch(props) {
         {label: 'Artist', id: 'artist_name', numeric: false, disablePadding: false},
         {label: 'Genre', id: 'track_genre', numeric: false, disablePadding: false}
     ]
-    const { addSong } = props
+    const { sort_results } = props
         , { sortBy, sortDirection } = props.search;
 
     const tableHeaders = headerNames.map( (column) => {
@@ -32,7 +34,7 @@ function DesktopSearch(props) {
                     <TableSortLabel
                         active={ sortBy === column.id }
                         direction={ sortDirection }
-                        onClick={ () => props.handleSort( column.id )}
+                        onClick={ () => sort_results( column.id )}
                     >
                         { column.label }
                     </TableSortLabel>
@@ -42,20 +44,14 @@ function DesktopSearch(props) {
     })
 
     const searchResults = props.sortedResults.map( (song, i) => {
-        const { bpm, track_name, artist_name, track_genre, track_id } = song;
+        const { track_id } = song;
         
         return (
             <DesktopSong
-                track_num={ '' }
-                addSong={ addSong } 
-                bpm={ bpm }
-                track_name={ track_name }
-                artist_name={ artist_name }
-                track_genre={ track_genre }
-                track_id={ track_id }
-                key={ track_id }
+                track={ song }
+                order_num={ '' }
                 addBtn={ true }
-                playlist_track_number={ '' }/>
+                key={ track_id }/>
         )
     } );
     return(
@@ -89,4 +85,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(DesktopSearch);
+export default connect(mapStateToProps, { sort_results })(DesktopSearch);

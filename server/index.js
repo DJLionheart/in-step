@@ -22,13 +22,21 @@ const {
     CLIENT_SECRET,
     CALLBACK_URL,
     CONNECTION_STRING,
+    AUTHENTICATE,
+    AUTH_NEXT,
+    REACT_APP_AUTH_ME,
     SUCCESS_REDIRECT,
     FAILURE_REDIRECT,
     REACT_APP_USERS,
     REACT_APP_SEARCH,
-    REACT_APP_PLAYLISTS,
+    REACT_APP_LOGOUT_BTN,
+    GET_ADD_PL,
+    DELETE_PL,
+    ADD_RMV_SONG,
     REACT_APP_FAVS,
+    FAV_UNFAV,
     REACT_APP_HOME
+
 } = process.env;
 
 app.use( express.static( `${__dirname}/../build` ) );
@@ -73,9 +81,9 @@ passport.use(new SpotifyStrategy({
     }).catch(err => console.log('Find User Error: ', err))
 }));
 
-app.get('/api/auth', passport.authenticate('spotify', {scope: ['playlist-modify', 'playlist-modify-private', 'user-read-email'], showDialog: true}))
+app.get(AUTHENTICATE, passport.authenticate('spotify', {scope: ['playlist-modify', 'playlist-modify-private', 'user-read-email'], showDialog: true}))
 
-app.get('/api/auth/callback', passport.authenticate('spotify', {
+app.get(AUTH_NEXT, passport.authenticate('spotify', {
     successRedirect: SUCCESS_REDIRECT,
     failureRedirect: FAILURE_REDIRECT
 }))
@@ -90,7 +98,7 @@ passport.deserializeUser( (id, done) => {
     })
 })
 
-app.get('/api/auth/me', function(req, res) {
+app.get(REACT_APP_AUTH_ME, function(req, res) {
     
     if(req.user) {
         res.status(200).send(req.user)
@@ -108,29 +116,31 @@ const logout = function() {
     }
 }
 
-app.post('/api/logout', logout, function(req, res) {
+app.post(REACT_APP_LOGOUT_BTN, logout, function(req, res) {
     console.log('Logged out');
     res.sendFile(path.resolve(REACT_APP_HOME));
 })
 
 // DB Search
-app.get('/api/search', src_ctrl.search);
+app.get(REACT_APP_SEARCH, src_ctrl.search);
 
-// User and Playlist Management
+// User
 app.get(REACT_APP_USERS, us_ctrl.getPreferences)
 app.post(REACT_APP_USERS, us_ctrl.postPreferences)
 
-app.get(`${REACT_APP_PLAYLISTS}/:userid`, pl_ctrl.getPlaylists)
-app.post(`${REACT_APP_PLAYLISTS}/:userid`, pl_ctrl.create_playlist)
-app.delete(`${REACT_APP_PLAYLISTS}/:userid`, pl_ctrl.delete_playlist)
+// Playlist Management
+app.get(GET_ADD_PL, pl_ctrl.getPlaylists)
+app.post(GET_ADD_PL, pl_ctrl.create_playlist)
+app.delete(DELETE_PL, pl_ctrl.delete_playlist)
 
-app.post(`${REACT_APP_PLAYLISTS}/manage/:playlist_id`, pl_ctrl.addSong)
-app.delete(`${REACT_APP_PLAYLISTS}/manage/:playlist_id`, pl_ctrl.removeSong)
+app.post(ADD_RMV_SONG, pl_ctrl.addSong)
+app.delete(ADD_RMV_SONG, pl_ctrl.removeSong)
+app.delete(ADD_RMV_SONG, pl_ctrl.delete_all_tracks)
 
 // Favorites
 app.get(REACT_APP_FAVS, fv_ctrl.getFavs)
-app.post(`${REACT_APP_FAVS}/:track_id`, fv_ctrl.addFav)
-app.delete(`${REACT_APP_FAVS}/:track_id`, fv_ctrl.unFav)
+app.post(FAV_UNFAV, fv_ctrl.addFav)
+app.delete(FAV_UNFAV, fv_ctrl.unFav)
 
 // End of Massive Connection Wrapper
 })

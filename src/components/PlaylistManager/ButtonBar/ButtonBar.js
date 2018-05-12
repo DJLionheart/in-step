@@ -17,17 +17,17 @@ class ButtonBar extends Component {
         }
     }
     render() {
-        const { namePlaylist, removePlaylist } = this.props
+        const { openAlert } = this.props
             , { currentIndex } = this.props.user_data;
 
         return(
             <section>
-                    <Button variant="fab" color="primary" onClick={ namePlaylist }>
+                    <Button variant="fab" color="primary" onClick={ () => openAlert('namePl') }>
                         <Create/>
                     </Button>
                     <IconButton color="default"><Share/></IconButton>
                     <IconButton color="primary"><BorderColor/></IconButton>
-                    <IconButton color="secondary"><ClearAll/></IconButton>
+                    <IconButton color="secondary" onClick={ () => openAlert('clearAllConf')}><ClearAll/></IconButton>
                     <IconButton onClick={ () => removePlaylist(currentIndex) }><DeleteButton/></IconButton>
             </section>
         )

@@ -5,25 +5,19 @@ import MobileSong from '../MobileSong/MobileSong';
 
 
 function MobilePlaylist(props) {
-    const { playlist, removeSong } = props
+    const { playlist } = props
         , { playlist_name, playlist_id, tracks } = playlist;
     
     const playlistSongs = tracks.map( (track, i) => {
-        const { bpm, track_name, artist_name, track_genre, track_id, track_num } = track;
+        const { track_num } = track;
         return(
             <MobileSong
-                removeSong={ removeSong }
+                track={ track }
                 playlist_id={ playlist_id }
                 order_num={ i+1 }
-                track_num={ track_num }
-                bpm={ bpm }
-                track_name={ track_name }
-                artist_name={ artist_name }
-                track_genre={ track_genre }
-                track_id={ track_id }
                 addBtn={ false }
                 rmvBtn={ true }
-                key={ i }/>
+                key={ track_num }/>
         )
         
     })

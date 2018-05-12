@@ -81,12 +81,14 @@ class DesktopSong extends Component {
     }
 
     render() {
-        const { track_num, bpm, track_name, order_num, track_id, artist_name, track_genre,  addBtn, rmvBtn } = this.props;
+        const { track, addBtn, rmvBtn } = this.props
+            , { bpm, track_name, artist_name, track_genre, order_num, track_id } = track;
+
         return(
             <TableRow>
                 {
                     order_num !== ''
-                        ? <TableCell>{ track_num }</TableCell>
+                        ? <TableCell>{ order_num }</TableCell>
                         : null
                 }
                 <TableCell numeric>{ bpm }</TableCell>
@@ -94,15 +96,15 @@ class DesktopSong extends Component {
                 <TableCell>{ artist_name }</TableCell>
                 <TableCell>{ track_genre }</TableCell>
                 <TableCell>
-                    <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
-                    <FavBtn track_id={ track_id } btnFunc={ this.favorite }/>
-                    {
-                        addBtn ? <AddBtn track_id={ track_id } btnFunc={ this.add }/> : null
-                    }
-    
-                    {
-                        rmvBtn ? <RmvBtn track_num={ track_num } btnFunc={ this.remove }/> : null
-                    }
+                <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
+                        <FavBtn track_id={ track_id }/>
+                        {
+                            addBtn ? <AddBtn track={ track }/> : null
+                        }
+        
+                        {
+                            rmvBtn ? <RmvBtn track={ track }/> : null
+                        }
                 </TableCell>
             </TableRow>            
         )

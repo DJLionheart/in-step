@@ -13,6 +13,7 @@ import RmvBtn from '../../buttons/RmvBtn/RmvBtn';
 import FavBtn from '../../buttons/FavBtn/FavBtn';
 
 import { get_playlists, get_favorites } from '../../../ducks/users';
+import { get_results } from '../../../ducks/search';
 
 import './MobileSong.css';
 
@@ -29,26 +30,27 @@ class MobileSong extends Component {
             'removedSnackbarOpen': false,
             'addedWarning': false
         }
-        this.add = this.add.bind(this);
-        this.remove = this.remove.bind(this);
-        this.favorite = this.favorite.bind(this);
+        // this.add = this.add.bind(this);
+        // this.remove = this.remove.bind(this);
+        // this.favorite = this.favorite.bind(this);
     }
 
-    add(songid) {
-        const { indexMatrix, current_index, userid } = this.props.user_data
-            , { get_playlists } = this.props;
+    // add(songid) {
+    //     const { indexMatrix, current_index, userid } = this.props.user_data
+    //         , { search_input, search_type } = this.props.search
+    //         , { get_playlists, get_results } = this.props;
 
-        songFunctions.addSong(indexMatrix, current_index, userid, songid, get_playlists)
-    }
+    //     songFunctions.addSong(search_input, search_type, indexMatrix, current_index, userid, songid, get_playlists, get_results) 
+    // }
 
-    remove(songid) {
-        const { indexMatrix, current_index, userid } = this.props.user_data
-            , { get_playlists } = this.props;
+    // remove(songid) {
+    //     const { indexMatrix, current_index, userid } = this.props.user_data
+    //         , { get_playlists } = this.props;
 
-        songFunctions.removeSong(indexMatrix, current_index, userid, songid).then( () => {
-            get_playlists(userid)
-        }).catch(err => console.log('Get favorites error: ', err))
-    }
+    //     songFunctions.removeSong(indexMatrix, current_index, userid, songid).then( () => {
+    //         get_playlists(userid)
+    //     }).catch(err => console.log('Get favorites error: ', err))
+    // }
 
     favorite(songid) {
         const { userid, favorite_tracks } = this.props.user_data
@@ -75,8 +77,9 @@ class MobileSong extends Component {
     // }
 
     render() {
-        const { addedWarning } = this.state 
-            , { bpm, track_name, artist_name, track_genre, order_num, track_num, track_id, addBtn, rmvBtn } = this.props;
+        const { addedWarning } = this.state
+            , { track, addBtn, rmvBtn, order_num } = this.props
+            , { bpm, track_name, artist_name, track_genre } = track;
 
         return(
             <div>
@@ -94,13 +97,13 @@ class MobileSong extends Component {
                     </CardContent>
                     <div className="mobile-song-controlls">
                         <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
-                        <FavBtn track_id={ track_id } btnFunc={ this.favorite }/>
+                        <FavBtn track={ track }/>
                         {
-                            addBtn ? <AddBtn track_id={ track_id } btnFunc={ this.add }/> : null
+                            addBtn ? <AddBtn track={ track }/> : null
                         }
         
                         {
-                            rmvBtn ? <RmvBtn track_num={ track_num } btnFunc={ this.remove }/> : null
+                            rmvBtn ? <RmvBtn track={ track }/> : null
                         }
                     </div>
                 </Card>
@@ -128,9 +131,7 @@ class MobileSong extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        user_data: state.user_data
-    }
+    return state
 }
 
-export default connect(mapStateToProps, { get_playlists, get_favorites })(MobileSong);
+export default connect(mapStateToProps, { get_playlists, get_favorites, get_results })(MobileSong);

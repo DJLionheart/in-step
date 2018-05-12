@@ -1,3 +1,3 @@
 INSERT INTO playlist_data(userid, playlist_name)
 VALUES( $1, $2)
-RETURNING *;
+RETURNING playlist_name, playlist_id;

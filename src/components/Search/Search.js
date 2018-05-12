@@ -8,7 +8,7 @@ import { TextField, Paper, Button, FormControl, FormControlLabel, Radio, RadioGr
 import axios from 'axios';
 import './Search.css'
 
-import { reduxSort } from '../../ducks/search';
+import { reduxSort, sort_results, get_input, get_type, get_results } from '../../ducks/search';
 import { get_playlists } from '../../ducks/users';
 import MobileSearch from '../mobile/MobileSearch/MobileSearch';
 import DesktopSearch from '../desktop/DesktopSearch/DesktopSearch';
@@ -51,8 +51,10 @@ class Search extends Component {
     }
 
     render() {
-        const { searchInput, searchType, results } = this.state
-            , { sortBy, sortDirection } = this.props.search;
+        // const { searchInput, searchType, results } = this.state
+        const { sortBy, sortDirection, search_input, search_type, results } = this.props.search
+            , { get_input, get_type, get_results } = this.props
+
 
         const sortedResults = orderBy( results, sortBy, sortDirection );
 
@@ -60,11 +62,11 @@ class Search extends Component {
             <Paper>
             <div className="search-controls">
             
-                <TextField name="searchInput" value={ searchInput } onChange={ e => this.handleInput(e) } placeholder="What are you looking for?" fullWidth margin="normal"/>
-                <Button variant="raised" children="Search" default={ true } onClick={ this.searchDb }/>
+                <TextField name="searchInput" value={ search_input } onChange={ e => get_input(e) } placeholder="What are you looking for?" fullWidth margin="normal"/>
+                <Button variant="raised" children="Search" default={ true } onClick={ () => get_results(search_type, search_input) }/>
                 <br/>
                 <FormControl>
-                    <RadioGroup name="searchType" value={ searchType } onChange={ e => this.handleInput(e) }>
+                    <RadioGroup name="searchType" value={ search_type } onChange={ e => get_type(e) }>
                         <FormControlLabel value="bpm" control={<Radio color="primary"/>} label="BPM"/>
                         <FormControlLabel value="track_name" control={<Radio color="primary"/>} label="Track"/>
                         <FormControlLabel value="artist_name" control={<Radio color="primary"/>} label="Artist"/>
@@ -79,7 +81,6 @@ class Search extends Component {
                         <section className="search-results">
                             <MobileSearch
                                 sortedResults={ sortedResults }
-                                handleSort={ this.handleSort }
                                 showControl={ sortedResults === [] ? false : true }/>
                         </section>
                     </MediaQuery>
@@ -87,8 +88,7 @@ class Search extends Component {
                     <MediaQuery query="(min-device-width: 1224px)">
       
                         <DesktopSearch
-                            sortedResults={ sortedResults }
-                            handleSort={ this.handleSort }/>
+                            sortedResults={ sortedResults }/>
                     </MediaQuery>
                 </main>
 
@@ -103,4 +103,4 @@ function mapStateToProps(state) {
     return state
 }
 
-export default connect(mapStateToProps, { reduxSort, get_playlists })(Search);
+export default connect(mapStateToProps, { reduxSort, sort_results, get_input, get_type, get_results, get_playlists })(Search);

@@ -9,6 +9,8 @@ const initialState = {
     invertDirection: {'asc': 'desc', 'desc': 'asc'}
 }
 
+const FULFILLED = '_FULFILLED';
+
 const HANDLE_SORT = 'HANDLE_SORT'
     , SORT_RESULTS = 'SORT_RESULTS'
     , GET_RESULTS = 'GET_RESULTS'
@@ -50,9 +52,9 @@ export function get_type(e) {
     }
 }
 
-export function get_results(searchType, searchInput) {
+export function get_results(search_type, search_input) {
 
-    let results = axios.get(`${REACT_APP_SEARCH}?type=${ searchType }&search=${ searchInput }`).then( res => {
+    let results = axios.get(`${REACT_APP_SEARCH}?type=${ search_type }&search=${ search_input }`).then( res => {
         console.log('Search results: ', res.data)
 
         return res.data
@@ -83,7 +85,7 @@ export default function search(state = initialState, action) {
         case GET_TYPE:
             return Object.assign({}, state, {search_type: action.payload});
 
-        case GET_RESULTS:
+        case GET_RESULTS + FULFILLED:
             return Object.assign({}, state, {results: action.payload});
 
         default:

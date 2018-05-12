@@ -10,6 +10,8 @@ import Paper from 'material-ui/Paper';
 // import { reduxSort } from '../../../ducks/search';
 import MobileSong from '../MobileSong/MobileSong';
 
+import { sort_results } from '../../../ducks/search';
+
 class MobileSearch extends Component {
     constructor(props) {
         super(props);
@@ -29,32 +31,20 @@ class MobileSearch extends Component {
     }
     
     handleClose(sort) {
-        this.props.handleSort(sort);
+        this.props.sort_results(sort);
         this.setState({
             anchorEl: null
         })
     }
     
     render() {
-        // bpm={ bpm }
-        // track_name={ track_name }
-        // artist_name={ artist_name }
-        // track_genre={ track_genre }
-        // track_id={ track_id }
-        const { addSong } = this.props
         const searchResults = this.props.sortedResults.map( (song, i) => {
-            const { bpm, track_name, artist_name, track_genre, track_id } = song;
+            const { track_id } = song;
             
             return (
                 <MobileSong
-                    addSong={ addSong }
-                    trackData={ song }
-                    bpm={ bpm }
-                    track_name={ track_name }
-                    artist_name={ artist_name }
-                    track_genre={ track_genre }
-                    track_id={ track_id }
-                    playlist_track_number={ '' }
+                    track={ song }
+                    order_num={ '' }
                     addBtn={ true }
                     key={ track_id }/>
             )
@@ -103,4 +93,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(MobileSearch);
+export default connect(mapStateToProps, { sort_results })(MobileSearch);

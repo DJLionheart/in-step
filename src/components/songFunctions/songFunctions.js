@@ -11,12 +11,13 @@ const {
 
 // Add
 module.exports = {
-    addSong: (indexMatrix, current_index, userid, songid, get_playlists) => {
+    addSong: (search_input, search_type, indexMatrix, current_index, userid, songid, get_playlists, get_results) => {
         const plId = indexMatrix[current_index];
         
-        axios.post(`${REACT_APP_PLAYLISTS}/manage/${plId}`, {track_id: songid}).then( () => {
-            console.log(`Track ${songid} added to playlist ${plId}`)
+        axios.post(`${REACT_APP_PLAYLISTS}/manage/${plId}`, {track_id: songid}).then( res => {
+            console.log(`Track ${songid} added to playlist ${plId}: `, res.data)
             get_playlists(userid)
+            get_results(search_input, search_type)
         }).catch(err => console.log('Add to playlist error: ', err))
     },
 
