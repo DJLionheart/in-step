@@ -108,13 +108,14 @@ export function remove_playlist(idToRemove) {
     // let indexMatrix = {};
     console.log('Remove playlist idToRemove: ', idToRemove)
     let id_to_remove = axios.delete(`${REACT_APP_PLAYLISTS}/${idToRemove}`).then( res => {
-        console.log(`Playlist${idToRemove} deleted from server`, res.data)
+        console.log('Remove - server response: ', res.data)
+        console.log('Redux id to remove: ', id_to_remove)
         return idToRemove
     }).catch(err => console.log('Error getting playlists: ', err))
     
     return {
-        type: ADD_PLAYLIST,
-        payload: id_to_remove
+        type: REMOVE_PLAYLIST,
+        payload: idToRemove
     }
 }
 
@@ -270,7 +271,7 @@ export default function users(state = initialState, action) {
             newMatrix[created_playlist.playlist_index] = created_playlist.playlist_id;
             
             playlist_added = [...playlist_added, created_playlist];
-            console.log('Playlist added, indexMatrix uptated: ', playlist_added)
+            console.log('Playlist added: ', playlist_added, 'indexMatrix uptated: ', newMatrix)
             return Object.assign({}, state, { playlists: playlist_added, indexMatrix: newMatrix })
 
         case RENAME_PLAYLIST + FULFILLED:

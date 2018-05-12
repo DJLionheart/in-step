@@ -52,7 +52,7 @@ module.exports = {
             , db = req.app.get('db');
 
         db.playlists.create_playlist([+userid, playlist_name]).then( resp => {
-            console.log(`Playlist with name of ${playlist_name}created: `, resp)
+            console.log(`Playlist with name of ${playlist_name} created: `, resp)
             res.status(200).send(resp[0])
     
         }).catch(err => console.log('Playlist creation failed: ', err))
@@ -71,9 +71,11 @@ module.exports = {
             , db = req.app.get('db')
             , dl_plId = +playlist_id
 
-    db.playlists.delete_playlist([dl_plId])
-        .then( () => res.status(200).send(`Playlist ${playlist_id} deleted`))
-        .catch(err => console.log('Delete playlist error: ', err))   
+    db.playlists.delete_playlist([dl_plId]).then( resp => {
+        console.log(`Playlist ${dl_plId} deleted from db'`)
+        res.status(200).send(`Playlist ${playlist_id} deleted`)
+    }).catch(err => console.log('Delete playlist error: ', err))
+           
     },
 
     addSong: (req, res, next) => {

@@ -166,7 +166,7 @@ class PlaylistManager extends Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button color="primary" onClick={ () => this.closeAlert('lastPl') }>
+                        <Button color="primary" onClick={ () => this.closeAlert('tooMany') }>
                             OK
                         </Button>
                     </DialogActions>
