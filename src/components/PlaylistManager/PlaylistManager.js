@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -12,13 +13,17 @@ import ClearAll from '@material-ui/icons/ClearAll';
 // import Button from 'material-ui/Button';
 // import Typography from 'material-ui/Typography';
 
-import { changeIndex, add_playlist, rename_playlist, remove_playlist, clear_all } from '../../ducks/users';
+import { get_playlists, changeIndex } from '../../ducks/users';
 
 import ButtonBar from './ButtonBar/ButtonBar';
 import PlaylistContainer from './PlaylistContainer/PlaylistContainer';
 
 import './PlaylistManager.css'
 
+const {
+    REACT_APP_PLAYLISTS,
+    REACT_APP_CLEAR_ALL
+} = process.env;
 
 class PlaylistManager extends Component {
     constructor(props) {
@@ -53,7 +58,8 @@ class PlaylistManager extends Component {
     closeAlert(dialog_name) {
         this.setState({
             [dialog_name]: false,
-            okButton: true
+            okButton: true,
+            playlistName: ''
         })
     }
 
@@ -69,26 +75,41 @@ class PlaylistManager extends Component {
     }
     
     addPlaylist(playlistName) {
-        const { userid } = this.props.user_data.user
-        this.props.add_playlist(userid, playlistName)
-        this.closeAlert('namePl')
+        const { userid, playlists } = this.props.user_data.user
+        axios.post(`${REACT_APP_PLAYLISTS}/${userid}`, {playlist_name: playlistName}).then( res => {
+            console.log('Playlist created on server: ', res.data)
+            this.props.get_playlists(userid).then( () => {
+                this.closeAlert('namePl')
+            })
+        }).catch(err => console.log('Error getting playlists: ', err))
     }
 
-    renamePlaylist(playlistName) {
-        const { current_index, indexMatrix } = this.props.user_data.user
-            , plIdToRename = indexMatrix[current_index]
-        this.props.rename_playlist(plIdToRename, playlistName)
-        this.closeAlert('renamePl')
+    renamePlaylist(id, playlistName) {
+        const { userid } = this.props.user_data.user
+        axios.put(`${REACT_APP_PLAYLISTS}/${id}`, {newName: playlistName}).then( res => {
+            console.log('Playlist renamed on server: ', res.data)
+            this.props.get_playlists(userid)
+            this.closeAlert('renamePl')
+        }).catch(err => console.log('Error renaming playlist: ', err))
     }
 
     removePlaylist(idToRemove) {
-        remove_playlist(idToRemove)
-        this.closeAlert('plDeleteConf')
+        const { userid } = this.props.user_data.user
+        axios.delete(`${REACT_APP_PLAYLISTS}/${idToRemove}`).then( res => {
+            this.props.changeIndex(0)
+            this.props.get_playlists(userid)
+            this.closeAlert('plDeleteConf')
+        }).catch(err => console.log(`Error removing playlist ${idToRemove}: `, err))
+        
     }
 
     clearPlaylist(idToRemove) {
-        this.props.clear_all(idToRemove)
-        this.closeAlert('clearAllConf')
+        const { userid } = this.props.user_data.user;
+        axios.delete(`${REACT_APP_CLEAR_ALL}/${idToRemove}`).then( res => {
+            this.props.get_playlists(userid)
+            this.closeAlert('clearAllConf')
+        }).catch(err => console.log(`Error clearing all tracks from playlist ${idToRemove}: `, err))
+        
     }
 
 
@@ -263,7 +284,7 @@ class PlaylistManager extends Component {
                         <TextField autoFocus margin="dense" onChange={ e => this.handleInput(e.target.value )} placeholder={ playlists[current_index].playlist_name } id="name" label="Playlist Name" type="text" value={ playlistName }/>
                     </DialogContent>
                     <DialogActions>
-                        <Button disabled={ okButton } color="primary" onClick={ () => this.renamePlaylist(playlistName) }>
+                        <Button disabled={ okButton } color="primary" onClick={ () => this.renamePlaylist(playlistId, playlistName) }>
                             Save
                         </Button>
                         <Button color="default" onClick={ () => this.closeAlert('renamePl')}>
@@ -310,4 +331,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { changeIndex, add_playlist, rename_playlist, remove_playlist, clear_all })(PlaylistManager);
+export default connect(mapStateToProps, { get_playlists, changeIndex })(PlaylistManager);

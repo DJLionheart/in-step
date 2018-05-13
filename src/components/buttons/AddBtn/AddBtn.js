@@ -1,17 +1,36 @@
 import React from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import filter from 'lodash/filter';
 
 import IconButton from 'material-ui/IconButton';
 import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
 
-import { add_track, remove_track } from '../../../ducks/users';
+import { get_playlists } from '../../../ducks/users';
+
+const { REACT_APP_ADD_RMV_TR } = process.env;
+
 
 function AddBtn(props) {
-    const { track, add_track, remove_track } = props
-        , { track_num } = track
-        , { playlists, current_index, indexMatrix } = props.user_data
+    const { get_playlists, track } = props
+        , { track_id } = track
+        , { playlists, current_index, indexMatrix, user } = props.user_data
+        , { userid } = user
         , plId = indexMatrix[current_index];
+
+    const addTrack = (plId, trackId) => {
+        axios.post(`${REACT_APP_ADD_RMV_TR}/${plId}`, {track_id: trackId}).then( res => {
+            console.log(`Track ${trackId} added to Playlist ${plId}: `, res.data)
+            get_playlists(userid)
+        }).catch(err => console.log('Error adding track: ', err))
+    }
+
+    const removeTrack = (plId, trackNum) => {
+        axios.delete(`${REACT_APP_ADD_RMV_TR}/${plId}?track_num=${trackNum}`).then( res => {
+            get_playlists(userid)
+        }).catch(err => console.log('Error adding track: ', err))
+    }
+
 
     let color = '',
         func = null,
@@ -20,11 +39,17 @@ function AddBtn(props) {
 
     if( inPlaylist.length >= 1 ) {
         color = 'secondary';
-        func = () => remove_track(plId, track_num);
+        func = () => {
+            removeTrack(plId, inPlaylist[0].track_num);
+            get_playlists(userid)
+        }
         ariaLabel = "Remove from playlist"
     } else {
         color = 'default';
-        func = () => add_track(plId, track);
+        func = () => {
+            addTrack(plId, track_id)
+            get_playlists(userid)
+        };
         ariaLabel = "Add to playlist"
     }
 
@@ -44,4 +69,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { add_track, remove_track })(AddBtn);
+export default connect(mapStateToProps, { get_playlists })(AddBtn);

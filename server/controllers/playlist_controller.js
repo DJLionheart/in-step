@@ -93,7 +93,7 @@ module.exports = {
 
         db.playlists.add_track([plId, track]).then( resp => {
             console.log(`Track ${track_id} added to playlist ${plId}`)
-            res.status(200).send(resp[0].track_num)
+            res.status(200).send(resp[0])
         }).catch(err => console.log('Add song error: ', err))
     },
 
@@ -105,7 +105,8 @@ module.exports = {
             , track = +track_num
 
         db.playlists.remove_track([plId, track]).then( resp => {
-            res.status(200).send(`Track ${track_num} removed from playlist ${playlist_id}`)
+            console.log(`Track ${track_num} removed from playlist ${playlist_id}`)
+            res.status(200).send(`Track number ${track_num} removed from playlist ${playlist_id}`)
         }).catch(err => console.log('Remove song error: ', err))
     },
 
@@ -116,6 +117,7 @@ module.exports = {
         let id_to_clear = +playlist_id
 
         db.playlists.delete_all_tracks([id_to_clear]).then( resp => {
+            console.log(`All tracks removed from playlist ${playlist_id}`)
             res.status(200).send(`All tracks removed from playlist ${playlist_id}`)
         }).catch(err => console.log('Remove all error: ', err))
     },
