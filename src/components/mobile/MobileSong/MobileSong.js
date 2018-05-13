@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Card, CardContent, Typography, Avatar } from 'material-ui';
-import IconButton from 'material-ui/IconButton';
-import PlayArrow from '@material-ui/icons/PlayArrow';
 
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 
+import PlayBtn from '../../buttons/PlayBtn/PlayBtn';
 import AddBtn from '../../buttons/AddBtn/AddBtn';
 import RmvBtn from '../../buttons/RmvBtn/RmvBtn';
 import FavBtn from '../../buttons/FavBtn/FavBtn';
@@ -30,9 +29,6 @@ class MobileSong extends Component {
             'removedSnackbarOpen': false,
             'addedWarning': false
         }
-        // this.add = this.add.bind(this);
-        // this.remove = this.remove.bind(this);
-        // this.favorite = this.favorite.bind(this);
     }
 
     // add(songid) {
@@ -96,7 +92,7 @@ class MobileSong extends Component {
                         <Typography variant="subheading">{ track_genre }</Typography>
                     </CardContent>
                     <div className="mobile-song-controlls">
-                        <IconButton aria-label="Play" color="primary"><PlayArrow/></IconButton>
+                        <PlayBtn track={ track }/>
                         <FavBtn track={ track }/>
                         {
                             addBtn ? <AddBtn track={ track }/> : null

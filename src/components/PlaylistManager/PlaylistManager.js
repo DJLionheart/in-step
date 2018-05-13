@@ -75,7 +75,7 @@ class PlaylistManager extends Component {
     }
     
     addPlaylist(playlistName) {
-        const { userid, playlists } = this.props.user_data.user
+        const { userid } = this.props.user_data.user
         axios.post(`${REACT_APP_PLAYLISTS}/${userid}`, {playlist_name: playlistName}).then( res => {
             console.log('Playlist created on server: ', res.data)
             this.props.get_playlists(userid).then( () => {

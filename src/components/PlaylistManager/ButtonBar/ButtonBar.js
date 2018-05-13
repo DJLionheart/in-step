@@ -7,7 +7,6 @@ import Share from '@material-ui/icons/Share';
 import BorderColor from '@material-ui/icons/BorderColor';
 import ClearAll from '@material-ui/icons/ClearAll';
 
-import { remove_playlist } from '../../../ducks/users';
 
 function ButtonBar(props) {
     const { openAlert } = props
@@ -37,4 +36,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { remove_playlist })(ButtonBar);
+export default connect(mapStateToProps)(ButtonBar);

@@ -34,8 +34,6 @@ const {
     REACT_APP_PLAYLISTS,
     REACT_APP_FAVS,
     REACT_APP_USERS,
-    REACT_APP_ADD_RMV_TR,
-    REACT_APP_CLEAR_ALL
 
 } = process.env
 
@@ -219,7 +217,7 @@ export function logout() {
 
 
 export default function users(state = initialState, action) {
-    const { playlists, indexMatrix, current_index } = state;
+    // const { playlists, indexMatrix, current_index } = state;
     
     switch( action.type ) {
         // case GET_USER + PENDING:
@@ -319,9 +317,9 @@ export default function users(state = initialState, action) {
             console.log('Post preferences fulfilled: ', action.payload)
             return Object.assign({}, state, {user_preferences: action.payload});
 
-        case GET_MATRIX:
-            console.log('Matrix saved to Redux: ', action.payload)
-            return Object.assign({}, state, { indexMatrix: action.payload })
+        // case GET_MATRIX:
+        //     console.log('Matrix saved to Redux: ', action.payload)
+        //     return Object.assign({}, state, { indexMatrix: action.payload })
         
         case CHANGE_INDEX:
             return Object.assign({}, state, { current_index: action.payload })
