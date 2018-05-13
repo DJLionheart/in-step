@@ -78,7 +78,7 @@ class PlaylistManager extends Component {
         const { current_index, indexMatrix } = this.props.user_data.user
             , plIdToRename = indexMatrix[current_index]
         this.props.rename_playlist(plIdToRename, playlistName)
-        this.closeAlert('namePl')
+        this.closeAlert('renamePl')
     }
 
     removePlaylist(idToRemove) {
@@ -263,7 +263,7 @@ class PlaylistManager extends Component {
                         <TextField autoFocus margin="dense" onChange={ e => this.handleInput(e.target.value )} placeholder={ playlists[current_index].playlist_name } id="name" label="Playlist Name" type="text" value={ playlistName }/>
                     </DialogContent>
                     <DialogActions>
-                        <Button disabled={ okButton } color="primary" onClick={ () => add_playlist(playlistName) }>
+                        <Button disabled={ okButton } color="primary" onClick={ () => this.renamePlaylist(playlistName) }>
                             Save
                         </Button>
                         <Button color="default" onClick={ () => this.closeAlert('renamePl')}>

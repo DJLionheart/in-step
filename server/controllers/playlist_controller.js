@@ -49,9 +49,10 @@ module.exports = {
     create_playlist: (req, res, next) => {
         const { userid } = req.params
             , { playlist_name } = req.body
-            , db = req.app.get('db');
+            , db = req.app.get('db')
+            , user_id = +userid;
 
-        db.playlists.create_playlist([+userid, playlist_name]).then( resp => {
+        db.playlists.create_playlist([user_id, playlist_name]).then( resp => {
             console.log(`Playlist with name of ${playlist_name} created: `, resp)
             res.status(200).send(resp[0])
     
@@ -61,9 +62,13 @@ module.exports = {
     rename_playlist: (req, res, next) => {
         const { playlist_id } = req.params
             , { newName } = req.body
-            , db = req.app.get('db');
+            , db = req.app.get('db')
+            , plId = +playlist_id
 
-        db.playlists.rename_playlist([newName, +playlist_id])
+        db.playlists.rename_playlist([newName, plId]).then( resp => {
+            console.log(`Playlist ${plId} name changed to ${newName}`)
+            res.status(200).send(resp[0].playlist_name)
+        }).catch(err => console.log('Rename playlist error: ', err))
     },
 
     delete_playlist: (req, res, next) => {
@@ -83,11 +88,12 @@ module.exports = {
             , { track_id } = req.body
             , db = req.app.get('db')
         
-            let plId = +playlist_id
+            let plId = +playlist_id,
+                track = +track_id
 
-        db.playlists.add_track([plId, track_id]).then( resp => {
-            console.log(`Track ${track_id} added to playlist ${playlist_id}`)
-            res.status(200).send(resp[0])
+        db.playlists.add_track([plId, track]).then( resp => {
+            console.log(`Track ${track_id} added to playlist ${plId}`)
+            res.status(200).send(resp[0].track_num)
         }).catch(err => console.log('Add song error: ', err))
     },
 
@@ -95,8 +101,10 @@ module.exports = {
         const { playlist_id } = req.params
             , { track_num } = req.query
             , db = req.app.get('db')
+            , plId = +playlist_id
+            , track = +track_num
 
-        db.playlists.remove_track([+playlist_id, +track_num]).then( resp => {
+        db.playlists.remove_track([plId, track]).then( resp => {
             res.status(200).send(`Track ${track_num} removed from playlist ${playlist_id}`)
         }).catch(err => console.log('Remove song error: ', err))
     },
@@ -111,6 +119,4 @@ module.exports = {
             res.status(200).send(`All tracks removed from playlist ${playlist_id}`)
         }).catch(err => console.log('Remove all error: ', err))
     },
-
-
 }

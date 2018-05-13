@@ -24,11 +24,9 @@ class Loader extends Component {
     componentDidMount() {
         const { get_user, get_playlists, get_preferences, history } = this.props;
 
-        // const { get_user, history } = this.props
-        //     , { userDataLoaded } = this.state;
         axios.get(REACT_APP_AUTH_ME).then( res => {
-
-            console.log(res.data)
+            console.log('USER: ', res.data)
+            
             get_user(res.data)
             const { userid } = res.data;
 
