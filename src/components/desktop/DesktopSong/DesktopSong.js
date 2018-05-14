@@ -5,10 +5,11 @@ import { TableRow, TableCell } from 'material-ui/Table';
 import PlayBtn from '../../buttons/PlayBtn/PlayBtn';
 import AddBtn from '../../buttons/AddBtn/AddBtn';
 import RmvBtn from '../../buttons/RmvBtn/RmvBtn';
-import FavBtn from '../../buttons/FavBtn/FavBtn';
+// import FavBtn from '../../buttons/FavBtn/FavBtn';
 
 import './DesktopSong.css';
 
+//    <FavBtn track={ track }/>
 function DesktopSong(props) {
     const { track, addBtn, rmvBtn, order_num} = props
         , { bpm, track_name, artist_name, track_genre } = track;
@@ -27,7 +28,6 @@ function DesktopSong(props) {
             <TableCell>
                 <div className="song-controls">
                     <PlayBtn track={ track }/>
-                    <FavBtn track={ track }/>
                     {
                         addBtn ? <AddBtn track={ track }/> : null
                     }

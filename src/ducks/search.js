@@ -104,7 +104,10 @@ export default function search(state = initialState, action) {
         case PLAY_BTN_SEARCH:
             return Object.assign({}, state, { playBtnSearch: action.payload})
 
-        default:
+        case 'persist/REHYDRATE':
+            return { ...state, persistedState: action.payload };
+        
+            default:
             return state
     }
 }

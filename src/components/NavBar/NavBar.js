@@ -16,6 +16,7 @@ import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import logo from '../../logos/instep.png'
 
 import { handle_modal } from '../../ducks/modals';
+import { get_playlists, log_out } from '../../ducks/users';
 import './NavBar.css'
 
 import YoutubeFrame from '../YoutubeFrame/YoutubeFrame';
@@ -44,7 +45,7 @@ class NavBar extends Component {
         this.handleNav = this.handleNav.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.searchYoutube = this.searchYoutube.bind(this);
-        this.savePlaylist = this.savePlaylist.bind(this);
+        // this.savePlaylist = this.savePlaylist.bind(this);
     }
 
     handleNav(evt) {
@@ -92,65 +93,56 @@ class NavBar extends Component {
             }).catch(err => console.log('Youtube search error: ', err))
     }
 
-    savePlaylist() {
-        let trackContainer = []
-        const { handle_modal } = this.props
-            , { user, playlists, current_index } = this.props.user_data
-            , { userid, access_token } = user
-            , { playlist_name } = playlists[current_index].playlist_name;
+    // savePlaylist() {
+    //     let trackContainer = []
+    //     const { handle_modal } = this.props
+    //         , { user, playlists, current_index } = this.props.user_data
+    //         , { auth_id, access_token } = user
+    //         , { playlist_name } = playlists[current_index].playlist_name;
         
-        handle_modal('sharePl', false)
+    //     handle_modal('sharePl', false)
 
-        const searchForId = (track, artist) => {
-            const config = {
-                headers: {'Authorization': 'Bearer ' + access_token }
-            }
+    //     const searchForId = (track, artist) => {
+    //         const config = {
+    //             headers: {'Authorization': 'Bearer ' + access_token }
+    //         }
             
-            axios.get(`https://api.spotify.com/v1/search?q=track:'${track}'%20artist:'${artist}'&type=track&limit=5`, config)
-                .then( res => {
-                    let spotifyResults = res.data.tracks.items[0];
-                    console.log('Spotify results: ', res.data.tracks.items[0])
-                    if(spotifyResults) {
-                        trackContainer.push(spotifyResults.track_id)
-                    }
-            }).catch(err => console.log('Play button error: ', err));
-        }
+    //         axios.get(`https://api.spotify.com/v1/search?q=track:'${track}'%20artist:'${artist}'&type=track&limit=5`, config)
+    //             .then( res => {
+    //                 let spotifyResults = res.data.tracks.items[0];
+    //                 console.log('Spotify results: ', res.data.tracks.items[0])
+    //                 if(spotifyResults) {
+    //                     trackContainer.push(spotifyResults.track_id)
+    //                 }
+    //         }).catch(err => console.log('Search for id error: : ', err));
+    //     }
         
-        const plConfig = {
-            headers: {
-                'Authorization': 'Bearer ' + access_token,
-                'Content-Type': 'application/json'
-            },
-            data: {
-                name: JSON.stringify({name: playlist_name, public: false})
-            }
-        }
-        axios.post(`https://api.spotify.com/v1/users/${userid}/playlists`, plConfig)
-            .then( res => {
-                console.log('Spotify playlist created: ', res.data)
-                let spotifyPlaylistId = res.data.id
+    //     const plConfig = {
+    //         headers: {
+    //             'Authorization': 'Bearer ' + access_token,
+    //             'Content-Type': 'application/json'
+    //         },
+    //         data: {
+    //             name: JSON.stringify({name: playlist_name, public: false})
+    //         }
+    //     }
+    //     axios.post(`https://api.spotify.com/v1/users/${auth_id}/playlists`, plConfig)
+    //         .then( res => {
+    //             console.log('Spotify playlist created: ', res.data)
+    //             let spotifyPlaylistId = res.data.id
 
-                let stack = [];
+    //             let stack = [];
 
-                playlists[current_index].tracks.forEach( track => {
-                    stack.push(searchForId(track.track_name, track.artist_name))
-                })
+    //             playlists[current_index].tracks.forEach( track => {
+    //                 stack.push(searchForId(track.track_name, track.artist_name))
+    //             })
 
-                Promise.all(stack).then( () => {
-                    console.log('Stack after promise.all: ', stack)
-                    console.log('Track container: ', trackContainer)
-                })
-
-                let spotifyResults = res.data.tracks.items[0];
-                console.log('Spotify results: ', res.data.tracks.items[0])
-                if(spotifyResults) {
-                    let spotifyUrl = spotifyResults.external_urls.spotify;
-                    window.open(spotifyUrl)
-                } else {
-                    handle_modal('notOnSpotify', true)
-                }
-        }).catch(err => console.log('Play button error: ', err));
-    }
+    //             Promise.all(stack).then( () => {
+    //                 console.log('Stack after promise.all: ', stack)
+    //                 console.log('Track container: ', trackContainer)
+    //             })
+    //     }).catch(err => console.log('Play button error: ', err));
+    // }
 
     addPlaylist(playlistName) {
         const { userid } = this.props.user_data.user
@@ -198,6 +190,7 @@ class NavBar extends Component {
 
     logout() {
         axios.post(REACT_APP_LOGOUT_BTN).then( () => {
+            log_out();
             this.props.history.push(REACT_APP_HOME_URL)
         })
     }
@@ -254,8 +247,8 @@ class NavBar extends Component {
             , { track, artist } = playBtnSearch;
 
         return(
-            <div>
-                <AppBar position="static" style={ style } className="nav-bar">
+            <div className="nav-bar">
+                <AppBar position="fixed" style={ style }>
                     <Toolbar>
                             <IconButton
                                 color="inherit"
@@ -535,4 +528,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { handle_modal } )(withRouter(NavBar));
+export default connect(mapStateToProps, { handle_modal, get_playlists, log_out } )(withRouter(NavBar));

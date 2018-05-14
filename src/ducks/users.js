@@ -28,7 +28,8 @@ const GET_USER = 'GET_USER'
     , GET_FAVORITES = 'GET_FAVORITES'
     // , GET_MATRIX = 'GET_MATRIX'
     , CHANGE_INDEX = 'CHANGE_INDEX'
-    , LOGOUT = 'LOGOUT';
+    , LOGOUT = 'LOGOUT'
+    , APPLY_PREFS = 'APPLY_PREFS';
 
 const {
     REACT_APP_PLAYLISTS,
@@ -176,6 +177,13 @@ export function get_favorites(userid) {
 //     }
 // }
 
+export function apply_prefs(preferences){
+    return {
+        type: APPLY_PREFS,
+        payload: preferences
+    }
+
+}
 export function get_preferences(userid) {
     let preferences = axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( res => {
         // console.log('User preferences: ', res.data)
@@ -208,7 +216,7 @@ export function changeIndex(index) {
     }
 }
 
-export function logout() {
+export function log_out() {
     return {
         type: LOGOUT,
         payload: {}
@@ -234,6 +242,9 @@ export default function users(state = initialState, action) {
         case GET_USER:
             return Object.assign({}, state, {user: action.payload});
 
+        case APPLY_PREFS: 
+            return Object.assign({}, state, {user_preferences: action.payload})
+            
         case GET_PLAYLISTS + FULFILLED:
             let matrix = {};
             action.payload.forEach( playlist => {
@@ -325,8 +336,11 @@ export default function users(state = initialState, action) {
             return Object.assign({}, state, { current_index: action.payload })
         
         case LOGOUT: 
-            return Object.assign({}, state, {})
+            return Object.assign(action.payload, initialState)
         
+        case 'persist/REHYDRATE':
+            return { ...state, persistedState: action.payload };
+
         default:
             return state;
     }

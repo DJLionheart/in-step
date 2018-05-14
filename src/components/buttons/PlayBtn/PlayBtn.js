@@ -20,10 +20,10 @@ function PlayBtn(props) {
         }
 
         playBtn_search(track, artist);
-        axios.get(`https://api.spotify.com/v1/search?q=track:'${track}'%20artist:'${artist}'&type=track&limit=5`, config)
+        axios.get(`https://api.spotify.com/v1/search?q=track:'${track}'%20artist:${artist}&type=track&limit=5`, config)
             .then( res => {
                 let spotifyResults = res.data.tracks.items[0];
-                console.log('Spotify results: ', res.data.tracks.items[0])
+                console.log('Spotify results: ', res.data)
                 if(spotifyResults) {
                     let spotifyUrl = spotifyResults.external_urls.spotify;
                     window.open(spotifyUrl)

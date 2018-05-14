@@ -5,17 +5,18 @@ import { Card, CardContent, Typography, Avatar } from 'material-ui';
 import PlayBtn from '../../buttons/PlayBtn/PlayBtn';
 import AddBtn from '../../buttons/AddBtn/AddBtn';
 import RmvBtn from '../../buttons/RmvBtn/RmvBtn';
-import FavBtn from '../../buttons/FavBtn/FavBtn';
+// import FavBtn from '../../buttons/FavBtn/FavBtn';
 
 import './MobileSong.css';
 
+//  <FavBtn track={ track }/>
 function MobileSong(props) {
-    const { track, addBtn, rmvBtn, order_num } = this.props
+    const { track, addBtn, rmvBtn, order_num } = props
         , { bpm, track_name, artist_name, track_genre } = track;
 
     return(
         <div>
-            <Card>
+            <Card className="mobile-song">
                 {
                     order_num !== ''
                         ? <Avatar>{ order_num }</Avatar>
@@ -29,7 +30,6 @@ function MobileSong(props) {
                 </CardContent>
                 <div className="song-controls">
                     <PlayBtn track={ track }/>
-                    <FavBtn track={ track }/>
                     {
                         addBtn ? <AddBtn track={ track }/> : null
                     }

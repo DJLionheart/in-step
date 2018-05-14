@@ -22,8 +22,10 @@ function MobilePlaylist(props) {
         
     })
     return(
-        <div className="playlist-contents">
-            <Typography variant="headline">{ playlist_name }</Typography>
+        <div className="playlist-main">
+            <div className="playlist-title">
+                <Typography variant="headline">{ playlist_name }</Typography>
+            </div>
             { playlistSongs }
         </div>
     )

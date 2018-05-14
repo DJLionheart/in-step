@@ -5,7 +5,8 @@ import { Provider } from 'react-redux';
 // import { PersistGate } from 'redux-persist/es/integration/react';
 
 import store from './ducks/store';
-// import persistor from './ducks/store';
+// import { store, persistor } from './ducks/store';
+// import createAppStore from './ducks/store';
 
 import './index.css';
 
@@ -14,8 +15,10 @@ import App from './App';
 
 //import registerServiceWorker from './registerServiceWorker';
 
-//<PersistGate loading={<LoadingScreen/>} persistor={ persistor }>
-//</PersistGate>
+   //<PersistGate loading={ <LoadingScreen/> } persistor={ persistor }>
+   //</PersistGate>
+
+// const { store, persistor } = createAppStore();
 
 ReactDOM.render(
 <Provider store={ store }>

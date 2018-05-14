@@ -9,3 +9,45 @@
     justify-content: center;
     align-items: space-between;
 }
+
+.playlist-main {
+    height: 385px;
+    overflow: scroll;
+
+    
+}
+
+/* .playlist-main Typography {
+
+} */
+
+@media (min-device-width: 375px) {
+    .playlist-main {
+        height: 480px;
+        overflow: scroll;
+    }
+
+}
+
+@media (min-device-width: 414px) {
+    .playlist-main {
+        height: 540px;
+        overflow: scroll;
+    }
+
+}
+
+@media (min-device-width: 768px) {
+    .playlist-main {
+        height: 830px;
+        overflow: scroll;
+    }
+
+}
+
+@media (min-device-width: 1224px) {
+    .playlist-main {
+        height: 600px;
+        overflow: scroll;        
+    }
+}

@@ -32,8 +32,8 @@ function DesktopPlaylist(props) {
         )
     })
     return(
-        <Paper>
-            <Typography variant="headline">{ playlist_name }</Typography>
+        <Paper className="playlist-main">
+            <Typography variant="headline" className="playlist-title">{ playlist_name }</Typography>
             <Paper>
                 <Table>
                     <TableHead>

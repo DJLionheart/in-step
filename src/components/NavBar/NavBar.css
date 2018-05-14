@@ -1,5 +1,5 @@
 .logo {
-    width: 50px;
+    width: 45px;
     position: absolute;
     right: 30px;
 }
@@ -9,14 +9,38 @@
 }
 
 .nav-bar {
-    position: fixed;
+    margin-bottom: 56px;
 
 }
 
-@media (min-device-width: 376px) {
+@media (min-device-width: 375px) {
     .logo {
-        width: 60px;
+        width: 50px;
         position: absolute;
         right: 30px;
+    }
+}
+
+@media (min-device-width: 768px) {
+    .logo {
+        width: 58px;
+        position: absolute;
+        right: 30px;
+    }
+
+    .nav-bar {
+        margin-bottom: 64px;
+    }
+}
+
+@media (min-device-width: 768px) {
+    .logo {
+        width: 58px;
+        position: absolute;
+        right: 30px;
+    }
+
+    .nav-bar {
+        margin-bottom: 64px;
     }
 }

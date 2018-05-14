@@ -16,9 +16,6 @@ function YoutubeFrame(props) {
     } else if(window.matchMedia("(max-width: 768px)").matches) {
         height = '550';
         width = '550';
-    } else if(window.matchMedia("(max-width: 1223px)").matches) {
-        height = '850';
-        width = '850';
     }
 
     const opts = {

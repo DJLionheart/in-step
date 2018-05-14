@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import CircularProgress from 'material-ui/Progress/CircularProgress'
 
-import { get_user, get_playlists, get_preferences } from '../../ducks/users';
+import { get_user, get_playlists, apply_prefs } from '../../ducks/users';
 
 const {
     REACT_APP_AUTH_ME,
@@ -23,7 +23,7 @@ class Loader extends Component {
     }
 
     componentDidMount() {
-        const { get_user, get_playlists, get_preferences, history } = this.props;
+        const { get_user, get_playlists, apply_prefs, history } = this.props;
 
         axios.get(REACT_APP_AUTH_ME).then( res => {
             console.log('USER: ', res.data)
@@ -54,9 +54,8 @@ class Loader extends Component {
             })
             axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
                 console.log('Resp from user_preference call: ', response)
+                apply_prefs(response.data)
                 const { user_genres, user_pace } = response.data;
-
-                get_preferences(userid);
 
                 !user_genres || !user_pace
                 // user_genres === [] || user_pace === ''
@@ -86,4 +85,4 @@ class Loader extends Component {
 function mapStateToProps(state) {
     return state
 }
-export default withRouter(connect(mapStateToProps, { get_user, get_playlists, get_preferences })(Loader));
+export default withRouter(connect(mapStateToProps, { get_user, get_playlists, apply_prefs })(Loader));

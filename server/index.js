@@ -63,7 +63,8 @@ app.use(passport.session());
 passport.use(new SpotifyStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
-    callbackURL: CALLBACK_URL
+    callbackURL: CALLBACK_URL,
+    scope: ['playlist-modify', 'playlist-modify-private', 'playlist-modify-public', 'user-read-email'], showDialog: true
 }, function(accessToken, refreshToken, expires_in, profile, done) {
     
     const db = app.get('db');
@@ -85,7 +86,7 @@ passport.use(new SpotifyStrategy({
     }).catch(err => console.log('Find User Error: ', err))
 }));
 
-app.get(AUTHENTICATE, passport.authenticate('spotify', {scope: ['playlist-modify', 'playlist-modify-private', 'user-read-email'], showDialog: true}))
+app.get(AUTHENTICATE, passport.authenticate('spotify', {scope: ['playlist-modify', 'playlist-modify-private', 'playlist-modify-public', 'user-read-email'], showDialog: true}))
 
 app.get(AUTH_NEXT, passport.authenticate('spotify', {
     successRedirect: SUCCESS_REDIRECT,

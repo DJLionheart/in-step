@@ -9,14 +9,12 @@
     "ajv": "^6.4.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
-    "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "lodash": "^4.17.10",
     "massive": "^4.7.2",
     "material-ui": "^1.0.0-beta.44",
-    "nodemailer": "^4.6.4",
     "passport": "^0.4.0",
     "passport-spotify": "^1.0.0",
     "react": "^16.3.2",
@@ -28,9 +26,9 @@
     "react-scripts": "1.1.4",
     "react-youtube": "^7.6.0",
     "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
     "redux-persist": "^5.9.1",
-    "redux-promise-middleware": "^5.1.1",
-    "redux-react-session": "^2.4.0"
+    "redux-promise-middleware": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

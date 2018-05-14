@@ -1,0 +1,59 @@
+.playlist-btn-bar {
+    position: fixed;
+    left: 20%;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+
+@media (min-device-width: 375px) {
+    .playlist-btn-bar {
+        position: fixed;
+        left: 25%;
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (min-device-width: 414px) {
+    .playlist-btn-bar {
+        position: fixed;
+        left: 26%;
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (min-device-width: 768px) {
+    .playlist-btn-bar {
+        position: fixed;
+        left: 37%;
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (min-device-width: 1224px) {
+    .playlist-btn-bar {
+        position: fixed;
+        left: 40%;
+        padding-top: 15px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -28,9 +28,11 @@ export default function search(state = initialState, action) {
     switch( action.type ) {
 
         case HANDLE_MODAL:
-
             return Object.assign({}, state, {[action.payload.modal]: action.payload.bool});
 
+        case 'persist/REHYDRATE':
+            return { ...state, persistedState: action.payload };
+        
         default:
             return state
     }
