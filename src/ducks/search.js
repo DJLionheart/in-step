@@ -6,7 +6,8 @@ const initialState = {
     results: [],
     sortBy: 'bpm',
     sortDirection: 'asc',
-    invertDirection: {'asc': 'desc', 'desc': 'asc'}
+    invertDirection: {'asc': 'desc', 'desc': 'asc'},
+    playBtnSearch: { track: '', artist: ''}
 }
 
 const FULFILLED = '_FULFILLED';
@@ -15,7 +16,8 @@ const HANDLE_SORT = 'HANDLE_SORT'
     , SORT_RESULTS = 'SORT_RESULTS'
     , GET_RESULTS = 'GET_RESULTS'
     , GET_INPUT = 'GET_INPUT'
-    , GET_TYPE = 'GET_TYPE';
+    , GET_TYPE = 'GET_TYPE'
+    , PLAY_BTN_SEARCH = 'PLAY_BTN_SEARCH';
 
 const {
      REACT_APP_SEARCH
@@ -66,6 +68,17 @@ export function get_results(search_type, search_input) {
     }
 }
 
+export function playBtn_search(track, artist) {
+    return {
+        type: PLAY_BTN_SEARCH,
+        payload: {
+            track: track,
+            artist: artist
+        }
+    }
+}
+
+
 export default function search(state = initialState, action) {
     switch( action.type ) {
 
@@ -87,6 +100,9 @@ export default function search(state = initialState, action) {
 
         case GET_RESULTS + FULFILLED:
             return Object.assign({}, state, {results: action.payload});
+
+        case PLAY_BTN_SEARCH:
+            return Object.assign({}, state, { playBtnSearch: action.payload})
 
         default:
             return state

@@ -30,8 +30,8 @@ class Loader extends Component {
             get_user(res.data)
             const { userid } = res.data;
 
-            axios.get(`${REACT_APP_PLAYLISTS}/${userid}`).then( res => {
-                if(!res.data) {
+            axios.get(`${REACT_APP_PLAYLISTS}/${userid}`).then( resp => {
+                if(resp.data.length === 0) {
                     axios.post(`${REACT_APP_PLAYLISTS}/${userid}`, {playlist_name: 'Playlist 1'})
                     .then( result => {
                         // const { playlist_id } = result.data[0]
@@ -51,9 +51,9 @@ class Loader extends Component {
                     get_playlists(userid)
                 }
             })
-            axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( resp => {
-                console.log('Resp from user_preference call: ', resp)
-                const { user_genres, user_pace } = resp.data;
+            axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
+                console.log('Resp from user_preference call: ', response)
+                const { user_genres, user_pace } = response.data;
 
                 get_preferences(userid);
 

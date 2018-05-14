@@ -10,20 +10,37 @@ import { createMuiTheme } from 'material-ui/styles';
 const muiTheme = createMuiTheme({
   palette: {
     primary: {
-      light: '#63a4ff',
-      main: '#1976d2',
-      dark: '#004ba0',
+      light: '#819ca9',
+      main: '#546e7a',
+      dark: '#29434e',
       contrastText: '#ffffff'
     },
     secondary: {
-      light: '#ffdd4b',
-      main: '#ffab00',
-      dark: '#c67c00',
-      contrastText: '#37474f'
+      light: 'ffd95a',
+      main: '#f9a825',
+      dark: '#c17900',
+      contrastText: '#29434e'
     }
   },
 
 })
+// const muiTheme = createMuiTheme({
+//   palette: {
+//     primary: {
+//       light: '#63a4ff',
+//       main: '#1976d2',
+//       dark: '#004ba0',
+//       contrastText: '#ffffff'
+//     },
+//     secondary: {
+//       light: '#ffdd4b',
+//       main: '#ffab00',
+//       dark: '#c67c00',
+//       contrastText: '#37474f'
+//     }
+//   },
+
+// })
 
 class App extends Component {
   render() {

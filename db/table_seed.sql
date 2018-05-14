@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS users (
     profile_url TEXT,
     user_email VARCHAR(60),
     access_token TEXT NOT NULL,
-    refresh_token TEXT NOT NULL
+    refresh_token TEXT NOT NULL,
+    is_premium BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS song_data (

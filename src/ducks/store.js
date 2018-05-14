@@ -6,6 +6,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 
 import users from './users';
 import search from './search';
+import modals from './modals';
 
 // const persistConfig = {
 //     key: 'root',
@@ -14,7 +15,8 @@ import search from './search';
 
 const reducer = combineReducers({
     user_data: users,
-    search: search
+    search: search,
+    modals: modals
 })
 
 // const rootReducer = combineReducers({
