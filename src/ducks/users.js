@@ -18,6 +18,7 @@ const FULFILLED = '_FULFILLED';
 const GET_USER = 'GET_USER'
     , GET_PREFERENCES = 'GET_PREFERENCES'
     , POST_PREFERENCES = 'POST_PREFERENCES'
+    , PLAYLISTS = 'PLAYLISTS'
     , GET_PLAYLISTS = 'GET_PLAYLISTS'
     // , ADD_PLAYLIST = 'ADD_PLAYLIST'
     // , RENAME_PLAYLIST = 'RENAME_PLAYLIST'
@@ -54,6 +55,13 @@ export function get_user(user) {
     return {
         type: GET_USER,
         payload: user
+    }
+}
+
+export function put_playlists(playlists) {
+    return {
+        type: PLAYLISTS,
+        payload: playlists
     }
 }
 
@@ -238,6 +246,9 @@ export default function users(state = initialState, action) {
             
         // case GET_USER + FULFILLED:
         //     return Object.assign({}, state, {user: action.payload});
+
+        case PLAYLISTS:
+            return Object.assign({}, state, {playlists: action.payload});
 
         case GET_USER:
             return Object.assign({}, state, {user: action.payload});

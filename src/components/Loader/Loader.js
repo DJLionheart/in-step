@@ -3,8 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import CircularProgress from 'material-ui/Progress/CircularProgress'
+import Button from 'material-ui/Button';
 
-import { get_user, get_playlists, apply_prefs } from '../../ducks/users';
+import { get_user, get_playlists, put_playlists, apply_prefs } from '../../ducks/users';
 
 const {
     REACT_APP_AUTH_ME,
@@ -23,7 +24,7 @@ class Loader extends Component {
     }
 
     componentDidMount() {
-        const { get_user, get_playlists, apply_prefs, history } = this.props;
+        const { get_user, get_playlists, put_playlists, apply_prefs, history } = this.props;
 
         axios.get(REACT_APP_AUTH_ME).then( res => {
             console.log('USER: ', res.data)
@@ -85,4 +86,5 @@ class Loader extends Component {
 function mapStateToProps(state) {
     return state
 }
-export default withRouter(connect(mapStateToProps, { get_user, get_playlists, apply_prefs })(Loader));
+export default withRouter(connect(mapStateToProps, { get_user, get_playlists, apply_prefs, put_playlists })(Loader));
+//<Button variant="raised" onClick={ () => this.props.history.push('/profile') }>Continue</Button>

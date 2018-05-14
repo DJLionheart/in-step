@@ -56,9 +56,9 @@ class Profile extends Component {
             {min: '05:00', mph: '12.00', bpm: '200'},
         ]  
 
-        const rows = paceData.map( entry => {
+        const rows = paceData.map( (entry, i) => {
             return(
-                 <TableRow key={ paceData.min }>
+                 <TableRow key={ i }>
                     <TableCell>{entry.bpm}</TableCell>
                     <TableCell>{entry.min}</TableCell>
                     <TableCell>{entry.mph}</TableCell>
