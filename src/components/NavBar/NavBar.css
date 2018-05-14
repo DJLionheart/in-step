@@ -1,0 +1,22 @@
+.logo {
+    width: 50px;
+    position: absolute;
+    right: 30px;
+}
+
+.logo img {
+    width: 100%;
+}
+
+.nav-bar {
+    position: fixed;
+
+}
+
+@media (min-device-width: 376px) {
+    .logo {
+        width: 60px;
+        position: absolute;
+        right: 30px;
+    }
+}

@@ -13,6 +13,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ClearAll from '@material-ui/icons/ClearAll';
 import Typography from 'material-ui/Typography';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
+import logo from '../../logos/instep.png'
 
 import { handle_modal } from '../../ducks/modals';
 import './NavBar.css'
@@ -25,7 +26,8 @@ const {
     REACT_APP_YT_KEY,
     REACT_APP_YT_URL,
     REACT_APP_PLAYLISTS,
-    REACT_APP_CLEAR_ALL
+    REACT_APP_CLEAR_ALL,
+    REACT_APP_LOGOUT_BTN
 } = process.env;
 
 class NavBar extends Component {
@@ -42,6 +44,7 @@ class NavBar extends Component {
         this.handleNav = this.handleNav.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.searchYoutube = this.searchYoutube.bind(this);
+        this.savePlaylist = this.savePlaylist.bind(this);
     }
 
     handleNav(evt) {
@@ -89,6 +92,66 @@ class NavBar extends Component {
             }).catch(err => console.log('Youtube search error: ', err))
     }
 
+    savePlaylist() {
+        let trackContainer = []
+        const { handle_modal } = this.props
+            , { user, playlists, current_index } = this.props.user_data
+            , { userid, access_token } = user
+            , { playlist_name } = playlists[current_index].playlist_name;
+        
+        handle_modal('sharePl', false)
+
+        const searchForId = (track, artist) => {
+            const config = {
+                headers: {'Authorization': 'Bearer ' + access_token }
+            }
+            
+            axios.get(`https://api.spotify.com/v1/search?q=track:'${track}'%20artist:'${artist}'&type=track&limit=5`, config)
+                .then( res => {
+                    let spotifyResults = res.data.tracks.items[0];
+                    console.log('Spotify results: ', res.data.tracks.items[0])
+                    if(spotifyResults) {
+                        trackContainer.push(spotifyResults.track_id)
+                    }
+            }).catch(err => console.log('Play button error: ', err));
+        }
+        
+        const plConfig = {
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            data: {
+                name: JSON.stringify({name: playlist_name, public: false})
+            }
+        }
+        axios.post(`https://api.spotify.com/v1/users/${userid}/playlists`, plConfig)
+            .then( res => {
+                console.log('Spotify playlist created: ', res.data)
+                let spotifyPlaylistId = res.data.id
+
+                let stack = [];
+
+                playlists[current_index].tracks.forEach( track => {
+                    stack.push(searchForId(track.track_name, track.artist_name))
+                })
+
+                Promise.all(stack).then( () => {
+                    console.log('Stack after promise.all: ', stack)
+                    console.log('Track container: ', trackContainer)
+                })
+
+                let spotifyResults = res.data.tracks.items[0];
+                console.log('Spotify results: ', res.data.tracks.items[0])
+                if(spotifyResults) {
+                    let spotifyUrl = spotifyResults.external_urls.spotify;
+                    window.open(spotifyUrl)
+                } else {
+                    handle_modal('notOnSpotify', true)
+                }
+        }).catch(err => console.log('Play button error: ', err));
+    }
+
     addPlaylist(playlistName) {
         const { userid } = this.props.user_data.user
             , { get_playlists, handle_modal } = this.props;
@@ -131,10 +194,16 @@ class NavBar extends Component {
             get_playlists(userid)
             handle_modal('clearTracks', false)
         }).catch(err => console.log(`Error clearing all tracks from playlist ${idToRemove}: `, err))
-        
+    }
+
+    logout() {
+        axios.post(REACT_APP_LOGOUT_BTN).then( () => {
+            this.props.history.push(REACT_APP_HOME_URL)
+        })
     }
 
     render() {
+
         const style = {
             background: '#29434e'
         };
@@ -186,7 +255,7 @@ class NavBar extends Component {
 
         return(
             <div>
-                <AppBar position="static" style={ style }>
+                <AppBar position="static" style={ style } className="nav-bar">
                     <Toolbar>
                             <IconButton
                                 color="inherit"
@@ -197,16 +266,19 @@ class NavBar extends Component {
                             >
                                 <MenuIcon/>
                             </IconButton>    
-                            <Typography variant="title" color="inherit">
+                            <Typography variant="headline" color="inherit">
                                 { navLocation }
                             </Typography>
+                            <div className="logo">
+                                <img src={ logo } alt="instep logo"/>
+                            </div>
                             <Menu className="nav-bar"
                                 anchorEl={ anchorEl }
                                 open={ Boolean(anchorEl)}
                                 onClose={ this.handleClose }
                             >
                                 { navLinks }
-                                <MenuItem><a href="/api/logout">Logout</a></MenuItem>
+                                <MenuItem onClick={ this.logout }>Logout</MenuItem>
                             </Menu>
                     </Toolbar>
                 </AppBar>
@@ -396,18 +468,18 @@ class NavBar extends Component {
                     onClose={ handle_modal }
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Share Playlist</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Save Playlist</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            How would you like to share?
+                            Would you like to save this playlist to spotify?
                         </DialogContentText>
+                        <Typography variant="caption">
+                            Note: only tracks actually found on Spotify will be saved.
+                        </Typography>
                     </DialogContent>
                     <DialogActions>
-                        <Button color="primary">
-                            Spotify
-                        </Button>
-                        <Button color="secondary">
-                            Email
+                        <Button color="secondary" onClick={ this.savePlaylist }>
+                            Yes
                         </Button>
                         <Button color="default" onClick={ () => handle_modal('sharePl', false) }>
                             Cancel

@@ -18,11 +18,11 @@ function ButtonBar(props) {
     
     return(
         <section>
-                <Button variant="fab" color="primary" onClick={ addFunc }>
+                <Button variant="fab" color="secondary" onClick={ addFunc }>
                     <Create/>
                 </Button>
-                <IconButton color="default" onClick={ () => openAlert('sharePl')}><Share/></IconButton>
-                <IconButton color="primary" onClick={ () => openAlert('renamePl')}><BorderColor/></IconButton>
+                <IconButton color="secondary" onClick={ () => openAlert('sharePl')}><Share/></IconButton>
+                <IconButton color="secondary" onClick={ () => openAlert('renamePl')}><BorderColor/></IconButton>
                 <IconButton color="secondary" onClick={ () => openAlert('clearAllConf')}><ClearAll/></IconButton>
                 <IconButton onClick={ deleteFunc }><DeleteButton/></IconButton>
         </section>

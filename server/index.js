@@ -36,7 +36,10 @@ const {
     CLEAR_ALL,
     REACT_APP_FAVS,
     FAV_UNFAV,
-    REACT_APP_HOME
+    REACT_APP_HOME,
+    EMAIL_PORT,
+    EMAIL_USER,
+    EMAIL_PASS
 
 } = process.env;
 
@@ -146,5 +149,16 @@ app.delete(FAV_UNFAV, fv_ctrl.unFav)
 
 // End of Massive Connection Wrapper
 })
+
+// nodemailer.createTestAccount((err, account) => {
+//     let transporter = nodemailer.createTransport({
+//         host: 'smtp.ethereal.email',
+//         port: EMAIL_PORT,
+//         auth: {
+//             user: EMAIL_USER,
+//             pass: EMAIL_PASS
+//         }
+//     })
+// })
                             
 app.listen(YE_OLDE_PORTE, () => { console.log(`Ye olde server doth lend an ear at porte ${YE_OLDE_PORTE}, sire!`) })

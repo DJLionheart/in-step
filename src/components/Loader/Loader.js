@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import CircularProgress from 'material-ui/Progress/CircularProgress'
 
 import { get_user, get_playlists, get_preferences } from '../../ducks/users';
 
@@ -64,13 +65,19 @@ class Loader extends Component {
             })
         })
     }
-
     render() {
+        let size = 85;
+
+        if(window.matchMedia("(max-width: 375px)").matches) {
+            size = 85;
+        } else if (window.matchMedia("(max-width: 414px)").matches) {
+            size = 100;
+        } else if(window.matchMedia("(max-width: 1223px)").matches) {
+            size = 200;
+        }
         return(
-            <main>
-                <h1>Loading Screen</h1>
-                <Link to="/questionnaire"><button>Questionnaire</button></Link>
-                <Link to="/profile"><button>Profile</button></Link>
+            <main className="progress">
+                <CircularProgress size={ size } color="secondary" />
             </main>
         )
     }

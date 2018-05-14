@@ -2,23 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import Avatar from 'material-ui/Avatar';
+import Typography from 'material-ui/Typography';
+
 class Profile extends Component {
     constructor() {
         super();
         this.state = {
+            
             songs_collected: false
         }
     }
-    
-    findIds() {
-        const { access_token } = this.props.user_data.user
-        axios.post('/api/ids', {token: access_token}).then( res => {
-            // this.setState({
-                //     songs_collected: true
-                // })
-                console.log('request complete', res.data);  
-        })
-    } 
         
 
     render() {
@@ -32,8 +26,8 @@ class Profile extends Component {
                         ? (
                             <main>
                                 <header>
-                                <h2>Welcome, { username }!</h2>
-                                <img src={ profile_pic } alt="profile"/>
+                                <Typography variant="headline">Welcome, { username }!</Typography>
+                                <Avatar src={ profile_pic } alt="profile"/>
 
                                 </header>
 
@@ -46,7 +40,6 @@ class Profile extends Component {
                                     <h2>Favorites</h2>
                                 </section>
                                 <footer>
-                                    <button onClick={ () => this.findIds(this.props) }>Find Ids</button>
                                     <a href={ profile_url } target="_blank" rel="noopener noreferrer"><p>Visit your Spotify Profile</p></a>      
                                 </footer>
                             </main>

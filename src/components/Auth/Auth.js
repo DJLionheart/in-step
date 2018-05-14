@@ -1,32 +1,28 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import Typography from 'material-ui/Typography';
+
+import spotifyLogo from '../../logos/spotify.png';
+
+import './Auth.css'
 
 
+function Auth() {
 
-class Auth extends Component {
+    return(
+        <main className="auth-page" color="error">
+            <header>
+                <Typography variant="display4">
+                    InStep
+                </Typography>
+            </header>
+            <section className="login">
+                <a href={ process.env.REACT_APP_LOGIN }> <img src={ spotifyLogo } alt="spotify logo"/></a>
+            </section>
 
-    findIds() {
-
-    }
-
-
-    render() {
-        return(
-            <main>
-                <header>
-                    <h1>InStep</h1>
-                    <h3>By logging in, you agree to let us access your Spotify profile and playlist information...</h3>
-                    <h3>Don't worry, we promise not to misuse your data... *Cough* Cambridge *Cough* Analitica</h3>
-                    <h4>(Too soon?)</h4>
-                </header>
-                <Link to="/loading"><button>Login</button></Link>
-                <a href={ process.env.REACT_APP_LOGIN }><button>Spotify - Login</button></a>
-
-                
-                
-            </main>
-        )
-    }
+            
+            
+        </main>
+    )
 }
 
 export default Auth;

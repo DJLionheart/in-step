@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { orderBy } from 'lodash';
 import MediaQuery from 'react-responsive';
 
 import { TextField, Paper, Button, FormControl, FormControlLabel, Radio, RadioGroup } from 'material-ui';
 
-import axios from 'axios';
 import './Search.css'
 
 import { reduxSort, sort_results, get_input, get_type, get_results } from '../../ducks/search';
@@ -14,52 +13,15 @@ import MobileSearch from '../mobile/MobileSearch/MobileSearch';
 import DesktopSearch from '../desktop/DesktopSearch/DesktopSearch';
 
 
-class Search extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchInput: '',
-            searchType: 'bpm',
-            results: []
-        }
-        this.searchDb = this.searchDb.bind(this);
-        this.handleSort = this.handleSort.bind(this);
-    }
-
-    handleInput(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-
-    handleSort(sort) {
-        const { sortBy, sortDirection, invertDirection } = this.props.search;
-        let direction = '';
-        sortBy === sort ? direction = invertDirection[sortDirection] : direction = 'asc';
-        this.props.reduxSort(sort, direction)
-    }
-
-    searchDb() {
-        const { searchType, searchInput } = this.state;
-        axios.get(`/api/search?type=${ searchType }&search=${ searchInput }`).then( res => {
-            console.log(res.data);
-            
-            this.setState({
-                results: res.data
-            })
-        }).catch( err => console.log(err))
-    }
-
-    render() {
-        // const { searchInput, searchType, results } = this.state
-        const { sortBy, sortDirection, search_input, search_type, results } = this.props.search
-            , { get_input, get_type, get_results } = this.props
+function Search(props) {
+    const { sortBy, sortDirection, search_input, search_type, results } = props.search
+        , { get_input, get_type, get_results } = props
 
 
-        const sortedResults = orderBy( results, sortBy, sortDirection );
+    const sortedResults = orderBy( results, sortBy, sortDirection );
 
-        return(
-            <Paper>
+    return(
+        <Paper>
             <div className="search-controls">
             
                 <TextField name="searchInput" value={ search_input } onChange={ e => get_input(e) } placeholder="What are you looking for?" fullWidth margin="normal"/>
@@ -86,17 +48,14 @@ class Search extends Component {
                     </MediaQuery>
 
                     <MediaQuery query="(min-device-width: 1224px)">
-      
+        
                         <DesktopSearch
                             sortedResults={ sortedResults }/>
                     </MediaQuery>
                 </main>
-
             </div>
-    
-            </Paper>
-        )
-    }
+        </Paper>
+    )
 }
 
 function mapStateToProps(state) {
