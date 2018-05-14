@@ -41,7 +41,7 @@
     .playlist-btn-bar {
         position: fixed;
         left: 40%;
-        padding-top: 15px;
+        bottom: 7px;
         display: flex;
         align-items: center;
     }
