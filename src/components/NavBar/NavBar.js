@@ -16,7 +16,7 @@ import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import logo from '../../logos/instep.png'
 
 import { handle_modal } from '../../ducks/modals';
-import { get_playlists, log_out } from '../../ducks/users';
+import { get_playlists, log_out, changeIndex } from '../../ducks/users';
 import './NavBar.css'
 
 import YoutubeFrame from '../YoutubeFrame/YoutubeFrame';
@@ -173,8 +173,8 @@ class NavBar extends Component {
             , { get_playlists, changeIndex, handle_modal } = this.props;
         axios.delete(`${REACT_APP_PLAYLISTS}/${idToRemove}`).then( res => {
             changeIndex(0)
-            get_playlists(userid)
             handle_modal('removePlaylist', false)
+            get_playlists(userid)
         }).catch(err => console.log(`Error removing playlist ${idToRemove}: `, err))
         
     }
@@ -528,4 +528,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { handle_modal, get_playlists, log_out } )(withRouter(NavBar));
+export default connect(mapStateToProps, { handle_modal, get_playlists, log_out, changeIndex } )(withRouter(NavBar));
