@@ -20,8 +20,6 @@ yarn add
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
-
 I use nodemon to keep my server running, and have it only pay attention to files in the server folder so it wouldn't restart every time I changed my front end:
 
 ```
