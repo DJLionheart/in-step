@@ -441,7 +441,7 @@ class NavBar extends Component {
                         <DialogContentText>
                             What would you like to call this playlist?
                         </DialogContentText>
-                        <TextField autoFocus margin="dense" onChange={ e => this.handleInput(e.target.value )} placeholder={ playlists[current_index].playlist_name } id="name" label="Playlist Name" type="text" value={ playlistName }/>
+                        <TextField autoFocus margin="dense" onChange={ e => this.handleInput(e.target.value )} placeholder={ playlists.length > 0 ? playlists[current_index].playlist_name : 'Playlist Name' } id="name" label="Playlist Name" type="text" value={ playlists.length > 0 ? playlistName : '' }/>
                     </DialogContent>
                     <DialogActions>
                         <Button disabled={ okButton } color="primary" onClick={ () => this.renamePlaylist(playlistId, playlistName) }>

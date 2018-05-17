@@ -25,14 +25,16 @@ function Search(props) {
             <div className="search-controls">
             
                 <TextField name="searchInput" value={ search_input } onChange={ e => get_input(e) } placeholder="What are you looking for?" fullWidth margin="normal"/>
-                <Button variant="raised" children="Search" default={ true } onClick={ () => get_results(search_type, search_input) }/>
+                <Button variant="raised" children="Search" color="primary" onClick={ () => get_results(search_type, search_input) }/>
                 <br/>
                 <FormControl>
                     <RadioGroup name="searchType" value={ search_type } onChange={ e => get_type(e) }>
-                        <FormControlLabel value="bpm" control={<Radio color="primary"/>} label="BPM"/>
-                        <FormControlLabel value="track_name" control={<Radio color="primary"/>} label="Track"/>
-                        <FormControlLabel value="artist_name" control={<Radio color="primary"/>} label="Artist"/>
-                        <FormControlLabel value="track_genre" control={<Radio color="primary"/>} label="Genre"/>
+                        <div className="search-options">
+                            <FormControlLabel value="bpm" control={<Radio color="primary"/>} label="BPM"/>
+                            <FormControlLabel value="track_name" control={<Radio color="primary"/>} label="Track"/>
+                            <FormControlLabel value="artist_name" control={<Radio color="primary"/>} label="Artist"/>
+                            <FormControlLabel value="track_genre" control={<Radio color="primary"/>} label="Genre"/>
+                        </div>
                     </RadioGroup>
                 </FormControl>
             </div>

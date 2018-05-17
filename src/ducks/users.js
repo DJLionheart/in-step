@@ -1,10 +1,12 @@
 import axios from 'axios';
 
 const initialState = {
-    user: {}, 
+    user: {
+        username: 'User'
+    }, 
     user_preferences: {
-        user_genres: [],
-        user_pace: ''
+        user_genres: ['None selected'],
+        user_pace: 'None selected'
     },
     favorite_tracks: [],
     current_index: 0,

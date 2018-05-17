@@ -12,6 +12,8 @@ import MobileSong from '../MobileSong/MobileSong';
 
 import { sort_results } from '../../../ducks/search';
 
+import './MobileSearch.css'
+
 class MobileSearch extends Component {
     constructor(props) {
         super(props);
@@ -56,17 +58,21 @@ class MobileSearch extends Component {
         return(
             <Paper>
                 <div>
-                {
-                    this.props.showControl
-                        ? <Button
-                            aria-owns={ anchorEl ? 'sort-menu' : null }
-                            aria-haspopup="true"
-                            onClick={ this.handleClick }
-                        >
-                            Sort
-                            </Button>
-                        : null
-                }     
+                    <div className="search-button">
+                        {
+                            this.props.showControl
+                                ? <Button
+                                    variant="raised"
+                                    color="secondary"
+                                    aria-owns={ anchorEl ? 'sort-menu' : null }
+                                    aria-haspopup="true"
+                                    onClick={ this.handleClick }
+                                >
+                                    Sort
+                                </Button>
+                                : null
+                        }     
+                    </div>
 
                     <Menu
                         anchorEl={ anchorEl }

@@ -4,11 +4,15 @@ import { connect } from 'react-redux';
 
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
-import { Table, TableBody, TableHead, TableRow, TableCell, Card, CardContent, CardMedia } from 'material-ui';
+import { Table, Button, TableBody, TableHead, TableRow, TableCell, Card, CardContent } from 'material-ui';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 import Paper from 'material-ui/Paper'
 
 import pace from './paceData';
 
+import placeholder from '../../images/profile_ph.jpg'
+
+import './Profile.css'
 // import { get_user, get_playlists, get_preferences } from '../../ducks/users';
   
 
@@ -20,23 +24,14 @@ class Profile extends Component {
         }
     }
 
-    //<Card>
-       // <CardMedia
-          //  image={ profile_pic }
-        //    title="Profile picture"/>
-      //  <CardContent>
-      //      <Typography variant="headline">Welcome, { username }!</Typography>
-    //        <Typography variant="subheading">
-            //    Goal Pace: { user_pace }
-          //      Favorite Genres: { JSON.stringify(user_genres)}
-        //    </Typography>
-      //  </CardContent> 
-    //</Card>
-
     render(){
-        const { username, profile_pic, profile_url, user_preferences  } = this.props.user_data.user
-            // , { user_genres, user_pace } = user_preferences
+        const { user, user_preferences  } = this.props.user_data
+            , { username, profile_pic, profile_url } = user
+            , { user_pace, user_genres } = user_preferences;
         
+        // let user_pace = user_preferences.user_pace ? user_preferences.user_pace : 'None selected',
+        //     user_genres = user_preferences.user_genres ? user_preferences.user_genres : 'None selected';
+
         const paceData = [
             {min: '12:00', mph: '05.00', bpm: '130'},
             {min: '11:30', mph: '05.22', bpm: '140'},
@@ -55,21 +50,49 @@ class Profile extends Component {
             {min: '05:30', mph: '10.91', bpm: '195'},
             {min: '05:00', mph: '12.00', bpm: '200'},
         ]  
-
+        
         const rows = paceData.map( (entry, i) => {
             return(
-                 <TableRow key={ i }>
+                <TableRow key={ i }>
                     <TableCell>{entry.bpm}</TableCell>
                     <TableCell>{entry.min}</TableCell>
                     <TableCell>{entry.mph}</TableCell>
                 </TableRow>
             )
-        })        
+        })
+        console.log('User genres: ', user_genres)
+        const favGenres = user_genres.map ( (genre, i) => {
+            console.log('Genre: ', genre)
+            return <ListItemText key={ i } primary={ genre }/> 
 
+        })        
+        
         return(
             <div>
                 <Paper>
-                    
+                    <Card>
+                        <CardContent>
+                            {
+                                username !== 'User'
+                                    ? <Avatar alt={ username } src={ profile_pic } className="avatar" sizes=""/>
+                                    : <Avatar alt="placeholder image" src={ placeholder } className="avatar"/>
+                            }
+                            
+                            <Typography variant="headline">Welcome, { username }!</Typography>
+                            <Typography variant="subheading">
+                                Goal Pace: { user_pace }
+                            </Typography>
+                            <Typography variant="subheading">    
+                                Favorite Genres:
+                            </Typography>
+                            <List>
+                                <ListItem>
+                                    { favGenres }
+                                </ListItem>
+
+                            </List>
+                        </CardContent> 
+                    </Card>
                     <Card>
                         <CardContent>
                             <Typography variant="title">
@@ -96,7 +119,7 @@ class Profile extends Component {
                         </CardContent>
                     </Card>
                     <footer>
-                        <a href={ profile_url } target="_blank" rel="noopener noreferrer"><p>Visit your Spotify Profile</p></a>      
+                        <Button variant="raised" color="primary" onClick={ () => window.open(profile_url)}>Spotify Profile</Button>      
                     </footer>
                 </Paper>
             </div>
