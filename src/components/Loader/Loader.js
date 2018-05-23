@@ -75,7 +75,7 @@ class Loader extends Component {
             size = 200;
         }
         return(
-            <main className="progress">
+            <main className="auth-page gradient">
                 <CircularProgress size={ size } color="secondary" />
             </main>
         )

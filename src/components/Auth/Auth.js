@@ -9,7 +9,7 @@ import './Auth.css'
 function Auth() {
 
     return(
-        <main className="auth-page" color="error">
+        <main className="auth-page gradient" color="error">
             <header>
                 <Typography variant="display4">
                     InStep

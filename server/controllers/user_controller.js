@@ -62,5 +62,30 @@ module.exports = {
             // console.log('User preferences posted : ', user_preferences)
             res.status(200).send(user_preferences)
         }).catch(err => console.log(err))
+    },
+
+    putPreferences: (req, res, next) => {
+        let stack = [];
+
+        const { userid } = req.query
+            , { userGenrePrefs, user_pace } = req.body
+            , db = req.app.get('db');
+        
+        db.user.reset_prefs([+userid]).then( () => {
+            userGenrePrefs.forEach( genre => {
+                stack.push(db.user.post_genres([+userid, genre]).then(resp => {
+                    user_preferences.user_genres.push(resp[0].genre_name);
+                }).catch(err => console.log('Genre added error: ', err)))
+            })
+    
+            stack.push(db.user.post_pace([+userid, user_pace]).then(resp => {
+                user_preferences.user_pace = resp[0].pace;
+            }).catch(err => console.log('Pace added error: ' ,err)))
+    
+            Promise.all(stack).then(result => {
+                res.status(200).send(user_preferences)
+            }).catch(err => console.log(err))
+
+        })
     }
 }

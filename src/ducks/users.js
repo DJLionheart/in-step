@@ -22,14 +22,7 @@ const GET_USER = 'GET_USER'
     , POST_PREFERENCES = 'POST_PREFERENCES'
     , PLAYLISTS = 'PLAYLISTS'
     , GET_PLAYLISTS = 'GET_PLAYLISTS'
-    // , ADD_PLAYLIST = 'ADD_PLAYLIST'
-    // , RENAME_PLAYLIST = 'RENAME_PLAYLIST'
-    // , REMOVE_PLAYLIST = 'REMOVE_PLAYLIST'
-    // , ADD_TRACK = 'ADD_TRACK'
-    // , REMOVE_TRACK = 'REMOVE_TRACK'
-    // , CLEAR_ALL = 'CLEAR_ALL'
     , GET_FAVORITES = 'GET_FAVORITES'
-    // , GET_MATRIX = 'GET_MATRIX'
     , CHANGE_INDEX = 'CHANGE_INDEX'
     , LOGOUT = 'LOGOUT'
     , APPLY_PREFS = 'APPLY_PREFS';
@@ -87,83 +80,6 @@ export function get_playlists(userid) {
     }
 }
 
-// export function add_playlist(userid, playlistName) {
-//     // let indexMatrix = {};
-
-//     let newPlaylist = axios.post(`${REACT_APP_PLAYLISTS}/${userid}`, {playlist_name: playlistName}).then( res => {
-//         console.log('Playlist created on server: ', res.data)
-//         return res.data
-//     }).catch(err => console.log('Error getting playlists: ', err))
-    
-//     return {
-//         type: ADD_PLAYLIST,
-//         payload: newPlaylist
-//     }
-// }
-
-// export function rename_playlist(plIdToRename, playlistName) {
-//     let newPlaylistName = axios.put(`${REACT_APP_PLAYLISTS}/${plIdToRename}`, {newName: playlistName}).then( res => {
-//         console.log('Playlist renamed on server: ', res.data)
-//         return res.data
-//     }).catch(err => console.log('Error renaming playlist: ', err))
-    
-//     return {
-//         type: RENAME_PLAYLIST,
-//         payload: newPlaylistName
-//     }
-// }
-
-// export function remove_playlist(idToRemove, index) {
-//     let removeThisId = axios.delete(`${REACT_APP_PLAYLISTS}/${idToRemove}`).then( res => {
-//         console.log('Remove - server response: ', res.data)
-//         console.log('Redux id to remove: ', removeThisId)
-//         return idToRemove
-//     }).catch(err => console.log('Error getting playlists: ', err))
-    
-//     return {
-//         type: REMOVE_PLAYLIST,
-//         payload: index
-//     }
-// }
-
-// export function add_track(add_plId, track) {
-//     const { track_id } = track
-//     let addedTrack = axios.post(`${REACT_APP_ADD_RMV_TR}/${add_plId}`, {track_id: track_id}).then( res => {
-//         console.log(`Track ${track_id} added to Playlist ${add_plId}: `, res.data)
-//         track.track_num = res.data.track_num
-//         return track;
-//     }).catch(err => console.log('Error adding track: ', err))
-
-//     return {
-//         type: ADD_TRACK,
-//         payload: addedTrack
-//     }
-// }
-
-// export function remove_track(rmv_plId, track_num) {
-//     let removeNum = axios.delete(`${REACT_APP_ADD_RMV_TR}/${rmv_plId}?track_num=${track_num}`).then( res => {
-//         console.log(` remove_track query sent: `, res.data)
-//         return track_num;
-//     }).catch(err => console.log('Error adding track: ', err))
-
-//     return {
-//         type: REMOVE_TRACK,
-//         payload: removeNum
-//     }
-// }
-
-// export function clear_all(plToClear) {
-//     let clearPlaylist = axios.delete(`${REACT_APP_CLEAR_ALL}/${plToClear}`).then( res => {
-//         console.log(`Clear all query sent: `, res.data)
-//         return plToClear;
-//     }).catch(err => console.log('Error clearing all: ', err))
-
-//     return {
-//         type: CLEAR_ALL,
-//         payload: clearPlaylist
-//     }
-// }
-
 export function get_favorites(userid) {
     // let indexMatrix = {};
 
@@ -179,20 +95,11 @@ export function get_favorites(userid) {
     }
 }
 
-// export function get_matrix(matrix) {
-//     console.log('Action creator: ', matrix)
-//     return {
-//         type: GET_MATRIX,
-//         payload: matrix
-//     }
-// }
-
 export function apply_prefs(preferences){
     return {
         type: APPLY_PREFS,
         payload: preferences
     }
-
 }
 export function get_preferences(userid) {
     let preferences = axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( res => {
@@ -208,6 +115,19 @@ export function get_preferences(userid) {
 
 export function post_user_preferences(userid, userGenrePrefs, user_pace) {
     let user_preferences = axios.post(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
+        // console.log('Preferences after saving to DB: ', res.data)
+        return res.data;
+    }).catch(err => console.log('Something went wrong: ', err))
+    // setTimeout( () => console.log('Preferences: ', preferences), 5000)
+
+    return {
+        type: POST_PREFERENCES,
+        payload: user_preferences
+    }
+}
+
+export function put_user_preferences(userid, userGenrePrefs, user_pace) {
+    let user_preferences = axios.put(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
         // console.log('Preferences after saving to DB: ', res.data)
         return res.data;
     }).catch(err => console.log('Something went wrong: ', err))
