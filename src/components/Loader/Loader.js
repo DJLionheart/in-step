@@ -54,16 +54,17 @@ class Loader extends Component {
             })
             axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
                 console.log('Resp from user_preference call: ', response)
-                apply_prefs(response.data)
                 const { user_genres, user_pace } = response.data;
-
-                !user_genres || !user_pace
-                // user_genres === [] || user_pace === ''
-                    ? history.push('/questionnaire')
-                    : history.push('/profile')  
+                if( !user_genres || !user_pace ) {
+                    history.push('/questionnaire')
+                } else {
+                    apply_prefs(response.data);
+                    history.push('/profile');
+                }
             })
         })
     }
+    
     render() {
         let size = 85;
 

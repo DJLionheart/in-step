@@ -8,6 +8,7 @@ const initialState = {
         user_genres: ['None selected'],
         user_pace: 'None selected'
     },
+    initialPrefsSaved: false,
     favorite_tracks: [],
     current_index: 0,
     indexMatrix: {},
@@ -20,6 +21,7 @@ const FULFILLED = '_FULFILLED';
 const GET_USER = 'GET_USER'
     , GET_PREFERENCES = 'GET_PREFERENCES'
     , POST_PREFERENCES = 'POST_PREFERENCES'
+    , PUT_PREFERENCES = 'PUT_PREFERENCES'
     , PLAYLISTS = 'PLAYLISTS'
     , GET_PLAYLISTS = 'GET_PLAYLISTS'
     , GET_FAVORITES = 'GET_FAVORITES'
@@ -34,18 +36,7 @@ const {
 
 } = process.env
 
-// export function get_user() {
-//     let userData = axios.get('/api/auth/me').then( res => {
-//         return res.data
-//     })
 
-//     return {
-//         type: GET_USER,
-//         payload: userData
-//     }
-// }
-
-// TEST
 export function get_user(user) {
     return {
         type: GET_USER,
@@ -134,7 +125,7 @@ export function put_user_preferences(userid, userGenrePrefs, user_pace) {
     // setTimeout( () => console.log('Preferences: ', preferences), 5000)
 
     return {
-        type: POST_PREFERENCES,
+        type: PUT_PREFERENCES,
         payload: user_preferences
     }
 }
@@ -176,7 +167,10 @@ export default function users(state = initialState, action) {
             return Object.assign({}, state, {user: action.payload});
 
         case APPLY_PREFS: 
-            return Object.assign({}, state, {user_preferences: action.payload})
+            return Object.assign({}, state, {
+                user_preferences: action.payload,
+                initialPrefsSaved: true
+            })
             
         case GET_PLAYLISTS + FULFILLED:
             let matrix = {};
@@ -189,81 +183,24 @@ export default function users(state = initialState, action) {
             console.log('Index Matrix: ', matrix)
             return Object.assign({}, state, { playlists: action.payload, indexMatrix: matrix })
 
-        // case ADD_PLAYLIST + FULFILLED:
-        //     let playlist_added = playlists.slice(),
-        //         created_playlist = Object.assign({}, action.payload);
-
-        //     created_playlist.playlist_index = playlists.length;
-        //     created_playlist.tracks = [];
-
-        //     let newMatrix = Object.assign({}, indexMatrix)
-        //     newMatrix[created_playlist.playlist_index] = created_playlist.playlist_id;
-            
-        //     playlist_added = [...playlist_added, created_playlist];
-        //     console.log('Playlist added: ', playlist_added, 'indexMatrix uptated: ', newMatrix)
-        //     return Object.assign({}, state, { playlists: playlist_added, indexMatrix: newMatrix })
-
-        // case RENAME_PLAYLIST + FULFILLED:
-        //     let playlist_renamed = playlists.slice();
-        //     playlist_renamed[current_index].playlist_name = action.payload;
-        //     console.log('Redux playlist successfully renamed: ', playlist_renamed);
-        //     return Object.assign({}, state, {playlists: playlist_renamed})    
-
-        // case REMOVE_PLAYLIST + FULFILLED:
-        //     let playlist_removed = playlists.slice()
-
-        //     playlist_removed.splice(action.payload, 1)
-        //     console.log('Playlists left: ', playlist_removed)
-        //     let matrix_after = {};
-        //     playlist_removed.forEach( (pl, i) => {
-        //         pl.playlist_index = i;
-        //         matrix_after[i] = pl.playlist_id;
-        //         console.log('Playlist removed: ', playlist_removed, 'indexMatrix updated: ', matrix_after);
-        //     })
-        //     return Object.assign({}, state, { playlists: playlist_removed, indexMatrix: matrix_after })
-
-        // case ADD_TRACK + FULFILLED:
-        //     console.log(playlists)
-        //     let newPlContainer = playlists.slice();
-        //     console.log(newPlContainer)
-        //     let updatedPlaylist = Object.assign({}, playlists[current_index]) ;
-    
-        //     updatedPlaylist.tracks.push(action.payload)
-
-        //     newPlContainer.splice(current_index, 1, updatedPlaylist)
-        //     console.log('Redux track successfully added: ', newPlContainer)
-        //     return Object.assign({}, state, { playlists: newPlContainer})
-
-        // case REMOVE_TRACK + FULFILLED:
-        //         let new_plContainer = playlists.slice(),
-        //             newTracksArray = new_plContainer[current_index].tracks.filter( track => track.track_num !== action.payload) ;
-
-        //     new_plContainer[current_index].tracks = newTracksArray;
-        //     console.log('Redux track successfully removed: ', new_plContainer)
-        //     return Object.assign({}, state, { playlists: new_plContainer})
-
-        // case CLEAR_ALL + FULFILLED:
-        //     let afterClear_plContainer = playlists.slice();
-
-        //     afterClear_plContainer[current_index].tracks = [];
-        //     console.log('All tracks successfully removed from Redux playlist: ', afterClear_plContainer)
-        //     return Object.assign({}, state, { playlists: afterClear_plContainer})
-
         case GET_FAVORITES + FULFILLED:
             console.log('Favorites saved to redux: ', action.payload)
             return Object.assign({}, state, { favorite_tracks: action.payload })
 
         case GET_PREFERENCES + FULFILLED:
             console.log('Preferences saved to Redux: ', action.payload)
-            return Object.assign({}, state, { user_preferences: action.payload })
+            return Object.assign({}, state, {
+                user_preferences: action.payload,
+                initialPrefsSaved: true
+            })
 
         case POST_PREFERENCES + FULFILLED:
             console.log('Post preferences fulfilled: ', action.payload)
             return Object.assign({}, state, {user_preferences: action.payload});
 
-        // case GET_MATRIX:
-        //     console.log('Matrix saved to Redux: ', action.payload)
-        //     return Object.assign({}, state, { indexMatrix: action.payload })
+        case PUT_PREFERENCES + FULFILLED:
+            console.log('Put preferences fulfilled: ', action.payload)
+            return Object.assign({}, state, {user_preferences: action.payload});
         
         case CHANGE_INDEX:
             return Object.assign({}, state, { current_index: action.payload })

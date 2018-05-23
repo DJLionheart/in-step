@@ -132,6 +132,7 @@ app.get(REACT_APP_SEARCH, src_ctrl.search);
 // User
 app.get(REACT_APP_USERS, us_ctrl.getPreferences)
 app.post(REACT_APP_USERS, us_ctrl.postPreferences)
+app.put(REACT_APP_USERS, us_ctrl.putPreferences)
 
 // Playlist Management
 app.get(GET_ADD_PL, pl_ctrl.getPlaylists)

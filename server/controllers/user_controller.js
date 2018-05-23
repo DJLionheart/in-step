@@ -44,6 +44,8 @@ module.exports = {
         const { userid } = req.query
             , { userGenrePrefs, user_pace } = req.body
             , db = req.app.get('db');
+
+        const id = +userid
         
         userGenrePrefs.forEach( genre => {
             stack.push(db.user.post_genres([+userid, genre]).then(resp => {
@@ -59,7 +61,7 @@ module.exports = {
         }).catch(err => console.log('Pace added error: ' ,err)))
 
         Promise.all(stack).then(result => {
-            // console.log('User preferences posted : ', user_preferences)
+            console.log('User preferences saved to DB')
             res.status(200).send(user_preferences)
         }).catch(err => console.log(err))
     },
@@ -72,6 +74,7 @@ module.exports = {
             , db = req.app.get('db');
         
         db.user.reset_prefs([+userid]).then( () => {
+            console.log('User prefs reset')
             userGenrePrefs.forEach( genre => {
                 stack.push(db.user.post_genres([+userid, genre]).then(resp => {
                     user_preferences.user_genres.push(resp[0].genre_name);
@@ -83,9 +86,9 @@ module.exports = {
             }).catch(err => console.log('Pace added error: ' ,err)))
     
             Promise.all(stack).then(result => {
+                console.log('User preferences updated');
                 res.status(200).send(user_preferences)
             }).catch(err => console.log(err))
-
         })
     }
 }
