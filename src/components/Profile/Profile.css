@@ -1,3 +1,56 @@
 .avatar{
-    height: 200px;
+    height: 75px;
+    width: 75px;
+    position: absolute;
+    border: 1px solid #819ca9;
+    box-shadow: 2px 2px 10px #819ca9;
+    border-radius: 50%;
+}
+
+#user {
+    top: 175px;
+    right: 40px;
+}
+
+#ph {
+    top: 145px;
+    right: 40px;
+}
+
+@media (min-device-width: 375px) {
+    #user {
+        top: 145px;
+        right: 50px;
+    }
+}
+
+@media (min-device-width: 414px) {
+    #user {
+        top: 130px;
+        right: 50px;
+    }
+    .avatar {
+        height: 65px;
+        width: 65px;
+    }
+}
+
+@media (min-device-width: 768px) {
+    #user {
+        top: 120px;
+        right: 50px;
+    }
+    .avatar {
+        height: 90px;
+        width: 90px;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+footer {
+    padding: 10px;
+    text-align: center;
 }

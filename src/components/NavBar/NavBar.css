@@ -1,16 +1,26 @@
 .logo {
     width: 45px;
     position: absolute;
-    right: 30px;
+    right: 5px;
+    bottom: 5px;
+
 }
 
 .logo img {
+    float: left;
     width: 100%;
 }
 
 .nav-bar {
     margin-bottom: 56px;
 
+}
+
+#avatar {
+    right: 60px;
+    top: 7px;
+    width: 42px;
+    height: 42px;
 }
 
 @media (min-device-width: 375px) {
@@ -33,7 +43,7 @@
     }
 }
 
-@media (min-device-width: 768px) {
+@media (min-device-width: 1224px) {
     .logo {
         width: 58px;
         position: absolute;

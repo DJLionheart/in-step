@@ -26,7 +26,7 @@ function DesktopSong(props) {
             <TableCell>{ artist_name }</TableCell>
             <TableCell>{ track_genre }</TableCell>
             <TableCell>
-                <div className="song-controls">
+                <div>
                     <PlayBtn track={ track }/>
                     {
                         addBtn ? <AddBtn track={ track }/> : null

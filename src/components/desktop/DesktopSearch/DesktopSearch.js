@@ -8,6 +8,8 @@ import Tooltip from 'material-ui/Tooltip';
 
 import { sort_results } from '../../../ducks/search';
 
+import './DesktopSearch.css'
+
 function DesktopSearch(props) {
     const headerNames = [
         {label: 'BPM', id: 'bpm', numeric: false, disablePadding: false},
@@ -55,7 +57,7 @@ function DesktopSearch(props) {
         )
     } );
     return(
-        <Paper>
+        <Paper id="d-search">
             <Table>
                 <TableHead>
                     <TableRow>

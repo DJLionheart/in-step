@@ -4,6 +4,8 @@ import { Paper, Table, TableBody, TableHead, TableRow, TableCell } from 'materia
 import DesktopSong from '../../desktop/DesktopSong/DesktopSong'
 import { Typography } from 'material-ui';
 
+import './DesktopPlaylist.css'
+
 function DesktopPlaylist(props) {
     const headerNames = ['#', 'BPM', 'Track Name', 'Artist', 'Genre', 'Options']
 
@@ -33,7 +35,6 @@ function DesktopPlaylist(props) {
     })
     return(
         <Paper className="playlist-main">
-            <Typography variant="headline" className="playlist-title">{ playlist_name }</Typography>
             <Paper>
                 <Table>
                     <TableHead>

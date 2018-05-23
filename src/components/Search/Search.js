@@ -23,24 +23,23 @@ function Search(props) {
     return(
         <Paper>
             <div className="search-controls">
-            
-                <TextField name="searchInput" value={ search_input } onChange={ e => get_input(e) } placeholder="What are you looking for?" fullWidth margin="normal"/>
+                <TextField name="searchInput" value={ search_input } onChange={ e => get_input(e) } placeholder="What are you looking for?" fullWidth margin="normal" id="search-field"/>
                 <Button variant="raised" children="Search" color="primary" onClick={ () => get_results(search_type, search_input) }/>
                 <br/>
-                <FormControl>
-                    <RadioGroup name="searchType" value={ search_type } onChange={ e => get_type(e) }>
-                        <div className="search-options">
-                            <FormControlLabel value="bpm" control={<Radio color="primary"/>} label="BPM"/>
-                            <FormControlLabel value="track_name" control={<Radio color="primary"/>} label="Track"/>
-                            <FormControlLabel value="artist_name" control={<Radio color="primary"/>} label="Artist"/>
-                            <FormControlLabel value="track_genre" control={<Radio color="primary"/>} label="Genre"/>
-                        </div>
-                    </RadioGroup>
-                </FormControl>
+                <div className="search-options">
+                    <FormControl>
+                        <RadioGroup name="searchType" value={ search_type } onChange={ e => get_type(e) }>
+                                <FormControlLabel value="bpm" control={<Radio color="primary"/>} label="BPM"/>
+                                <FormControlLabel value="track_name" control={<Radio color="primary"/>} label="Track"/>
+                                <FormControlLabel value="artist_name" control={<Radio color="primary"/>} label="Artist"/>
+                                <FormControlLabel value="track_genre" control={<Radio color="primary"/>} label="Genre"/>
+                        </RadioGroup>
+                    </FormControl>
+                </div>
             </div>
             <div>
                 <main className="search-results">
-                    <MediaQuery query="(max-device-width: 1223px)">
+                    <MediaQuery query="(max-device-width: 767px)">
                         
                         <section className="search-results">
                             <MobileSearch
@@ -49,7 +48,7 @@ function Search(props) {
                         </section>
                     </MediaQuery>
 
-                    <MediaQuery query="(min-device-width: 1224px)">
+                    <MediaQuery query="(min-device-width: 768px)">
         
                         <DesktopSearch
                             sortedResults={ sortedResults }/>

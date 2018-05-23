@@ -1,11 +1,9 @@
 import React from 'react';
 
 import { Card, CardContent, Typography, Avatar } from 'material-ui';
-
 import PlayBtn from '../../buttons/PlayBtn/PlayBtn';
 import AddBtn from '../../buttons/AddBtn/AddBtn';
 import RmvBtn from '../../buttons/RmvBtn/RmvBtn';
-// import FavBtn from '../../buttons/FavBtn/FavBtn';
 
 import './MobileSong.css';
 
@@ -19,12 +17,13 @@ function MobileSong(props) {
             <Card className="mobile-song">
                 {
                     order_num !== ''
-                        ? <Avatar>{ order_num }</Avatar>
+                        ? <Avatar id="order-num">{ order_num }</Avatar>
                         : null
                 }
                 <CardContent>
                     <Typography variant="headline">{track_name}</Typography>
-                    <Typography variant="subheading">{ artist_name }</Typography>
+                    <Typography variant="title">{ artist_name }</Typography>
+                    <br/>
                     <Typography variant="subheading">{ bpm } BPM</Typography>
                     <Typography variant="subheading">{ track_genre }</Typography>
                 </CardContent>

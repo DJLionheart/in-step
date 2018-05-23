@@ -13,15 +13,18 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ClearAll from '@material-ui/icons/ClearAll';
 import Typography from 'material-ui/Typography';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
-import logo from '../../logos/instep.png'
+
+import logo from '../../logos/instep.png';
 
 import { handle_modal } from '../../ducks/modals';
-import { get_playlists, log_out, changeIndex } from '../../ducks/users';
+import { get_user, apply_prefs, get_playlists, log_out, changeIndex } from '../../ducks/users';
 import './NavBar.css'
 
 import YoutubeFrame from '../YoutubeFrame/YoutubeFrame';
 
 const { 
+    REACT_APP_AUTH_ME,
+    REACT_APP_USERS,
     REACT_APP_LOGOUT_BUTTON,
     REACT_APP_HOME_URL,
     REACT_APP_YT_KEY,
@@ -46,6 +49,38 @@ class NavBar extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.searchYoutube = this.searchYoutube.bind(this);
         // this.savePlaylist = this.savePlaylist.bind(this);
+    }
+
+    componentDidMount() {
+        const { get_user, get_playlists, apply_prefs, user_data } = this.props
+            , { user, playlists } = user_data;
+
+        if( playlists.length === 0 || user === {}) {
+                axios.get(REACT_APP_AUTH_ME).then( res => {
+                console.log('USER: ', res.data)
+                
+                get_user(res.data)
+                const { userid } = res.data;
+
+                axios.get(`${REACT_APP_PLAYLISTS}/${userid}`).then( resp => {
+                    if(resp.data.length === 0) {
+                        axios.post(`${REACT_APP_PLAYLISTS}/${userid}`, {playlist_name: 'Playlist 1'})
+                        .then( result => {
+                            console.log(result)
+                            get_playlists(userid)
+
+                        }
+                        ).catch(err => console.log('Error creating playlist: ', err))
+                    } else {
+                        get_playlists(userid)
+                    }
+                })
+                axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
+                    console.log('Resp from user_preference call: ', response)
+                    apply_prefs(response.data)
+                })
+            })
+        }
     }
 
     handleNav(evt) {
@@ -204,7 +239,6 @@ class NavBar extends Component {
 
         const navHeaders = [
             {name: 'Profile', path: '/profile'},
-            {name: 'Find Your Pace', path: '/pace'},
             {name: 'Search', path: '/search'},
             {name: 'Playlist Manager', path: '/playlist_manager'}
         ]
@@ -220,10 +254,6 @@ class NavBar extends Component {
                 navLocation = 'Profile';
                 break;
 
-            case '/pace':
-                navLocation = 'Find Your Pace';
-                break;
-
             case '/search':
                 navLocation = 'Search';
                 break;
@@ -237,7 +267,7 @@ class NavBar extends Component {
                 break;
         }
 
-        const { lastPlaylist, removePlaylist, clearTracks, renamePlaylist, createPlaylist, tooManyPl, sharePl, notOnSpotify, youTubeFrame, notOnYoutube, resetPrefs } = this.props.modals;
+        const { lastPlaylist, removePlaylist, clearTracks, renamePlaylist, createPlaylist, tooManyPl, sharePl, notOnSpotify, youTubeFrame, notOnYoutube } = this.props.modals;
 
         const { current_index, playlists, indexMatrix } = this.props.user_data
             , playlistId = indexMatrix[current_index];
@@ -528,4 +558,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { handle_modal, get_playlists, log_out, changeIndex } )(withRouter(NavBar));
+export default connect(mapStateToProps, { handle_modal, get_playlists, log_out, changeIndex, get_user, apply_prefs } )(withRouter(NavBar));

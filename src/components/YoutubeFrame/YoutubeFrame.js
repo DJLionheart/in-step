@@ -7,7 +7,10 @@ function YoutubeFrame(props) {
     let height = '';
     let width = '';
 
-    if(window.matchMedia("(max-width: 375px)").matches) {
+    if(window.matchMedia("(max-width: 320px)").matches) {
+        height = '130'; 
+        width = '180';
+    } else if(window.matchMedia("(max-width: 375px)").matches) {
         height = '200';
         width = '250';
     } else if (window.matchMedia("(max-width: 414px)").matches) {

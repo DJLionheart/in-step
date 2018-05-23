@@ -1,12 +1,9 @@
 import React from 'react';
-import Typography from 'material-ui/Typography';
-
 import MobileSong from '../MobileSong/MobileSong';
-
 
 function MobilePlaylist(props) {
     const { playlist } = props
-        , { playlist_name, playlist_id, tracks } = playlist;
+        , { playlist_id, tracks } = playlist;
     
     const playlistSongs = tracks.map( (track, i) => {
         const { track_num } = track;
@@ -23,9 +20,6 @@ function MobilePlaylist(props) {
     })
     return(
         <div className="playlist-main">
-            <div className="playlist-title">
-                <Typography variant="headline">{ playlist_name }</Typography>
-            </div>
             { playlistSongs }
         </div>
     )

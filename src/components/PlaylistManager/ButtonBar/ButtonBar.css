@@ -1,6 +1,7 @@
 .playlist-btn-bar {
     position: fixed;
     left: 20%;
+    bottom: 10px;
     padding-top: 10px;
     display: flex;
     align-items: center;
@@ -9,41 +10,29 @@
 
 @media (min-device-width: 375px) {
     .playlist-btn-bar {
-        position: fixed;
         left: 25%;
-        padding-top: 10px;
-        display: flex;
-        align-items: center;
+        bottom: 12px;
     }
 }
 
 @media (min-device-width: 414px) {
     .playlist-btn-bar {
-        position: fixed;
         left: 26%;
-        padding-top: 10px;
-        display: flex;
-        align-items: center;
+        bottom: 15px;
     }
 }
 
 @media (min-device-width: 768px) {
     .playlist-btn-bar {
-        position: fixed;
         left: 37%;
-        padding-top: 10px;
-        display: flex;
-        align-items: center;
+        bottom: 6px;
     }
 }
 
 @media (min-device-width: 1224px) {
     .playlist-btn-bar {
-        position: fixed;
         left: 40%;
-        bottom: 7px;
-        display: flex;
-        align-items: center;
+        bottom: 6px;
     }
 }
 

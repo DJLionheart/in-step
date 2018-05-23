@@ -2,17 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import axios from 'axios';
 
-import Avatar from 'material-ui/Avatar';
+
 import Typography from 'material-ui/Typography';
 import { Table, Button, TableBody, TableHead, TableRow, TableCell, Card, CardContent } from 'material-ui';
-import List, { ListItem, ListItemText } from 'material-ui/List';
+// import List, { ListItem, ListItemText } from 'material-ui/List';
 import Paper from 'material-ui/Paper'
 
-import pace from './paceData';
-
-import placeholder from '../../images/profile_ph.jpg'
-
 import './Profile.css'
+import placeholder from '../../images/profile_ph.jpg';
+import pace from './paceData';
 // import { get_user, get_playlists, get_preferences } from '../../ducks/users';
   
 
@@ -28,9 +26,6 @@ class Profile extends Component {
         const { user, user_preferences  } = this.props.user_data
             , { username, profile_pic, profile_url } = user
             , { user_pace, user_genres } = user_preferences;
-        
-        // let user_pace = user_preferences.user_pace ? user_preferences.user_pace : 'None selected',
-        //     user_genres = user_preferences.user_genres ? user_preferences.user_genres : 'None selected';
 
         const paceData = [
             {min: '12:00', mph: '05.00', bpm: '130'},
@@ -51,7 +46,9 @@ class Profile extends Component {
             {min: '05:00', mph: '12.00', bpm: '200'},
         ]  
         
-        const rows = paceData.map( (entry, i) => {
+        const user_rec = paceData.filter( val => val.min === user_pace);
+
+        const rows = pace.data.map( (entry, i) => {
             return(
                 <TableRow key={ i }>
                     <TableCell>{entry.bpm}</TableCell>
@@ -60,12 +57,12 @@ class Profile extends Component {
                 </TableRow>
             )
         })
-        console.log('User genres: ', user_genres)
-        const favGenres = user_genres.map ( (genre, i) => {
-            console.log('Genre: ', genre)
-            return <ListItemText key={ i } primary={ genre }/> 
+        let num = Math.floor(Math.random() * user_genres.length );
+        // const favGenres =  ( (genre, i) => {
+        //     console.log('Genre: ', genre)
+        //     return <ListItemText key={ i } primary={ genre }/> 
 
-        })        
+        // })        
         
         return(
             <div>
@@ -74,48 +71,43 @@ class Profile extends Component {
                         <CardContent>
                             {
                                 username !== 'User'
-                                    ? <Avatar alt={ username } src={ profile_pic } className="avatar" sizes=""/>
-                                    : <Avatar alt="placeholder image" src={ placeholder } className="avatar"/>
+                                    ? <img src={ profile_pic } alt={ username } className="avatar" id="user"/>
+                                    : <img src={ placeholder } alt="user profile" className="avatar" id="ph"/>
                             }
-                            
                             <Typography variant="headline">Welcome, { username }!</Typography>
-                            <Typography variant="subheading">
-                                Goal Pace: { user_pace }
-                            </Typography>
                             <Typography variant="subheading">    
-                                Favorite Genres:
-                            </Typography>
-                            <List>
-                                <ListItem>
-                                    { favGenres }
-                                </ListItem>
-
-                            </List>
+                                How about searching for some { user_genres[num] } songs today?
+                            </Typography>    
                         </CardContent> 
+                        <br/>
                     </Card>
                     <Card>
                         <CardContent>
+                            <br/>
                             <Typography variant="title">
                                 Why BPM matters...
                             </Typography>
                             <Typography variant="subheading">
-                                According to <a href="https://www.nateshivar.com/1182/how-i-cut-157-off-my-average-5k-time-by-tweaking-my-playlist/" target="_blank">Nate Shivar</a>, listening to music at a specific BPM (beats per minute) can help you stay on pace. Call it your own personal "Marathoner's Metronome" if you will.
+                                According to <a href="https://www.nateshivar.com/1182/how-i-cut-157-off-my-average-5k-time-by-tweaking-my-playlist/" target="_blank" rel="noopener noreferrer">Nate Shivar</a>, listening to music at a specific BPM (beats per minute) can help you stay on pace. Call it your own personal "Marathoner's Metronome" if you will.
                             </Typography>
+                            <br/>
                             <Typography variant="subheading">
-                                Take a look at the following pace calculations:
+                                Because you're aiming for a { user_pace } pace, we recommend running at about { user_rec.bpm } BPM. Take a look at the following pace calculations:
                             </Typography>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>BPM</TableCell>
-                                        <TableCell>Min/mile</TableCell>
-                                        <TableCell>MPH</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    { rows }
-                                </TableBody>
-                            </Table>
+                            <div className="pace-table">
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>BPM</TableCell>
+                                            <TableCell>Min/mile</TableCell>
+                                            <TableCell>MPH</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        { rows }
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </CardContent>
                     </Card>
                     <footer>
