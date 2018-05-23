@@ -15,11 +15,6 @@ function MobileSong(props) {
     return(
         <div>
             <Card className="mobile-song">
-                {
-                    order_num !== ''
-                        ? <Avatar id="order-num">{ order_num }</Avatar>
-                        : null
-                }
                 <CardContent>
                     <Typography variant="headline">{track_name}</Typography>
                     <Typography variant="title">{ artist_name }</Typography>
@@ -29,6 +24,11 @@ function MobileSong(props) {
                 </CardContent>
                 <div className="song-controls">
                     <PlayBtn track={ track }/>
+                    {
+                    order_num !== ''
+                        ? <Avatar id="order-num">{ order_num }</Avatar>
+                        : null
+                    }   
                     {
                         addBtn ? <AddBtn track={ track }/> : null
                     }

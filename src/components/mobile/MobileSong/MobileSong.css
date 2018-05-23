@@ -8,25 +8,46 @@
     padding-top: 5px;
     padding-left: 10px;
     height: 205px;
+    width: 278px;
     margin-bottom: 10px;
 }
 
 .song-controls {
+    display: flex;
     position: relative;
-    bottom: 80px;
-    left: 200px;
+    left: 140px;
+    bottom: 20px;
 }
 
-#order-num {
-    position: relative;
-    top: 10px;
-    left: 10px;
 
-}
 
 @media(min-device-width: 375px) {
     .song-controls {
-        bottom: 80px;
-        left: 255px;
+        left: 190px;
+    }
+
+    .mobile-song {
+        width: 334px;
+    }
+}
+
+@media(min-device-width: 414px) {
+    .song-controls {
+        left: 220px;
+    }
+
+    .mobile-song {
+        width: 370px;
+    }
+}
+
+@media(min-device-height: 812px) {
+    .song-controls {
+        left: 190px;
+        bottom: 25px;
+    }
+
+    .mobile-song {
+        width: 335px;
     }
 }

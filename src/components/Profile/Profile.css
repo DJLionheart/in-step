@@ -35,6 +35,13 @@
     }
 }
 
+@media(min-device-height: 812px) {
+    #user {
+        top: 150px;
+        right: 50px;
+    }
+}
+
 @media (min-device-width: 768px) {
     #user {
         top: 120px;

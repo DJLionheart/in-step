@@ -1,7 +1,7 @@
 .playlist-btn-bar {
     position: fixed;
     left: 20%;
-    bottom: 10px;
+    bottom: 5px;
     padding-top: 10px;
     display: flex;
     align-items: center;
@@ -11,14 +11,12 @@
 @media (min-device-width: 375px) {
     .playlist-btn-bar {
         left: 25%;
-        bottom: 12px;
     }
 }
 
 @media (min-device-width: 414px) {
     .playlist-btn-bar {
         left: 26%;
-        bottom: 15px;
     }
 }
 

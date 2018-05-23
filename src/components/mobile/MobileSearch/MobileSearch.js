@@ -85,7 +85,7 @@ class MobileSearch extends Component {
                         <MenuItem onClick={ () => this.handleClose('track_genre') }>Genre</MenuItem>
                     </Menu>
                 </div>
-                <div>
+                <div className="m-search-results">
                     { searchResults }
                 </div>
             </Paper>

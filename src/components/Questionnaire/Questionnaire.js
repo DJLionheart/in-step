@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { FormGroup, FormControlLabel, Checkbox } from 'material-ui';
 
 import { post_user_preferences } from '../../ducks/users';
 
