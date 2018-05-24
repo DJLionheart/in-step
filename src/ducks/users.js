@@ -8,7 +8,6 @@ const initialState = {
         user_genres: ['None selected'],
         user_pace: 'None selected'
     },
-    initialPrefsSaved: false,
     favorite_tracks: [],
     current_index: 0,
     indexMatrix: {},
@@ -168,9 +167,7 @@ export default function users(state = initialState, action) {
 
         case APPLY_PREFS: 
             return Object.assign({}, state, {
-                user_preferences: action.payload,
-                initialPrefsSaved: true
-            })
+                user_preferences: action.payload})
             
         case GET_PLAYLISTS + FULFILLED:
             let matrix = {};
@@ -190,17 +187,17 @@ export default function users(state = initialState, action) {
         case GET_PREFERENCES + FULFILLED:
             console.log('Preferences saved to Redux: ', action.payload)
             return Object.assign({}, state, {
-                user_preferences: action.payload,
-                initialPrefsSaved: true
-            })
+                user_preferences: action.payload})
 
         case POST_PREFERENCES + FULFILLED:
             console.log('Post preferences fulfilled: ', action.payload)
-            return Object.assign({}, state, {user_preferences: action.payload});
+            return Object.assign({}, state, {
+                user_preferences: action.payload});
 
         case PUT_PREFERENCES + FULFILLED:
             console.log('Put preferences fulfilled: ', action.payload)
-            return Object.assign({}, state, {user_preferences: action.payload});
+            return Object.assign({}, state, {
+                user_preferences: action.payload});
         
         case CHANGE_INDEX:
             return Object.assign({}, state, { current_index: action.payload })

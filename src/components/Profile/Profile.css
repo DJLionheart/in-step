@@ -1,3 +1,10 @@
+.profile {
+    padding-bottom: 30px;
+}
+
+.pace-table {
+    padding-left: 0;
+}
 .avatar{
     height: 75px;
     width: 75px;
@@ -58,6 +65,15 @@ a {
 }
 
 footer {
-    padding: 10px;
+    border-top: 1px solid lightgrey;
+    padding: 10px 0 10px 0;
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
     text-align: center;
+    background-color: white;
+}
+
+#profile-btn {
+    margin: 0 5px 0 5px;
 }

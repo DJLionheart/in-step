@@ -31,7 +31,7 @@ const {
     REACT_APP_YT_URL,
     REACT_APP_PLAYLISTS,
     REACT_APP_CLEAR_ALL,
-    REACT_APP_LOGOUT_BTN
+    REACT_APP_LOGOUT
 } = process.env;
 
 class NavBar extends Component {
@@ -48,6 +48,7 @@ class NavBar extends Component {
         this.handleNav = this.handleNav.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.searchYoutube = this.searchYoutube.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
         // this.savePlaylist = this.savePlaylist.bind(this);
     }
 
@@ -106,6 +107,7 @@ class NavBar extends Component {
 
     handleLogout() {
         axios.post(REACT_APP_LOGOUT_BUTTON).then( () => {
+
             this.props.history.push(REACT_APP_HOME_URL)
         })
     }
@@ -224,8 +226,8 @@ class NavBar extends Component {
     }
 
     logout() {
-        axios.post(REACT_APP_LOGOUT_BTN).then( () => {
-            log_out();
+        axios.post(REACT_APP_LOGOUT).then( () => {
+            this.props.log_out();
             this.props.history.push(REACT_APP_HOME_URL)
         })
     }
@@ -301,7 +303,7 @@ class NavBar extends Component {
                                 onClose={ this.handleClose }
                             >
                                 { navLinks }
-                                <MenuItem onClick={ this.logout }>Logout</MenuItem>
+                                <MenuItem onClick={ this.handleLogout }>Logout</MenuItem>
                             </Menu>
                     </Toolbar>
                 </AppBar>

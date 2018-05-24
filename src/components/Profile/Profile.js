@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 // import axios from 'axios';
 
 
@@ -12,7 +13,11 @@ import './Profile.css'
 import placeholder from '../../images/profile_ph.jpg';
 import pace from './paceData';
 // import { get_user, get_playlists, get_preferences } from '../../ducks/users';
-  
+
+const {
+    REACT_APP_QUEST,
+    REACT_APP_SHIVAR
+} = process.env;
 
 class Profile extends Component {
     constructor(props) {
@@ -66,7 +71,8 @@ class Profile extends Component {
         
         return(
             <div>
-                <Paper>
+
+                <Paper className="profile">
                     <Card>
                         <CardContent>
                             {
@@ -88,12 +94,22 @@ class Profile extends Component {
                                 Why BPM matters...
                             </Typography>
                             <Typography variant="subheading">
-                                According to <a href="https://www.nateshivar.com/1182/how-i-cut-157-off-my-average-5k-time-by-tweaking-my-playlist/" target="_blank" rel="noopener noreferrer">Nate Shivar</a>, listening to music at a specific BPM (beats per minute) can help you stay on pace. Call it your own personal "Marathoner's Metronome" if you will.
+                                According to <a href={REACT_APP_SHIVAR} target="_blank" rel="noopener noreferrer">Nate Shivar</a>, listening to music at a specific BPM (beats per minute) can help you stay on pace. Call it your own personal "Marathoner's Metronome" if you will.
                             </Typography>
                             <br/>
-                            <Typography variant="subheading">
-                                Because you're aiming for a { user_pace } pace, we recommend running at about { user_rec.bpm } BPM. Take a look at the following pace calculations:
-                            </Typography>
+                            {
+                                user_pace === 'Not sure'
+                                    ? (
+                                        <Typography variant="subheading">
+                                            Since you still need to figure out your target pace, take a look at the following pace calculations. Once you get a feel for the pace you want to run, try searching for songs near the related BPM.
+                                        </Typography>
+                                    )
+                                    : (
+                                        <Typography variant="subheading">
+                                            Because you're aiming for a { user_pace } pace, we recommend running at about { user_rec.bpm } BPM. Take a look at the following pace calculations:
+                                        </Typography>
+                                    )
+                            }
                             <div className="pace-table">
                                 <Table>
                                     <TableHead>
@@ -111,7 +127,8 @@ class Profile extends Component {
                         </CardContent>
                     </Card>
                     <footer>
-                        <Button variant="raised" color="primary" onClick={ () => window.open(profile_url)}>Spotify Profile</Button>      
+                        <Button variant="raised" color="primary" onClick={ () => window.open(profile_url)} id="profile-btn">Spotify Profile</Button>
+                        <Link to={REACT_APP_QUEST}><Button variant="raised" color="secondary" id="profile-btn"> Preferences</Button></Link>
                     </footer>
                 </Paper>
             </div>

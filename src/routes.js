@@ -10,14 +10,24 @@ import Premium from './components/Premium/Premium';
 
 import { Switch, Route } from 'react-router-dom';
 
+const {
+    REACT_APP_HOME_URL,
+    REACT_APP_LOAD,
+    REACT_APP_QUEST,
+    REACT_APP_PROF,
+    REACT_APP_SRC,
+    REACT_APP_PM,
+    REACT_APP_PREM
+} = process.env;
+
 export default(
     <Switch>
-        <Route exact path="/" component={ Auth } />
-        <Route path="/loading" component={ Loader }/>
-        <Route path="/questionnaire" component={ Questionnaire }/>
-        <Route path="/profile" component={ Profile } />
-        <Route path="/search" component={ Search } />
-        <Route path="/playlist_manager" component={ PlaylistManager } />
-        <Route path="/premium" component={ Premium } />
+        <Route exact path={REACT_APP_HOME_URL} component={ Auth } />
+        <Route path={REACT_APP_LOAD} component={ Loader }/>
+        <Route path={REACT_APP_QUEST} component={ Questionnaire }/>
+        <Route path={REACT_APP_PROF} component={ Profile } />
+        <Route path={REACT_APP_SRC} component={ Search } />
+        <Route path={REACT_APP_PM} component={ PlaylistManager } />
+        <Route path={REACT_APP_PREM} component={ Premium } />
     </Switch>
 )

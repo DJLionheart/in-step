@@ -6,6 +6,8 @@ import CircularProgress from 'material-ui/Progress/CircularProgress'
 
 import { get_user, get_playlists, apply_prefs } from '../../ducks/users';
 
+import './Loader.css';
+
 const {
     REACT_APP_AUTH_ME,
     REACT_APP_PLAYLISTS,
@@ -76,7 +78,7 @@ class Loader extends Component {
             size = 200;
         }
         return(
-            <main className="auth-page gradient">
+            <main className="loader">
                 <CircularProgress size={ size } color="secondary" />
             </main>
         )

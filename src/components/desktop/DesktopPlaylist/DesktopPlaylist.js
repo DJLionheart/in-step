@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Table, TableBody, TableHead, TableRow, TableCell } from 'material-ui';
+import { Table, TableBody, TableHead, TableRow, TableCell } from 'material-ui';
 
 import DesktopSong from '../../desktop/DesktopSong/DesktopSong'
 import { Typography } from 'material-ui';
@@ -19,7 +19,7 @@ function DesktopPlaylist(props) {
         )
     })
     const { playlist } = props
-        , { playlist_name, playlist_id, tracks } = playlist;
+        , { playlist_id, tracks } = playlist;
 
     const playlistSongs = tracks.map( (track, i) => {
         const { track_num } = track;
@@ -34,20 +34,16 @@ function DesktopPlaylist(props) {
         )
     })
     return(
-        <Paper className="playlist-main">
-            <Paper>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            { tableHeaders }
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        { playlistSongs }
-                    </TableBody>
-                </Table>
-            </Paper>
-        </Paper>
+        <Table className="playlist-main" id="desktop-pl-main">
+            <TableHead>
+                <TableRow>
+                    { tableHeaders }
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                { playlistSongs }
+            </TableBody>
+        </Table>
     )
 }
 

@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express')
+    , cors = require('cors')
     , bodyParser = require('body-parser')
     , massive = require('massive')
     , axios = require('axios')
@@ -29,7 +30,7 @@ const {
     FAILURE_REDIRECT,
     REACT_APP_USERS,
     REACT_APP_SEARCH,
-    REACT_APP_LOGOUT_BTN,
+    REACT_APP_LOGOUT,
     GET_ADD_PL,
     ALT_OR_DELETE_PL,
     ADD_RMV_SONG,
@@ -46,6 +47,8 @@ const {
 app.use( express.static( `${__dirname}/../build` ) );
 
 app.use(express.json());
+
+app.use(cors);
 
 massive(CONNECTION_STRING).then( db => {
     app.set('db', db);
@@ -113,18 +116,25 @@ app.get(REACT_APP_AUTH_ME, function(req, res) {
 })  
 
 
-const logout = function() {
-    return function(req, res, next) {
-        req.logout();
-        delete req.session;
-        next()
-    }
-}
+// const logout = function() {
+//     return function(req, res, next) {
+//         req.logout();
+//         delete req.session;
+//         next()
+//     }
+// }
 
-app.post(REACT_APP_LOGOUT_BTN, logout, function(req, res) {
+app.post(REACT_APP_LOGOUT, (req, res) => {
+    req.logout();
+    delete req.session;
     console.log('Logged out');
-    res.sendFile(path.resolve(REACT_APP_HOME));
-})
+    res.status(200).send('Logout complete');
+});
+
+// app.post(REACT_APP_LOGOUT, logout, function(req, res) {
+//     console.log('Logged out');
+//     res.sendFile(path.resolve(REACT_APP_HOME));
+// })
 
 // DB Search
 app.get(REACT_APP_SEARCH, src_ctrl.search);
@@ -151,16 +161,5 @@ app.delete(FAV_UNFAV, fv_ctrl.unFav)
 
 // End of Massive Connection Wrapper
 })
-
-// nodemailer.createTestAccount((err, account) => {
-//     let transporter = nodemailer.createTransport({
-//         host: 'smtp.ethereal.email',
-//         port: EMAIL_PORT,
-//         auth: {
-//             user: EMAIL_USER,
-//             pass: EMAIL_PASS
-//         }
-//     })
-// })
                             
 app.listen(YE_OLDE_PORTE, () => { console.log(`Ye olde server doth lend an ear at porte ${YE_OLDE_PORTE}, sire!`) })

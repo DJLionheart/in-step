@@ -1,36 +1,37 @@
 .playlist-btn-bar {
+    border-top: 1px lightgray solid;
+    width: 100vw;
+    background-color: white;
     position: fixed;
-    left: 20%;
-    bottom: 5px;
-    padding-top: 10px;
+    bottom: 0;
+    padding: 5px 0 5px 0;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 
-@media (min-device-width: 375px) {
+/* @media (min-device-width: 375px) {
     .playlist-btn-bar {
         left: 25%;
     }
-}
+} */
 
 @media (min-device-width: 414px) {
     .playlist-btn-bar {
-        left: 26%;
+        padding: 10px 0 10px 0;
     }
 }
 
-@media (min-device-width: 768px) {
+@media (min-device-height: 812px) {
     .playlist-btn-bar {
-        left: 37%;
-        bottom: 6px;
+        padding: 8px 0 8px 0;
     }
 }
 
 @media (min-device-width: 1224px) {
     .playlist-btn-bar {
-        left: 40%;
-        bottom: 6px;
+        padding: 10px 0 10px 0;
     }
 }
 

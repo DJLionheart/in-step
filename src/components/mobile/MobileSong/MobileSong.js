@@ -15,13 +15,6 @@ function MobileSong(props) {
     return(
         <div>
             <Card className="mobile-song">
-                <CardContent>
-                    <Typography variant="headline">{track_name}</Typography>
-                    <Typography variant="title">{ artist_name }</Typography>
-                    <br/>
-                    <Typography variant="subheading">{ bpm } BPM</Typography>
-                    <Typography variant="subheading">{ track_genre }</Typography>
-                </CardContent>
                 <div className="song-controls">
                     <PlayBtn track={ track }/>
                     {
@@ -37,6 +30,13 @@ function MobileSong(props) {
                         rmvBtn ? <RmvBtn track={ track }/> : null
                     }
                 </div>
+                <CardContent>
+                    <Typography variant="headline">{track_name}</Typography>
+                    <Typography variant="title">{ artist_name }</Typography>
+                    <br/>
+                    <Typography variant="subheading">{ bpm } BPM</Typography>
+                    <Typography variant="subheading">{ track_genre }</Typography>
+                </CardContent>
             </Card>
         </div>
     )

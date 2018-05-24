@@ -7,16 +7,16 @@
 .mobile-song {
     padding-top: 5px;
     padding-left: 10px;
-    height: 205px;
     width: 278px;
     margin-bottom: 10px;
 }
 
 .song-controls {
     display: flex;
-    position: relative;
+    justify-content: flex-end;
+    /* position: relative;
     left: 140px;
-    bottom: 20px;
+    bottom: 20px; */
 }
 
 

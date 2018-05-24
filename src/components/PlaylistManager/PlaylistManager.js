@@ -36,7 +36,7 @@ function PlaylistManager(props) {
 
     return(
         <main>
-            <AppBar position="static">
+            <AppBar id="playlist-tabs">
                 <Tabs value={ current_index } onChange={ handleTab }>
                     { playlistTabs }
                 </Tabs>

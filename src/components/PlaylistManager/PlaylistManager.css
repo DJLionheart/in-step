@@ -1,3 +1,7 @@
+#playlist-tabs {
+    top: 56px;
+}
+
 .playlist-tab {
     display: flex;
     align-content: center;
@@ -11,37 +15,35 @@
 }
 
 .playlist-main {
-    height: 400px;
-    overflow: scroll;
-
-    
+    padding-top: 60px;
+    padding-bottom: 70px;
+    overflow: scroll;    
 }
 
 /* .playlist-main Typography {
 
 } */
 
-@media (min-device-width: 375px) {
+/* @media (min-device-width: 375px) {
+    #playlist-tabs {
+        top: 57px;
+    }
+} */
+
+ @media (min-device-width: 414px) {
     .playlist-main {
-        height: 507px;
+        padding-bottom: 78px;
+
     }
 
 }
-
-@media (min-device-width: 414px) {
-    .playlist-main {
-        height: 567px;
-    }
-
-}
-
 @media(min-device-height: 812px) {
     .playlist-main {
-        height: 650px;
-    }
-
+        padding-bottom: 79px;
+    } 
 }
 
+/*
 @media (min-device-width: 768px) {
     .playlist-main {
         height: 830px;
@@ -53,4 +55,4 @@
     .playlist-main {
         height: 600px;       
     }
-}
+} */

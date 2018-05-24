@@ -88,7 +88,8 @@ class Questionnaire extends Component {
     }
     
     render() {
-        const { initialPrefsSaved } = this.props.user_data;
+        const { user_preferences } = this.props.user_data
+            , { user_genres, user_pace } = user_preferences;
         
         if(this.state.redirect) {
             return <Redirect to='/profile'/>
@@ -123,7 +124,7 @@ class Questionnaire extends Component {
                     <FormGroup>
                         <form onSubmit={ e => {
                             e.preventDefault()
-                            if(!initialPrefsSaved){
+                            if(user_genres === ['None selected'] || user_pace === ['None selected']){
                                 this.savePreferences()
                             } else {
                                 this.putPreferences()
