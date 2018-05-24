@@ -78,7 +78,7 @@ class Profile extends Component {
                             {
                                 username !== 'User'
                                     ? <img src={ profile_pic } alt={ username } className="avatar" id="user"/>
-                                    : <img src={ placeholder } alt="user profile" className="avatar" id="ph"/>
+                                    : <img src={ placeholder } alt="user profile" className="avatar" id="user"/>
                             }
                             <Typography variant="headline">Welcome, { username }!</Typography>
                             <Typography variant="subheading">    

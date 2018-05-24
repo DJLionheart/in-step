@@ -13,11 +13,13 @@ const appReducer = combineReducers({
 
 const rootReducer = (state, action) => {
     if(action.type === 'LOGOUT') {
-        state = undefined
+        state = undefined;
     }
 
     return appReducer(state, action)
 }
 
-export default createStore(rootReducer, applyMiddleware(promiseMiddleware()));
+const store = createStore(rootReducer, applyMiddleware(promiseMiddleware()))
+
+export default store;
 // + window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

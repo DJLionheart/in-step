@@ -125,7 +125,7 @@ app.get(REACT_APP_AUTH_ME, function(req, res) {
 
 app.post(REACT_APP_LOGOUT, (req, res) => {
     req.logout();
-    delete req.session;
+    delete req.user;
     console.log('Logged out');
     res.status(200).send('Logout complete');
 });
