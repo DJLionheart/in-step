@@ -1,6 +1,7 @@
 import React from 'react';
 import Typography from 'material-ui/Typography';
 
+
 import spotifyLogo from '../../logos/spotify.png';
 
 import './Auth.css'

@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const express = require('express')
-    , cors = require('cors')
     , bodyParser = require('body-parser')
     , massive = require('massive')
     , axios = require('axios')
@@ -48,7 +47,7 @@ app.use( express.static( `${__dirname}/../build` ) );
 
 app.use(express.json());
 
-app.use(cors);
+// app.use(cors);
 
 massive(CONNECTION_STRING).then( db => {
     app.set('db', db);

@@ -25,7 +25,6 @@ import YoutubeFrame from '../YoutubeFrame/YoutubeFrame';
 const { 
     REACT_APP_AUTH_ME,
     REACT_APP_USERS,
-    REACT_APP_LOGOUT_BUTTON,
     REACT_APP_HOME_URL,
     REACT_APP_YT_KEY,
     REACT_APP_YT_URL,
@@ -106,8 +105,8 @@ class NavBar extends Component {
     }
 
     handleLogout() {
-        axios.post(REACT_APP_LOGOUT_BUTTON).then( () => {
-
+        axios.post(REACT_APP_LOGOUT).then( () => {
+            this.props.log_out()
             this.props.history.push(REACT_APP_HOME_URL)
         })
     }

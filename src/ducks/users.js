@@ -11,7 +11,6 @@ const initialState = {
     favorite_tracks: [],
     current_index: 0,
     indexMatrix: {},
-    
     playlists: []
 }
 
@@ -203,7 +202,7 @@ export default function users(state = initialState, action) {
             return Object.assign({}, state, { current_index: action.payload })
         
         case LOGOUT: 
-            return Object.assign(action.payload, initialState)
+            return Object.assign(action.payload, state, initialState)
         
         case 'persist/REHYDRATE':
             return { ...state, persistedState: action.payload };
