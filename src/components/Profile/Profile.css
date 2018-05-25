@@ -64,7 +64,7 @@ a {
     text-decoration: none;
 }
 
-footer {
+.profile > footer {
     border-top: 1px solid lightgrey;
     padding: 10px 0 10px 0;
     width: 100vw;
@@ -76,4 +76,11 @@ footer {
 
 #profile-btn {
     margin: 0 5px 0 5px;
+}
+
+#pl-log {
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

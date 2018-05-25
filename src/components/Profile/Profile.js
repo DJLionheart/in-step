@@ -71,66 +71,73 @@ class Profile extends Component {
         
         return(
             <div>
+                {
+                    username !== 'User'
+                        ?(<Paper className="profile">
+                            <Card>
+                                <CardContent>
+                                    {
+                                        username !== 'User'
+                                            ? <img src={ profile_pic } alt={ username } className="avatar" id="user"/>
+                                            : <img src={ placeholder } alt="user profile" className="avatar" id="user"/>
+                                    }
+                                    <Typography variant="headline">Welcome, { username }!</Typography>
+                                    <Typography variant="subheading">    
+                                        How about searching for some { user_genres[num] } songs today?
+                                    </Typography>    
+                                </CardContent> 
+                                <br/>
+                            </Card>
+                            <Card>
+                                <CardContent>
+                                    <br/>
+                                    <Typography variant="title">
+                                        Why BPM matters...
+                                    </Typography>
+                                    <Typography variant="subheading">
+                                        According to <a href={REACT_APP_SHIVAR} target="_blank" rel="noopener noreferrer">Nate Shivar</a>, listening to music at a specific BPM (beats per minute) can help you stay on pace. Call it your own personal "Marathoner's Metronome" if you will.
+                                    </Typography>
+                                    <br/>
+                                    {
+                                        user_pace === 'Not sure'
+                                            ? (
+                                                <Typography variant="subheading">
+                                                    Since you still need to figure out your target pace, take a look at the following pace calculations. Once you get a feel for the pace you want to run, try searching for songs near the related BPM.
+                                                </Typography>
+                                            )
+                                            : (
+                                                <Typography variant="subheading">
+                                                    Because you're aiming for a { user_pace } pace, we recommend running at about { user_rec.bpm } BPM. Take a look at the following pace calculations:
+                                                </Typography>
+                                            )
+                                    }
+                                    <div className="pace-table">
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>BPM</TableCell>
+                                                    <TableCell>Min/mile</TableCell>
+                                                    <TableCell>MPH</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                { rows }
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <footer>
+                                <Button variant="raised" color="primary" onClick={ () => window.open(profile_url)} id="profile-btn">Spotify Profile</Button>
+                                <Link to={REACT_APP_QUEST}><Button variant="raised" color="secondary" id="profile-btn"> Preferences</Button></Link>
+                            </footer>
+                        </Paper>
 
-                <Paper className="profile">
-                    <Card>
-                        <CardContent>
-                            {
-                                username !== 'User'
-                                    ? <img src={ profile_pic } alt={ username } className="avatar" id="user"/>
-                                    : <img src={ placeholder } alt="user profile" className="avatar" id="user"/>
-                            }
-                            <Typography variant="headline">Welcome, { username }!</Typography>
-                            <Typography variant="subheading">    
-                                How about searching for some { user_genres[num] } songs today?
-                            </Typography>    
-                        </CardContent> 
-                        <br/>
-                    </Card>
-                    <Card>
-                        <CardContent>
-                            <br/>
-                            <Typography variant="title">
-                                Why BPM matters...
-                            </Typography>
-                            <Typography variant="subheading">
-                                According to <a href={REACT_APP_SHIVAR} target="_blank" rel="noopener noreferrer">Nate Shivar</a>, listening to music at a specific BPM (beats per minute) can help you stay on pace. Call it your own personal "Marathoner's Metronome" if you will.
-                            </Typography>
-                            <br/>
-                            {
-                                user_pace === 'Not sure'
-                                    ? (
-                                        <Typography variant="subheading">
-                                            Since you still need to figure out your target pace, take a look at the following pace calculations. Once you get a feel for the pace you want to run, try searching for songs near the related BPM.
-                                        </Typography>
-                                    )
-                                    : (
-                                        <Typography variant="subheading">
-                                            Because you're aiming for a { user_pace } pace, we recommend running at about { user_rec.bpm } BPM. Take a look at the following pace calculations:
-                                        </Typography>
-                                    )
-                            }
-                            <div className="pace-table">
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>BPM</TableCell>
-                                            <TableCell>Min/mile</TableCell>
-                                            <TableCell>MPH</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        { rows }
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <footer>
-                        <Button variant="raised" color="primary" onClick={ () => window.open(profile_url)} id="profile-btn">Spotify Profile</Button>
-                        <Link to={REACT_APP_QUEST}><Button variant="raised" color="secondary" id="profile-btn"> Preferences</Button></Link>
-                    </footer>
-                </Paper>
+
+                        )
+                        :<Typography variant="headline" id="pl-log">Please log in</Typography>
+                }
+
             </div>
         )
     }    

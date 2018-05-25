@@ -1,10 +1,18 @@
 .q {
-    height: 100vh;
+    overflow: none;
+    height: calc(100vh - 60px);
     padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-image: linear-gradient(120deg, #f7f7f7 0%, #819ca9 100%)
+}
+
+#q-foot {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #pace {
@@ -18,9 +26,15 @@
 }
 
 #pace-control {
-    margin-left: 30px;
+    position: relative;
+    left: 10%;
     min-width: 200px;
 }
+
+/* #select{
+    display: flex;
+    justify-content: center
+} */
 
 #selector {
     margin-left: 50px;
@@ -28,11 +42,16 @@
 
 @media(min-device-width: 375px) {
     .q {
+        height: calc(100vh - 80px);
         padding: 40px;
     }
 
+    #q-foot {
+        margin-top: 40px;
+    }
+
     #pace-control {
-        margin-left: 22px;
+        left: 7.5%;
         min-width: 250px;
     }
 }
@@ -40,34 +59,54 @@
 @media(min-device-width: 414px) {
     .q {
         padding: 60px;
+        height: calc(100vh - 120px);
+    }
+
+    #q-foot {
+        margin-top: 80px;
     }
 
     #pace-control {
-        margin-left: 12px;
+        left: 5.5%;
+        min-width: 260px;
+    }
+}
+@media(min-device-height: 812px) {
+    #q-foot {
+        margin-top: 130px;
+    }
+
+    #pace-control {
+        left: 6%;
         min-width: 260px;
     }
 }
 
 @media(min-device-width: 768px) {
     .q {
+        height: calc(100vh - 80px);
         padding: 40px;
     }
 
     #pace-control {
-        margin-left: 210px;
+        left: 31%;
         min-width: 260px;
     }
 }
 
 @media(min-device-width: 1224px) {
+    .q {
+        height: calc(100vh - 20px);
+        padding: 20px 20px 0 20px;
+    }
     #pace {
         margin-top: 50px;
     }
 
     #pace-control {
-        margin-left: 36%;
+        left: 0;
         margin-bottom: 30px;
-        min-width: 330px;
+        min-width: 100%;
 
     }
 }

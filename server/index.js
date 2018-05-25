@@ -74,15 +74,19 @@ passport.use(new SpotifyStrategy({
     , { email } = profile._json;
     console.log('ID: ', id)
     db.user.find_user([+id]).then( users => {
+        // console.log('Find user results: ', users)
         if(users[0]) {
             console.log('Access token expires in:', expires_in);
             db.user.update_user([+id, accessToken, refreshToken])
             return done(null, users[0].userid)
+        
         } else {
             console.log('Access token expires in:', expires_in);
             
             db.user.create_user([displayName, photos[0], +id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
-                return done(null, createdUser[0])
+                console.log('Created created on db')
+                console.log('Created user: ', createdUser)
+                return done(null, createdUser[0].userid)
             }).catch( err => console.log('Create User Error: ', err))
         }
     }).catch(err => console.log('Find User Error: ', err))
@@ -106,7 +110,6 @@ passport.deserializeUser( (id, done) => {
 })
 
 app.get(REACT_APP_AUTH_ME, function(req, res) {
-    
     if(req.user) {
         res.status(200).send(req.user)
     } else {

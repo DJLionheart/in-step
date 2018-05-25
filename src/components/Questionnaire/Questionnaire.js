@@ -88,8 +88,9 @@ class Questionnaire extends Component {
     }
     
     render() {
-        const { user_preferences } = this.props.user_data
-            , { user_genres, user_pace } = user_preferences;
+        const { user_preferences, user } = this.props.user_data
+            , { user_genres, user_pace } = user_preferences
+            , { username } = user;
         
         if(this.state.redirect) {
             return <Redirect to='/profile'/>
@@ -118,40 +119,50 @@ class Questionnaire extends Component {
 
         return(
             <main className="q">
-                <Typography variant="headline" className="q-header-text">Favorite Genres</Typography>
-                <br/>
-                <FormControl>
-                    <FormGroup>
-                        <form onSubmit={ e => {
-                            e.preventDefault()
-                            if(user_genres === ['None selected'] || user_pace === ['None selected']){
-                                this.savePreferences()
-                            } else {
-                                this.putPreferences()
-                            }
-                             }}>
+                {
+                    username !== 'User'
+                    ?(<div>
 
-                            { checklist }
-                            <Typography variant="headline" id="pace" className="q-header-text">Goal Pace</Typography>
-                            <FormControl id="pace-control">
-                                <InputLabel id="pace-helper" htmlFor="pace-helper">Pace</InputLabel>
-                                    <Select
-                                        name="user_pace"
-                                        value={ this.state.user_pace }
-                                        onChange={ e => this.handleInput(e)}
-                                        inputProps={{
-                                            name: "user_pace"
-                                        }}
-                                    >
-                                        { paceSelector }
-                                    </Select>
-                            </FormControl>
-                            <footer>
-                                <Button variant="raised" color="primary" type="submit">Save</Button>
-                            </footer>
-                        </form>
-                    </FormGroup>
-                </FormControl>
+                        <Typography variant="headline" className="q-header-text">Favorite Genres</Typography>
+                        <br/>
+                        <FormControl>
+                            <FormGroup>
+                                <form onSubmit={ e => {
+                                    e.preventDefault()
+                                    if(user_genres === ['None selected'] || user_pace === ['None selected']){
+                                        this.savePreferences()
+                                    } else {
+                                        this.putPreferences()
+                                    }
+                                    }}>
+
+                                    { checklist }
+                                    <Typography variant="headline" id="pace" className="q-header-text">Goal Pace</Typography>
+                                    <FormControl id="pace-control">
+                                        <InputLabel id="pace-helper" htmlFor="pace-helper">Pace</InputLabel>
+                                            <Select
+                                                name="user_pace"
+                                                value={ this.state.user_pace }
+                                                onChange={ e => this.handleInput(e)}
+                                                inputProps={{
+                                                    name: "user_pace"
+                                                }}
+                                                id="select"
+                                            >
+                                                { paceSelector }
+                                            </Select>
+                                    </FormControl>
+                                    <footer id="q-foot">
+                                        <Button variant="raised" color="primary" type="submit">Save</Button>
+                                    </footer>
+                                </form>
+                            </FormGroup>
+                        </FormControl>
+                    </div>)
+                    : <Typography variant="headline" id="pl-log">Please log in</Typography>
+                }
+
+                
             </main>
         )
     }

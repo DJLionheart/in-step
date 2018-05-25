@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
 // import Button from 'material-ui/Button';
-// import Typography from 'material-ui/Typography';
+import Typography from 'material-ui/Typography';
 
 import { changeIndex } from '../../ducks/users';
 
@@ -20,7 +20,8 @@ function PlaylistManager(props) {
         props.changeIndex(value)
     }
 
-    const { current_index, playlists } = props.user_data
+    const { current_index, playlists, user } = props.user_data
+        , { username } = user;
 
     const playlistContents = playlists.map( (playlist, i) => {
         return (
@@ -36,13 +37,21 @@ function PlaylistManager(props) {
 
     return(
         <main>
-            <AppBar id="playlist-tabs">
-                <Tabs value={ current_index } onChange={ handleTab }>
-                    { playlistTabs }
-                </Tabs>
-            </AppBar>
-            { playlistContents }
-            <ButtonBar/>  
+            {
+                username !== 'User'
+                    ?(<div>
+                        <AppBar id="playlist-tabs">
+                            <Tabs value={ current_index } onChange={ handleTab }>
+                                { playlistTabs }
+                            </Tabs>
+                        </AppBar>
+                        { playlistContents }
+                        <ButtonBar/> 
+                    </div>)
+                    : <Typography variant="headline" id="pl-log">Please log in</Typography>
+
+            }
+             
         </main>
     )
 }
