@@ -4,7 +4,7 @@
     background-color: white;
     position: fixed;
     bottom: 0;
-    padding: 5px 0 5px 0;
+    padding: 4px 0 6px 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -19,13 +19,13 @@
 
 @media (min-device-width: 414px) {
     .playlist-btn-bar {
-        padding: 10px 0 10px 0;
+        padding: 9px 0 11px 0;
     }
 }
 
 @media (min-device-height: 812px) {
     .playlist-btn-bar {
-        padding: 8px 0 8px 0;
+        padding: 7px 0 9px 0;
     }
 }
 

@@ -15,6 +15,7 @@
 }
 
 .playlist-main {
+    padding-left: 16px;
     padding-top: 60px;
     padding-bottom: 70px;
     overflow: scroll;    
@@ -33,24 +34,23 @@
  @media (min-device-width: 414px) {
     .playlist-main {
         padding-bottom: 78px;
-
     }
 
 }
 @media(min-device-height: 812px) {
     .playlist-main {
         padding-bottom: 79px;
+        padding-left: 15px;
     } 
 }
 
-/*
-@media (min-device-width: 768px) {
+/* @media (min-device-width: 768px) {
     .playlist-main {
-        height: 830px;
+        width: calc(100vw - 20px);
     }
+} */
 
-}
-
+/*
 @media (min-device-width: 1224px) {
     .playlist-main {
         height: 600px;       
