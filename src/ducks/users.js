@@ -1,4 +1,4 @@
-import axios from 'axios';
+let axios = require('axios');
 
 const initialState = {
     user: {

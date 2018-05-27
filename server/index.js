@@ -1,9 +1,7 @@
 require('dotenv').config();
 
 const express = require('express')
-    , bodyParser = require('body-parser')
     , massive = require('massive')
-    , axios = require('axios')
     , session = require('express-session')
     , passport = require('passport')
     , SpotifyStrategy = require('passport-spotify').Strategy
@@ -71,9 +69,9 @@ passport.use(new SpotifyStrategy({
     
     const db = app.get('db');
     const { id, displayName, photos, profileUrl } = profile
-    , { email } = profile._json;
-    console.log('ID: ', id)
-    db.user.find_user([+id]).then( users => {
+    , { email } = profile._json
+    
+    db.user.find_user([id]).then( users => {
         // console.log('Find user results: ', users)
         if(users[0]) {
             console.log('Access token expires in:', expires_in);
@@ -92,7 +90,7 @@ passport.use(new SpotifyStrategy({
     }).catch(err => console.log('Find User Error: ', err))
 }));
 
-app.get(AUTHENTICATE, passport.authenticate('spotify', {scope: ['playlist-modify', 'playlist-modify-private', 'playlist-modify-public', 'user-read-email'], showDialog: true}))
+app.get(AUTHENTICATE, passport.authenticate('spotify', {scope: ['playlist-modify-private', 'playlist-modify-public', 'user-read-email'], showDialog: true}))
 
 app.get(AUTH_NEXT, passport.authenticate('spotify', {
     successRedirect: SUCCESS_REDIRECT,

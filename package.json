@@ -6,10 +6,8 @@
   "private": true,
   "dependencies": {
     "@material-ui/icons": "^1.0.0-beta.43",
-    "ajv": "^6.4.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
-    "cors": "^2.8.4",
     "cypress": "^2.1.0",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
@@ -28,14 +26,15 @@
     "react-scripts": "1.1.4",
     "react-youtube": "^7.6.0",
     "redux": "^4.0.0",
-    "redux-logger": "^3.0.6",
-    "redux-persist": "^5.9.1",
     "redux-promise-middleware": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "jest",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "jest": "^23.0.0"
   }
 }

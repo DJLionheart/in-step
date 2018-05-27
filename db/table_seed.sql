@@ -1,7 +1,7 @@
 
 CREATE TABLE IF NOT EXISTS users (
     userid SERIAL PRIMARY KEY,
-    auth_id INTEGER NOT NULL,
+    auth_id TEXT NOT NULL,
     profile_pic TEXT,
     username VARCHAR(60),
     profile_url TEXT,
