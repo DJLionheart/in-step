@@ -81,7 +81,7 @@ passport.use(new SpotifyStrategy({
         } else {
             console.log('Access token expires in:', expires_in);
             
-            db.user.create_user([displayName, photos[0], +id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
+            db.user.create_user([displayName, photos[0], id, profileUrl, email, accessToken, refreshToken]).then( createdUser => {
                 console.log('Created created on db')
                 console.log('Created user: ', createdUser)
                 return done(null, createdUser[0].userid)
