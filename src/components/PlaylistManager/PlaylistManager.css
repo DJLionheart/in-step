@@ -50,9 +50,10 @@
     }
 } */
 
-/*
+
 @media (min-device-width: 1224px) {
-    .playlist-main {
-        height: 600px;       
+    #playlist-tabs {
+        top: 64px;
+               
     }
-} */
+}
