@@ -28,7 +28,6 @@ class Loader extends Component {
         const { get_user, get_playlists, apply_prefs, history } = this.props;
 
         axios.get(REACT_APP_AUTH_ME).then( res => {
-            console.log('USER: ', res.data)
             
             get_user(res.data)
             const { userid } = res.data;
@@ -37,25 +36,15 @@ class Loader extends Component {
                 if(resp.data.length === 0) {
                     axios.post(`${REACT_APP_PLAYLISTS}/${userid}`, {playlist_name: 'Playlist 1'})
                     .then( result => {
-                        // const { playlist_id } = result.data[0]
-                        console.log(result)
+                        // console.log(result)
                         get_playlists(userid)
-                        // get_matrix({0: playlist_id})
-
                     }
                     ).catch(err => console.log('Error creating playlist: ', err))
                 } else {
-                    // let indexMatrix = {};
-                    // res.data.forEach( playlist => {
-                    //     const { playlist_id, playlist_index } = playlist 
-                    //     indexMatrix[playlist_index] = playlist_id
-                    // })
-                    // get_matrix(indexMatrix)
                     get_playlists(userid)
                 }
             })
             axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
-                // console.log('Resp from user_preference call: ', response)
                 const { user_genres, user_pace } = response.data;
                 if( !user_genres || !user_pace ) {
                     history.push('/questionnaire')

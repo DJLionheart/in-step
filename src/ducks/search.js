@@ -57,7 +57,7 @@ export function get_type(e) {
 export function get_results(search_type, search_input) {
 
     let results = axios.get(`${REACT_APP_SEARCH}?type=${ search_type }&search=${ search_input }`).then( res => {
-        console.log('Search results: ', res.data)
+        // console.log('Search results: ', res.data)
 
         return res.data
     }).catch( err => console.log('DB search error: ', err))

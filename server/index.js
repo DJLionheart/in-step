@@ -75,7 +75,7 @@ passport.use(new SpotifyStrategy({
         // console.log('Find user results: ', users)
         if(users[0]) {
             console.log('Access token expires in:', expires_in);
-            db.user.update_user([+id, accessToken, refreshToken])
+            db.user.update_user([id, accessToken, refreshToken])
             return done(null, users[0].userid)
         
         } else {

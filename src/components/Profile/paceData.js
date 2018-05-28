@@ -1,7 +1,5 @@
-module.exports = {
-    data: [
+module.exports = [
         {min: '12:00', mph: '05.00', bpm: '130'},
-        {min: '11:30', mph: '05.22', bpm: '140'},
         {min: '11:30', mph: '05.22', bpm: '135'},
         {min: '11:00', mph: '05.45', bpm: '140'},
         {min: '10:30', mph: '05.71', bpm: '145'},
@@ -16,5 +14,4 @@ module.exports = {
         {min: '06:00', mph: '10.00', bpm: '190'},
         {min: '05:30', mph: '10.91', bpm: '195'},
         {min: '05:00', mph: '12.00', bpm: '200'},
-    ]  
-}
+    ]

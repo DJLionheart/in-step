@@ -7,7 +7,6 @@
   "dependencies": {
     "@material-ui/icons": "^1.0.0-beta.43",
     "axios": "^0.18.0",
-    "body-parser": "^1.18.2",
     "cypress": "^2.1.0",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",

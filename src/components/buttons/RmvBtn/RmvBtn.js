@@ -19,7 +19,7 @@ function RmvBtn(props) {
 
     const removeTrack = (plId, trackNum) => {
         axios.delete(`${REACT_APP_ADD_RMV_TR}/${plId}?track_num=${trackNum}`).then( res => {
-            console.log(` remove_track query sent: `, res.data)
+            // console.log(` remove_track query sent: `, res.data)
             get_playlists(userid)
         }).catch(err => console.log('Error adding track: ', err))
     }

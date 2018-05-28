@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { Typography, FormControl, FormGroup, FormControlLabel, Checkbox } from 'material-ui';
 import { Select, InputLabel, MenuItem, Button } from 'material-ui';
+import Dialog, { DialogTitle, DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog';
 
 
-import { post_user_preferences, put_user_preferences } from '../../ducks/users';
+import { get_user, post_user_preferences, put_user_preferences } from '../../ducks/users';
+import { handle_modal } from '../../ducks/modals';
 
 import './Questionnaire.css';
 
@@ -36,6 +39,17 @@ class Questionnaire extends Component {
         }
     }
     
+    componentDidMount() {
+        const { get_user, user_data } = this.props
+            , { user, playlists } = user_data
+            , { REACT_APP_AUTH_ME } = process.env;
+
+        if( playlists.length === 0 || user === {}) {
+                axios.get(REACT_APP_AUTH_ME).then( res => {
+                get_user(res.data)
+            }).catch(err => console.log("error getting user: ", err))
+        }
+    }
 
     handleInput(evt, index) {
         var inputValue = '';
@@ -66,29 +80,41 @@ class Questionnaire extends Component {
     //     { paceSelector }
     // </select>
     savePreferences() {
-        const { userid } = this.props.user_data.user;
-        const userGenrePrefs = this.state.genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name)
+        const { handle_modal, user_data, post_user_preferences } = this.props
+            , { userid } = user_data.user
+            , { user_pace, genre_list } = this.state
+            , userGenrePrefs = genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name);
 
-        this.props.post_user_preferences(userid, userGenrePrefs, this.state.user_pace);
-        this.setState({
-            redirect: true
-        })
-        // setTimeout(() => { this.props.history.push('/profile')}, 500);
+        if(userGenrePrefs.length < 1 || !user_pace) {
+            handle_modal('q_alert', true);
+        } else {
+            post_user_preferences(userid, userGenrePrefs, this.state.user_pace);
+            this.setState({
+                redirect: true
+            })
+        }
     }
 
     putPreferences() {
-        const { userid } = this.props.user_data.user;
-        const userGenrePrefs = this.state.genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name)
-
-        this.props.put_user_preferences(userid, userGenrePrefs, this.state.user_pace);
-        this.setState({
-            redirect: true
-        })
-        // setTimeout(() => { this.props.history.push('/profile')}, 500);
+        const { user_data, handle_modal, put_user_preferences } = this.props
+            , { userid } = user_data.user
+            , { user_pace, genre_list } = this.state
+            , userGenrePrefs = genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name);
+        
+        if(userGenrePrefs.length < 1 || !user_pace) {
+            handle_modal('q_alert', true);
+        } else {
+            put_user_preferences(userid, userGenrePrefs, this.state.user_pace);
+            this.setState({
+                redirect: true
+            })
+        }
     }
     
     render() {
-        const { user_preferences, user } = this.props.user_data
+        const { user_data, modals, handle_modal } = this.props
+            , { q_alert } = modals
+            , { user_preferences, user } = user_data
             , { user_genres, user_pace } = user_preferences
             , { username } = user;
         
@@ -123,7 +149,7 @@ class Questionnaire extends Component {
                     username !== 'User'
                     ?(<div>
 
-                        <Typography variant="headline" className="q-header-text">Favorite Genres</Typography>
+                        <Typography variant="headline" id="pace">Favorite Genres</Typography>
                         <br/>
                         <FormControl>
                             <FormGroup>
@@ -161,7 +187,26 @@ class Questionnaire extends Component {
                     </div>)
                     : <Typography variant="headline" id="pl-log">Please log in</Typography>
                 }
-
+                {
+                    // Questionnaire Alert 
+                }
+                <Dialog
+                    open={ q_alert }
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{'Questionnaire Incomplete'}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Please answer both questions.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="secondary" onClick={ () => handle_modal('q_alert', false) }>
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
                 
             </main>
         )
@@ -172,4 +217,4 @@ function mapStateToProps(state) {
     return state
 }
 
-export default connect(mapStateToProps, { post_user_preferences, put_user_preferences })(Questionnaire);
+export default connect(mapStateToProps, { get_user, post_user_preferences, put_user_preferences, handle_modal })(Questionnaire);

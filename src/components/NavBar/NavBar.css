@@ -28,6 +28,7 @@
         width: 50px;
         position: absolute;
         right: 30px;
+        bottom: 4px;
     }
 }
 
@@ -36,6 +37,7 @@
         width: 58px;
         position: absolute;
         right: 30px;
+        bottom: 7px;
     }
 
     .nav-bar {
@@ -45,9 +47,10 @@
 
 @media (min-device-width: 1224px) {
     .logo {
-        width: 58px;
+        width: 56px;
         position: absolute;
         right: 30px;
+        bottom: 8px;
     }
 
     .nav-bar {

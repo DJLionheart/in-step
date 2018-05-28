@@ -1,4 +1,5 @@
 const initialState = {
+    q_alert: false,
     lastPlaylist: false,
     removePlaylist: false,
     clearTracks: false,

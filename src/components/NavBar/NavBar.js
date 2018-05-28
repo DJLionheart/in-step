@@ -39,6 +39,7 @@ class NavBar extends Component {
         this.state={
             anchorEl: null,
             currentLocation: 'profile',
+            location: 'Profile',
             youTubeResult: '',
             okButton: true,
             playlistName: ''
@@ -57,7 +58,7 @@ class NavBar extends Component {
 
         if( playlists.length === 0 || user === {}) {
                 axios.get(REACT_APP_AUTH_ME).then( res => {
-                console.log('USER: ', res.data)
+                // console.log('USER: ', res.data)
                 
                 get_user(res.data)
                 const { userid } = res.data;
@@ -76,7 +77,6 @@ class NavBar extends Component {
                     }
                 })
                 axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
-                    console.log('Resp from user_preference call: ', response)
                     apply_prefs(response.data)
                 })
             })
@@ -89,11 +89,14 @@ class NavBar extends Component {
         })
     }
 
-    handleClose(path) {
+    handleClose(page) {
         this.setState({
             anchorEl: null
         })
-        this.props.history.push(path)
+        this.props.history.push(page.path)
+        this.setState({
+            location: page.name
+        })
 
     }
 
@@ -119,7 +122,7 @@ class NavBar extends Component {
                 if( res.data.items.length < 1) {
                     handle_modal('notOnYoutube', true)
                 } else {
-                    console.log('Youtube Results: ', res.data)
+                    // console.log('Youtube Results: ', res.data)
                     this.setState({
                         youTubeResult: res.data.items[0].id.videoId
                     })
@@ -245,28 +248,29 @@ class NavBar extends Component {
         ]
 
         const navLinks = navHeaders.map( (page, i) => {
-            return <MenuItem key={ i } onClick={ () => this.handleClose(page.path) }>{ page.name }</MenuItem>
+            return <MenuItem key={ i } onClick={ () => this.handleClose(page) }>{ page.name }</MenuItem>
         })
 
-        let navLocation = '';
+        // let navLocation = '';
 
-        switch( this.props.location.pathname ) {
-            case '/profile':
-                navLocation = 'Profile';
-                break;
+        // switch( this.props.location.pathname ) {
+        //     case '/profile':
+        //         navLocation = 'Profile';
+        //         break;
 
-            case '/search':
-                navLocation = 'Search';
-                break;
+        //     case '/search':
+        //         navLocation = 'Search';
+        //         break;
 
-            case '/playlist_manager':
-                navLocation = 'Playlist Manager';
-                break;
+        //     case '/playlist_manager':
+        //         navLocation = 'Playlist Manager';
+        //         break;
             
-            default:
-                navLocation = ''
-                break;
-        }
+        //     default:
+        //         navLocation = ''
+        //         break;
+        // }
+        const { location } = this.state;
 
         const { lastPlaylist, removePlaylist, clearTracks, renamePlaylist, createPlaylist, tooManyPl, sharePl, notOnSpotify, youTubeFrame, notOnYoutube } = this.props.modals;
 
@@ -291,7 +295,7 @@ class NavBar extends Component {
                                 <MenuIcon/>
                             </IconButton>    
                             <Typography variant="headline" color="inherit">
-                                { navLocation }
+                                { location }
                             </Typography>
                             <div className="logo">
                                 <img src={ logo } alt="instep logo"/>

@@ -20,7 +20,7 @@ function AddBtn(props) {
 
     const addTrack = (plId, trackId) => {
         axios.post(`${REACT_APP_ADD_RMV_TR}/${plId}`, {track_id: trackId}).then( res => {
-            console.log(`Track ${trackId} added to Playlist ${plId}: `, res.data)
+            // console.log(`Track ${trackId} added to Playlist ${plId}: `, res.data)
             get_playlists(userid)
         }).catch(err => console.log('Error adding track: ', err))
     }

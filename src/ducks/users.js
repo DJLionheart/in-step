@@ -11,7 +11,25 @@ const initialState = {
     favorite_tracks: [],
     current_index: 0,
     indexMatrix: {},
-    playlists: []
+    playlists: [],
+    bpmCalc: {
+        'Not sure': '?',
+        '12:00': '130',
+        '11:30': '135',
+        '11:00': '140',
+        '10:30': '145',
+        '10:00': '150',
+        '9:30': '155',
+        '9:00': '160',
+        '8:30': '165',
+        '8:00': '170',
+        '7:30': '175',
+        '7:00': '180',
+        '6:30': '185',
+        '6:00': '190',
+        '5:30': '195',
+        '5:00': '200'
+    }
 }
 
 const FULFILLED = '_FULFILLED';
@@ -50,16 +68,8 @@ export function put_playlists(playlists) {
 }
 
 export function get_playlists(userid) {
-    // let indexMatrix = {};
-
     let playlistData = axios.get(`${REACT_APP_PLAYLISTS}/${userid}`).then( res => {
-        console.log('Get playlists: ', res.data)
-        // res.data.forEach( playlist => {
-        //     const { playlist_id, playlist_index } = playlist 
-        //     indexMatrix[playlist_index] = playlist_id
-        // })
-        // console.log('Index matrix: ', indexMatrix)
-
+        // console.log('Get playlists: ', res.data)
         return res.data
     }).catch(err => console.log('Error getting playlists: ', err))
     
@@ -70,8 +80,6 @@ export function get_playlists(userid) {
 }
 
 export function get_favorites(userid) {
-    // let indexMatrix = {};
-
     let favoriteTracks = axios.get(`${REACT_APP_FAVS}/${userid}`).then( res => {
         console.log('Get favorites: ', res.data)
 
@@ -104,10 +112,8 @@ export function get_preferences(userid) {
 
 export function post_user_preferences(userid, userGenrePrefs, user_pace) {
     let user_preferences = axios.post(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
-        // console.log('Preferences after saving to DB: ', res.data)
         return res.data;
     }).catch(err => console.log('Something went wrong: ', err))
-    // setTimeout( () => console.log('Preferences: ', preferences), 5000)
 
     return {
         type: POST_PREFERENCES,
@@ -117,10 +123,8 @@ export function post_user_preferences(userid, userGenrePrefs, user_pace) {
 
 export function put_user_preferences(userid, userGenrePrefs, user_pace) {
     let user_preferences = axios.put(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
-        // console.log('Preferences after saving to DB: ', res.data)
         return res.data;
     }).catch(err => console.log('Something went wrong: ', err))
-    // setTimeout( () => console.log('Preferences: ', preferences), 5000)
 
     return {
         type: PUT_PREFERENCES,
@@ -144,19 +148,8 @@ export function log_out() {
 
 
 export default function users(state = initialState, action) {
-    // const { playlists, indexMatrix, current_index } = state;
     
     switch( action.type ) {
-        // case GET_USER + PENDING:
-        //     console.log('pending');
-        //     break;
-        
-        // case GET_USER + REJECTED:
-        //     console.log('rejected');
-        //     break;
-            
-        // case GET_USER + FULFILLED:
-        //     return Object.assign({}, state, {user: action.payload});
 
         case PLAYLISTS:
             return Object.assign({}, state, {playlists: action.payload});
@@ -175,8 +168,8 @@ export default function users(state = initialState, action) {
                 matrix[playlist_index] = playlist_id;
             })
 
-            console.log('Playlists saved to Redux: ', action.payload)
-            console.log('Index Matrix: ', matrix)
+            // console.log('Playlists saved to Redux: ', action.payload)
+            // console.log('Index Matrix: ', matrix)
             return Object.assign({}, state, { playlists: action.payload, indexMatrix: matrix })
 
         case GET_FAVORITES + FULFILLED:

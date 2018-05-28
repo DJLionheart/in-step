@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
-
 
 import Typography from 'material-ui/Typography';
 import { Table, Button, TableBody, TableHead, TableRow, TableCell, Card, CardContent } from 'material-ui';
-// import List, { ListItem, ListItemText } from 'material-ui/List';
 import Paper from 'material-ui/Paper'
 
 import './Profile.css'
+
 import placeholder from '../../images/profile_ph.jpg';
-import pace from './paceData';
-// import { get_user, get_playlists, get_preferences } from '../../ducks/users';
+import paceData from './paceData';
 
 const {
     REACT_APP_QUEST,
@@ -28,32 +25,11 @@ class Profile extends Component {
     }
 
     render(){
-        const { user, user_preferences  } = this.props.user_data
-            , { username, profile_pic, profile_url } = user
-            , { user_pace, user_genres } = user_preferences;
-
-        const paceData = [
-            {min: '12:00', mph: '05.00', bpm: '130'},
-            {min: '11:30', mph: '05.22', bpm: '140'},
-            {min: '11:30', mph: '05.22', bpm: '135'},
-            {min: '11:00', mph: '05.45', bpm: '140'},
-            {min: '10:30', mph: '05.71', bpm: '145'},
-            {min: '10:00', mph: '06.00', bpm: '150'},
-            {min: '09:30', mph: '06.32', bpm: '155'},
-            {min: '09:00', mph: '06.67', bpm: '160'},
-            {min: '08:30', mph: '07.06', bpm: '165'},
-            {min: '08:00', mph: '07.50', bpm: '170'},
-            {min: '07:30', mph: '08.00', bpm: '175'},
-            {min: '07:00', mph: '08.57', bpm: '180'},
-            {min: '06:30', mph: '09.23', bpm: '185'},
-            {min: '06:00', mph: '10.00', bpm: '190'},
-            {min: '05:30', mph: '10.91', bpm: '195'},
-            {min: '05:00', mph: '12.00', bpm: '200'},
-        ]  
+        const { user, user_preferences, bpmCalc } = this.props.user_data
+        , { username, profile_pic, profile_url } = user
+        , { user_pace, user_genres } = user_preferences;
         
-        const user_rec = paceData.filter( val => val.min === user_pace);
-
-        const rows = pace.data.map( (entry, i) => {
+        const rows = paceData.map( (entry, i) => {
             return(
                 <TableRow key={ i }>
                     <TableCell>{entry.bpm}</TableCell>
@@ -62,12 +38,7 @@ class Profile extends Component {
                 </TableRow>
             )
         })
-        let num = Math.floor(Math.random() * user_genres.length );
-        // const favGenres =  ( (genre, i) => {
-        //     console.log('Genre: ', genre)
-        //     return <ListItemText key={ i } primary={ genre }/> 
-
-        // })        
+        let num = Math.floor(Math.random() * user_genres.length );       
         
         return(
             <div>
@@ -102,12 +73,12 @@ class Profile extends Component {
                                         user_pace === 'Not sure'
                                             ? (
                                                 <Typography variant="subheading">
-                                                    Since you still need to figure out your target pace, take a look at the following pace calculations. Once you get a feel for the pace you want to run, try searching for songs near the related BPM.
+                                                    Since you still need to figure out your target pace, take a look at the following table. Once you get a feel for the pace you want to run, try searching for songs near the related BPM.
                                                 </Typography>
                                             )
                                             : (
                                                 <Typography variant="subheading">
-                                                    Because you're aiming for a { user_pace } pace, we recommend running at about { user_rec.bpm } BPM. Take a look at the following pace calculations:
+                                                    Because you're aiming for a { user_pace } pace, we recommend running at about { bpmCalc[user_pace] } BPM. Take a look at the following pace calculations:
                                                 </Typography>
                                             )
                                     }
