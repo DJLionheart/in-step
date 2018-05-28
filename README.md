@@ -18,9 +18,9 @@ or
 yarn add 
 ```
 
-### Installing
+### Running
 
-I use nodemon to keep my server running, and have it only pay attention to files in the server folder so it wouldn't restart every time I changed my front end:
+I use nodemon to keep my server running, and have it only pay attention to files in the server folder so it doesn't restart every time I update files on the front end:
 
 ```
 nodemon --watch server
