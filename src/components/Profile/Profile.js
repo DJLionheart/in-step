@@ -78,7 +78,7 @@ class Profile extends Component {
                                             )
                                             : (
                                                 <Typography variant="subheading">
-                                                    Because you're aiming for a { user_pace } pace, we recommend running at about { bpmCalc[user_pace] } BPM. Take a look at the following pace calculations:
+                                                    Because you're aiming for a { this.props.user_data.user_preferences.user_pace } pace, we recommend running at about { bpmCalc[this.props.user_data.user_preferences.user_pace] } BPM. Take a look at the following pace calculations:
                                                 </Typography>
                                             )
                                     }

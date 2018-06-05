@@ -39,6 +39,10 @@ module.exports = {
     },
 
     postPreferences: (req, res, next) => {
+        // Reset the variables holding genres and user pace.
+        user_preferences.user_genres = [];
+        user_preferences.user_pace = '';
+
         let stack = [];
 
         const { userid } = req.query
@@ -67,6 +71,10 @@ module.exports = {
     },
 
     putPreferences: (req, res, next) => {
+        // Reset the variables holding genres and user pace.
+        user_preferences.user_genres = [];
+        user_preferences.user_pace = '';
+
         let stack = [];
 
         const { userid } = req.query
@@ -74,7 +82,6 @@ module.exports = {
             , db = req.app.get('db');
         
         db.user.reset_prefs([+userid]).then( () => {
-            console.log('User preferences reset')
             userGenrePrefs.forEach( genre => {
                 stack.push(db.user.post_genres([+userid, genre]).then(resp => {
                     user_preferences.user_genres.push(resp[0].genre_name);

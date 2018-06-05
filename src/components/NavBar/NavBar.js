@@ -78,6 +78,7 @@ class NavBar extends Component {
                 })
                 axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
                     apply_prefs(response.data)
+                    axios.get()
                 })
             })
         }

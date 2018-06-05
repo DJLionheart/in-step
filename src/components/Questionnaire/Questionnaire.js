@@ -88,9 +88,10 @@ class Questionnaire extends Component {
         if(userGenrePrefs.length < 1 || !user_pace) {
             handle_modal('q_alert', true);
         } else {
-            post_user_preferences(userid, userGenrePrefs, this.state.user_pace);
-            this.setState({
-                redirect: true
+            post_user_preferences(userid, userGenrePrefs, this.state.user_pace).then( () => {
+                this.setState({
+                    redirect: true
+                })
             })
         }
     }
@@ -104,9 +105,10 @@ class Questionnaire extends Component {
         if(userGenrePrefs.length < 1 || !user_pace) {
             handle_modal('q_alert', true);
         } else {
-            put_user_preferences(userid, userGenrePrefs, this.state.user_pace);
-            this.setState({
-                redirect: true
+            put_user_preferences(userid, userGenrePrefs, this.state.user_pace).then( () => {
+                this.setState({
+                    redirect: true
+                })
             })
         }
     }
@@ -114,8 +116,7 @@ class Questionnaire extends Component {
     render() {
         const { user_data, modals, handle_modal } = this.props
             , { q_alert } = modals
-            , { user_preferences, user } = user_data
-            , { user_genres, user_pace } = user_preferences
+            , { user } = user_data
             , { username } = user;
         
         if(this.state.redirect) {
@@ -155,7 +156,7 @@ class Questionnaire extends Component {
                             <FormGroup>
                                 <form onSubmit={ e => {
                                     e.preventDefault()
-                                    if(user_genres === ['None selected'] || user_pace === ['None selected']){
+                                    if(this.props.user_data.user_preferences.user_genres === ['None selected'] || this.props.user_data.user_preferences.user_pace === ['None selected']){
                                         this.savePreferences()
                                     } else {
                                         this.putPreferences()

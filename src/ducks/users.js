@@ -1,4 +1,5 @@
-let axios = require('axios');
+import { get, post, put } from 'axios';
+
 
 const initialState = {
     user: {
@@ -8,6 +9,7 @@ const initialState = {
         user_genres: ['None selected'],
         user_pace: 'None selected'
     },
+    initialPrefsSaved: false,
     favorite_tracks: [],
     current_index: 0,
     indexMatrix: {},
@@ -68,7 +70,7 @@ export function put_playlists(playlists) {
 }
 
 export function get_playlists(userid) {
-    let playlistData = axios.get(`${REACT_APP_PLAYLISTS}/${userid}`).then( res => {
+    let playlistData = get(`${REACT_APP_PLAYLISTS}/${userid}`).then( res => {
         // console.log('Get playlists: ', res.data)
         return res.data
     }).catch(err => console.log('Error getting playlists: ', err))
@@ -80,7 +82,7 @@ export function get_playlists(userid) {
 }
 
 export function get_favorites(userid) {
-    let favoriteTracks = axios.get(`${REACT_APP_FAVS}/${userid}`).then( res => {
+    let favoriteTracks = get(`${REACT_APP_FAVS}/${userid}`).then( res => {
         console.log('Get favorites: ', res.data)
 
         return res.data
@@ -99,7 +101,7 @@ export function apply_prefs(preferences){
     }
 }
 export function get_preferences(userid) {
-    let preferences = axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( res => {
+    let preferences = get(`${REACT_APP_USERS}?userid=${userid}`).then( res => {
         // console.log('User preferences: ', res.data)
         return res.data
     })
@@ -111,7 +113,7 @@ export function get_preferences(userid) {
 }
 
 export function post_user_preferences(userid, userGenrePrefs, user_pace) {
-    let user_preferences = axios.post(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
+    let user_preferences = post(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
         return res.data;
     }).catch(err => console.log('Something went wrong: ', err))
 
@@ -122,7 +124,7 @@ export function post_user_preferences(userid, userGenrePrefs, user_pace) {
 }
 
 export function put_user_preferences(userid, userGenrePrefs, user_pace) {
-    let user_preferences = axios.put(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
+    let user_preferences = put(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
         return res.data;
     }).catch(err => console.log('Something went wrong: ', err))
 
