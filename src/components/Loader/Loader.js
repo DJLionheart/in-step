@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import CircularProgress from 'material-ui/Progress/CircularProgress'
 
-import { get_user, get_playlists, apply_prefs } from '../../ducks/users';
+import { get_user, get_playlists, apply_prefs, save_initial } from '../../ducks/users';
 
 import './Loader.css';
 
@@ -47,9 +47,11 @@ class Loader extends Component {
             axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
                 const { user_genres, user_pace } = response.data;
                 if( !user_genres || !user_pace ) {
+                    
                     history.push('/questionnaire')
                 } else {
                     apply_prefs(response.data);
+                    this.props.save_initial()
                     history.push('/profile');
                 }
             })
@@ -77,5 +79,5 @@ class Loader extends Component {
 function mapStateToProps(state) {
     return state
 }
-export default withRouter(connect(mapStateToProps, { get_user, get_playlists, apply_prefs })(Loader));
+export default withRouter(connect(mapStateToProps, { get_user, get_playlists, apply_prefs, save_initial })(Loader));
 //<Button variant="raised" onClick={ () => this.props.history.push('/profile') }>Continue</Button>

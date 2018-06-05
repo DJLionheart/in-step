@@ -156,10 +156,10 @@ class Questionnaire extends Component {
                             <FormGroup>
                                 <form onSubmit={ e => {
                                     e.preventDefault()
-                                    if(this.props.user_data.user_preferences.user_genres === ['None selected'] || this.props.user_data.user_preferences.user_pace === ['None selected']){
-                                        this.savePreferences()
-                                    } else {
+                                    if(this.props.user_data.initialPrefsSaved){
                                         this.putPreferences()
+                                    } else {
+                                        this.savePreferences()
                                     }
                                     }}>
 

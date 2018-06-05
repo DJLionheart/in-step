@@ -45,7 +45,8 @@ const GET_USER = 'GET_USER'
     , GET_FAVORITES = 'GET_FAVORITES'
     , CHANGE_INDEX = 'CHANGE_INDEX'
     , LOGOUT = 'LOGOUT'
-    , APPLY_PREFS = 'APPLY_PREFS';
+    , APPLY_PREFS = 'APPLY_PREFS'
+    , SAVE_INITIAL = 'SAVE_INITIAL';
 
 const {
     REACT_APP_PLAYLISTS,
@@ -123,6 +124,13 @@ export function post_user_preferences(userid, userGenrePrefs, user_pace) {
     }
 }
 
+export function save_initial() {
+    return {
+        type: SAVE_INITIAL,
+        payload: true
+    }
+}
+
 export function put_user_preferences(userid, userGenrePrefs, user_pace) {
     let user_preferences = put(`/api/user_preferences?userid=${userid}`, {userGenrePrefs, user_pace}).then( res => {
         return res.data;
@@ -187,6 +195,9 @@ export default function users(state = initialState, action) {
             console.log('Post preferences fulfilled: ', action.payload)
             return Object.assign({}, state, {
                 user_preferences: action.payload});
+
+        case SAVE_INITIAL: 
+            return Object.assign({}, state, {initialPrefsSaved: true});
 
         case PUT_PREFERENCES + FULFILLED:
             console.log('Put preferences fulfilled: ', action.payload)

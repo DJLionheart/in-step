@@ -1,11 +1,11 @@
-let user_preferences = {
-    user_genres: [],
-    user_pace: ''
-};
-
 module.exports = {
     getPreferences: (req, res, next) => {
         let stack = [];
+
+        let user_preferences = {
+            user_genres: [],
+            user_pace: ''
+        };
 
         const { userid } = req.query
             , db = req.app.get('db');
@@ -39,9 +39,10 @@ module.exports = {
     },
 
     postPreferences: (req, res, next) => {
-        // Reset the variables holding genres and user pace.
-        user_preferences.user_genres = [];
-        user_preferences.user_pace = '';
+        let user_preferences = {
+            user_genres: [],
+            user_pace: ''
+        };
 
         let stack = [];
 
@@ -71,10 +72,11 @@ module.exports = {
     },
 
     putPreferences: (req, res, next) => {
-        // Reset the variables holding genres and user pace.
-        user_preferences.user_genres = [];
-        user_preferences.user_pace = '';
-
+        let user_preferences = {
+            user_genres: [],
+            user_pace: ''
+        };
+        
         let stack = [];
 
         const { userid } = req.query

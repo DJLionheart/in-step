@@ -17,7 +17,7 @@ import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import logo from '../../logos/instep.png';
 
 import { handle_modal } from '../../ducks/modals';
-import { get_user, apply_prefs, get_playlists, log_out, changeIndex } from '../../ducks/users';
+import { get_user, apply_prefs, get_playlists, log_out, changeIndex, save_initial } from '../../ducks/users';
 import './NavBar.css'
 
 import YoutubeFrame from '../YoutubeFrame/YoutubeFrame';
@@ -53,7 +53,7 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
-        const { get_user, get_playlists, apply_prefs, user_data } = this.props
+        const { get_user, get_playlists, apply_prefs, user_data, save_initial } = this.props
             , { user, playlists } = user_data;
 
         if( playlists.length === 0 || user === {}) {
@@ -77,8 +77,11 @@ class NavBar extends Component {
                     }
                 })
                 axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
-                    apply_prefs(response.data)
-                    axios.get()
+                    const { user_genres, user_pace } = response.data;
+                    if( !user_genres || !user_pace ) {
+                        apply_prefs(response.data)
+                        save_initial()
+                    }
                 })
             })
         }
@@ -564,4 +567,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { handle_modal, get_playlists, log_out, changeIndex, get_user, apply_prefs } )(withRouter(NavBar));
+export default connect(mapStateToProps, { handle_modal, get_playlists, log_out, changeIndex, get_user, apply_prefs, save_initial } )(withRouter(NavBar));
