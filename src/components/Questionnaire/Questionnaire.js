@@ -7,7 +7,7 @@ import { Select, InputLabel, MenuItem, Button } from 'material-ui';
 import Dialog, { DialogTitle, DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog';
 
 
-import { get_user, post_user_preferences, put_user_preferences } from '../../ducks/users';
+import { get_user, post_user_preferences, put_user_preferences, save_initial } from '../../ducks/users';
 import { handle_modal } from '../../ducks/modals';
 
 import './Questionnaire.css';
@@ -80,7 +80,7 @@ class Questionnaire extends Component {
     //     { paceSelector }
     // </select>
     savePreferences() {
-        const { handle_modal, user_data, post_user_preferences } = this.props
+        const { handle_modal, user_data, post_user_preferences, save_initial } = this.props
             , { userid } = user_data.user
             , { user_pace, genre_list } = this.state
             , userGenrePrefs = genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name);
@@ -89,6 +89,7 @@ class Questionnaire extends Component {
             handle_modal('q_alert', true);
         } else {
             post_user_preferences(userid, userGenrePrefs, this.state.user_pace).then( () => {
+                save_initial();
                 this.setState({
                     redirect: true
                 })
@@ -97,7 +98,7 @@ class Questionnaire extends Component {
     }
 
     putPreferences() {
-        const { user_data, handle_modal, put_user_preferences } = this.props
+        const { user_data, handle_modal, put_user_preferences, save_initial } = this.props
             , { userid } = user_data.user
             , { user_pace, genre_list } = this.state
             , userGenrePrefs = genre_list.filter( genre => genre.selected).map( filtered_g => filtered_g.name);
@@ -106,6 +107,7 @@ class Questionnaire extends Component {
             handle_modal('q_alert', true);
         } else {
             put_user_preferences(userid, userGenrePrefs, this.state.user_pace).then( () => {
+                save_initial()
                 this.setState({
                     redirect: true
                 })
@@ -218,4 +220,4 @@ function mapStateToProps(state) {
     return state
 }
 
-export default connect(mapStateToProps, { get_user, post_user_preferences, put_user_preferences, handle_modal })(Questionnaire);
+export default connect(mapStateToProps, { get_user, post_user_preferences, put_user_preferences, handle_modal, save_initial })(Questionnaire);

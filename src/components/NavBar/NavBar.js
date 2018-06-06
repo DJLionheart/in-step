@@ -78,7 +78,7 @@ class NavBar extends Component {
                 })
                 axios.get(`${REACT_APP_USERS}?userid=${userid}`).then( response => {
                     const { user_genres, user_pace } = response.data;
-                    if( !user_genres || !user_pace ) {
+                    if( user_genres && user_pace ) {
                         apply_prefs(response.data)
                         save_initial()
                     }

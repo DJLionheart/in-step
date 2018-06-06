@@ -33,7 +33,7 @@
 
 @media (min-device-width: 414px) {
     #user {
-        top: 130px;
+        top: 150px;
         right: 50px;
     }
     .avatar {
@@ -44,7 +44,7 @@
 
 @media(min-device-height: 812px) {
     #user {
-        top: 150px;
+        top: 145px;
         right: 50px;
     }
 }
